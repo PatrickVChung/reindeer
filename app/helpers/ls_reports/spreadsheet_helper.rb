@@ -1,13 +1,15 @@
 module LsReports::SpreadsheetHelper
-    def hf_get_response_sets lime_survey, filters=[]
+    def hf_flatten_response_sets lime_survey 
         result = []
         lime_survey.lime_questions.select do |lq|
             if (filters.empty? || filters.include?(lq.qid)) && lq.response_set.data.present?
                 if lq.response_set.data.first.respond_to? :data
                     result += lq.response_set.data
+
                 else
-                    result.push lq.response_set
+                    result.push pquestion.response_set
                 end
+              end
             end
         end
         return result
@@ -20,7 +22,6 @@ module LsReports::SpreadsheetHelper
         end
         return result.transpose
     end
-
 
 
 end
