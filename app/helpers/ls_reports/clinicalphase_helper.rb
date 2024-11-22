@@ -1,5 +1,5 @@
 module LsReports::ClinicalphaseHelper
-  include LsReportsHelper
+
 
   PRECEPTOR_COMP_DEF = { "Beginning" => "<b>Beginning</b>: Performs the attribute inconsistently; improvement is needed, or does not yet perform.",
                            "Effort" => "<b>Expending Effort</b>: Clearly trying to perform tasks.  Performs some aspects of the attribute consistently, but others aspects may not yet be skillful, complete, or accurate; the student demonstrates the attribute on some occasions.",

@@ -34,30 +34,5 @@
   </table>
 
 <% else %>
-    <% stats = hf_wba_stats(current_user) %>
-    <h5><font color="purple">WBA Statistics</font></h5>
-    <table class="table table-hover" >
-      <tr>
-        <th>Cohort</th>
-        <th style="text-align:center">Max</th>
-        <th style="text-align:center">Min</th>
-        <th style="text-align:center">Ave</th>
-        <th style="text-align:center">Median</th>
-      </tr>
-      <body>
-        <% if !stats.nil? %>
-          <% stats.each do |key, stat| %>
-            <tr>
-              <td><%= key %></td>
 
-              <% stat.each do |dd| %>
-                <td style="text-align:center"><%= dd.round %></td>
-              <% end %>
-
-            </tr>
-          <% end %>
-        <% end %>
-
-      </body>
-    </table>
 <% end %>

@@ -65,57 +65,6 @@ module SearchesHelper
     return wba_count_hash
   end
 
-  def process_wba_total_count(cohort_id)
-    data = {}
-    students = User.where(permission_group_id: cohort_id)
-    students.each do |student|
-      if student.sid != 'U00999999'
-        total_count_wbas = User.find_by(sid: student.sid).epas.count
-        data.store(student.full_name, total_count_wbas)
-      end
-    end
-    return data
-  end
-
-  def hf_wba_stats(user)
-    if user.coaching_type == 'student'
-      # re-get user records as permission_group_id was pointed to Med21 --> Not sure why!
-      user = User.find(user.id)
-      cohort_title = user.permission_group.title[/(?<=\().*?(?=\))/]  # to extract cohort Med21
-      permission_group_id = user.permission_group_id
-      wba_count_hash = get_stats(permission_group_id)
-
-      if wba_count_hash.nil?
-          return nil, nil, cohort_title
-      else
-        #arr = result.rows.flatten  # the array is sorted DESC
-        #max = arr.first
-        #min = arr.last
-        cohort_count = User.where(permission_group_id: permission_group_id).count #excludes BettyBogus
-        ave = wba_count_hash.values.sum.to_f/cohort_count.round(2)
-        med = median(wba_count_hash.values).round(2)
-        return ave, med, cohort_title
-      end
-    elsif user.coaching_type == 'dean' or user.coaching_type == 'admin'
-      cohorts = PermissionGroup.where("id >= ?", 18).order(:title)
-      cohorts_stat = {}
-      stat = []
-      cohorts.each do |cohort|
-        title = cohort.title[/(?<=\().*?(?=\))/]
-        arr = process_wba_total_count(cohort.id)
-        if !arr.empty?
-          stat << arr.values.max
-          stat << arr.values.min
-          stat << arr.values.sum.fdiv(arr.size).round
-          stat << median(arr.values).round
-          cohorts_stat.store(title, stat)
-          stat = []
-        end
-      end
-      return cohorts_stat
-    end
-
-  end
 
   def hf_releaseDate(in_user)
 

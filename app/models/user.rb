@@ -13,49 +13,30 @@ class User < ActiveRecord::Base
   belongs_to :permission_group, inverse_of: :users
   belongs_to :cohort
 
-  has_many :charts, inverse_of: :user, dependent: :destroy
   #has_many :dashboard_widgets, through: :dashboard  ## disabled dashboard_widgets
   has_many :permission_ls_groups, through: :permission_group
-  has_many :question_widgets, dependent: :delete_all
+
   has_many :user_externals, dependent: :delete_all, inverse_of: :user
   has_many :goals, -> { order 'created_at DESC' }, class_name: 'Coaching::Goal',
     dependent: :destroy
   has_many :meetings, class_name: 'Coaching::Meeting', dependent: :destroy
   has_many :messages, dependent: :destroy
   has_one :room, as: :discussable
-  has_one :eg_cohort
-  has_one :ume_bls
+
 
   has_one :dashboard, dependent: :destroy
-  has_one :med23_mspe, inverse_of: :user, foreign_key: :email, dependent: :destroy
-  has_one :med24_mspe, inverse_of: :user, foreign_key: :email, dependent: :destroy
 
   has_many :artifacts, dependent: :destroy
-  has_many :epas, dependent: :destroy
-  has_many :competencies, dependent: :destroy, inverse_of: :user
-  has_many :new_competencies, dependent: :destroy, inverse_of: :user
-  
-  has_many :med18_competencies, inverse_of: :user, dependent: :destroy
-  has_many :med19_competencies, inverse_of: :user, dependent: :destroy
-  has_many :med20_competencies, inverse_of: :user, dependent: :destroy
-  has_many :med21_competencies, inverse_of: :user, dependent: :destroy
 
 
-  has_one  :cpx, dependent: :destroy
-  has_many :usmle_exams, dependent: :destroy
-  has_many :epa_masters, dependent: :destroy, inverse_of: :user
-  has_many :fom_exams, dependent: :destroy, inverse_of: :user
-  has_many :med22_fom_exams, dependent: :destroy
-  has_many :med21_fom_exams, dependent: :destroy
-  has_many :fom_labels
-  has_many :preceptor_evals, dependent: :destroy
-  has_many :preceptor_assesses, dependent: :destroy
+
+
+
+
   has_one :advisor, foreign_key: :email, dependent: :destroy
 
   has_many :events, inverse_of: :user, dependent: :destroy
 
-  has_many :fom_remeds, inverse_of: :user, dependent: :destroy
-  has_many :formative_feedbacks, inverse_of: :user, dependent: :destroy
 
   accepts_nested_attributes_for :user_externals, allow_destroy: true
 
@@ -91,7 +72,6 @@ class User < ActiveRecord::Base
     can_dashboard: 1,
     can_stats: 1,
     can_reports: 1,
-    can_chart: 1,
     can_lime: 1,
     can_lime_all: 1,
     can_view_spreadsheet: 1,
@@ -280,7 +260,6 @@ class User < ActiveRecord::Base
     group :forms do
       active false
       field :dashboard
-      field :charts
     end
 
     group :site_permissions do
@@ -318,7 +297,7 @@ class User < ActiveRecord::Base
       [
         :current_sign_in_at, :sign_in_count, :reset_password_sent_at,
         :remember_created_at, :last_sign_in_at, :current_sign_in_ip,
-        :last_sign_in_ip, :charts, :roles_mask
+        :last_sign_in_ip, :roles_mask
       ].each do |attr|
         configure attr do
           read_only true
@@ -327,11 +306,11 @@ class User < ActiveRecord::Base
     end
 
     list do
-      include_fields :id, :username, :email, :permission_group, :is_ldap, :can_dashboard, :can_chart,
+      include_fields :id, :username, :email, :permission_group, :is_ldap, :can_dashboard,
         :admin, :superadmin
       exclude_fields :lime_user, :password, :password_confirmation, :explain_survey_access,
         :user_externals, :current_sign_in_at, :sign_in_count, :permission_ls_groups,
-        :reset_password_sent_at, :dashboard, :charts, :remember_created_at,
+        :reset_password_sent_at, :dashboard,  :remember_created_at,
         :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip,
         :participant, :can_stats, :can_reports, :can_lime, :can_view_spreadsheet, :can_lime_all
     end

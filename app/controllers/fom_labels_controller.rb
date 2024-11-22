@@ -1,3 +1,0 @@
-class FomLabelsController < ApplicationController
-
-end

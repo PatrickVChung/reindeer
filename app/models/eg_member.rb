@@ -1,2 +1,0 @@
-class EgMember < ApplicationRecord
-end

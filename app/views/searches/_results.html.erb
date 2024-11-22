@@ -84,12 +84,6 @@
                         preceptor_eval_path(uuid: result.uuid),  target: '_blank') %> <br>
               <% end %>
 
-              <% if hf_has_csl_feedbacks(result.id) %>
-                <% session[:user_id] = result.id %>
-                <% session[:cohort] = cohort_title(result.permission_group_id) %>
-                <%= link_to('<i><b>CSL Feedback from Qualtrics</b></i>'.html_safe, csl_feedbacks_index_path(user_id: result.id), target: '_blank') %>
-                <br>
-              <% end %>
 
               <% hf_datasets(result, @temp_hash).each do |dataset| %>
                  <% sid = dataset.split("~").first %>

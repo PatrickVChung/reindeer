@@ -1,7 +1,6 @@
 class DashboardController < ApplicationController
-  include LsReportsHelper
   include DashboardHelper
-  include EpaMastersHelper
+
   layout 'full_width'
 
   def index
@@ -9,23 +8,10 @@ class DashboardController < ApplicationController
       redirect_to auto_path
       return
     end
-    get_artifacts
-    @class_mean_badge, @cohort_title = get_badge_class_mean
+
     #@surveys = current_user.lime_surveys_by_most_recent(5)
     @dash = Dashboard.where(user_id: current_user.id).first_or_initialize  #includes(:dashboard_widgets)
-    if current_user.coaching_type == 'student'
-      #@meetings = Coaching::Meeting.where("user_id=? and event_id is not NULL", current_user.id)
-      student = User.where(id: current_user.id)
-      @wba_epa_data = hf_process_student(student, 'WBA')
-      @wba_clinical_assessor_data = hf_process_student(student, 'ClinicalAssessor')
-    else
-      if Advisor.exists?(email: current_user.email)
-        @yes_advisor = true
-      else
-        @yes_advisor = false
-      end
-      @meetings = []
-    end
+
 
     authorize! :read, @dash
     #do_gon   # disable dashboard_widgets
@@ -97,39 +83,6 @@ class DashboardController < ApplicationController
       end
     end
 
-  end
-
-  def get_badge_class_mean
-    if current_user.coaching_type == 'student'
-      no_of_students = User.where(permission_group_id: current_user.permission_group_id).count
-      cohort_title = PermissionGroup.find(current_user.permission_group_id).title.split(" ").last.gsub(/[()]/, "")
-
-      users = User.where(permission_group_id: current_user.permission_group_id).select(:id, :full_name, :spec_program).all
-      class_mean_hash = {}
-      no_excluded = 0
-
-      users.each do |user|
-        count = 0
-        if user.spec_program.nil?
-            no_excluded += 1
-        elsif !user.spec_program.downcase.include? 'withdrew' or !user.spec_program.downcase.include? 'withdrawn' or
-                 !user.spec_program.downcase.include? 'dismissed'
-                  count = user.epa_masters.where(status: 'Badge').count
-                  if count != 0
-                    class_mean_hash[user.full_name] = count
-                  else
-                    #no_excluded += 1
-                  end
-        else
-            no_excluded += 1
-        end
-      end
-      if (no_of_students-no_excluded) <= 0
-        return 0, cohort_title
-      else
-        return class_mean_hash.values.sum/(no_of_students-no_excluded), cohort_title
-      end
-    end
   end
 
   def do_gon

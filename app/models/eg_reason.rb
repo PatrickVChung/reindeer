@@ -1,3 +1,0 @@
-class EgReason < ApplicationRecord
-
-end

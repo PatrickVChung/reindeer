@@ -1,5 +1,5 @@
 module LsReports::CslevalHelper
-  include LsReportsHelper
+  
 
   DECODE_CSL_EVAL = { '1' => '<font color="red">Rarely demonstrates this behavior</font>',
                       '2' => '<font color="#f46242">Occasionally demonstrates this behavior</font>',
