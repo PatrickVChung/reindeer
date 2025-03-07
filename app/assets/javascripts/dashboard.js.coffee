@@ -1,9 +1,6 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
-# = require charts
-# = require charts.js
-# = require ls_reports_filter.js
 # = require jquery.transform2d.js
 # = require gridster/jquery.gridster.with-extras.js
 

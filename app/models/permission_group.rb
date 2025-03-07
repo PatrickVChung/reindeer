@@ -5,7 +5,7 @@ class PermissionGroup < ActiveRecord::Base
     dependent: :destroy,
     after_add: :dirty_user_ls_lists
 
-  has_many :role_aggregates, through: :lime_surveys
+  # has_many :role_aggregates, through: :lime_surveys
 
   accepts_nested_attributes_for :permission_ls_groups, allow_destroy: true,
     reject_if: :all_blank
@@ -36,4 +36,4 @@ class PermissionGroup < ActiveRecord::Base
     }
     return details, result
   end
-end 
+end

@@ -39,11 +39,7 @@
 //= require highcharts/modules/no-data-to-display
 //= require cocoon
 //= require startup.js
-//= require scrollspy.js
 //= require typeahead.bundle.js
-//= require charts.js
-//= require reports.js
-//= require stats.js
 //= require users.js
 //= require dashboard.js
 //= require sync_triggers.js
@@ -52,53 +48,9 @@
 //= require form-utils.js
 //= require simplemde.min
 //= require nested_form_fields
-//= require goals
-// require cable  commented out on 12/6/2021
 //= require datatables
-//= require artifacts
-//= require epa_graphs.js
-//= require ls_reports.js
-//= require ls_reports_filter.js
-//= require ls_reports_graph.js
-//= require ls_reports_spreadsheet.js
 //= require searches.js
-//= require students.js
-//= require epa_masters.js
-//= require epa_reviews.js
-//= require cds_reports
-//= require wba_graphs
-//= require csl_feedbacks
-//= require fom_exams
-//= require epas
-//= require competencies
-//= require new_competencies
-//=  require jquery-contextmenu/dist/jquery.contextMenu.js
-//=  require jquery-contextmenu/dist/jquery.ui.position.js
-//=  require jquery-contextmenu/dist/jquery.contextMenu.min.js
-//=  require jquery-contextmenu/dist/jquery.ui.position.min.js
 //= require moment
-//= require fullcalendar
-//= require events
-//= require meetings
-//= require reports
-//= require courses
-//= require overall_progresses.js
 //= require active_storage_drag_and_drop
-//= require badging_dates
-//= require course_schedules
 //= require flatpickr
 //= require flatpickr/plugins/confirmDate/confirmDate
-
-// document.addEventListener('DOMContentLoaded', function() {
-//   flatpickr('.flatpickr', {
-//     allowInput: true,
-//     enableTime: true,
-//     minDate: 'today',
-//     minTime: "07:00",
-//     maxTime: "20:00",
-//     dateFormat: "m-d-Y h:i K",
-//     plugins: [
-//       new confirmDatePlugin({})
-//     ]
-//   })
-// })

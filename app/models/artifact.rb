@@ -8,12 +8,6 @@ class Artifact < ApplicationRecord
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     'text/plain', 'text/csv'], size_range: 1..10.megabytes }
 
-    COMP_CODES = ["ics1", "ics2", "ics3", "ics4", "ics5", "ics6", "ics7","ics8",
-                  "mk1", "mk2", "mk3", "mk4", "mk5",
-                  "pbli1", "pbli2", "pbli3", "pbli4", "pbli5", "pbli6", "pbli7", "pbli8",
-                  "pcp1", "pcp2", "pcp3", "pcp4", "pcp5", "pcp6",
-                  "pppd1", "pppd2", "pppd3", "pppd4", "pppd5", "pppd6", "pppd7", "pppd8", "pppd9", "pppd10", "pppd11",
-                  "sbpic1", "sbpic2", "sbpic3", "sbpic4", "sbpic5"]
 
   def self.format_date(in_date)
     temp_date = in_date.split("/")
@@ -331,7 +325,7 @@ class Artifact < ApplicationRecord
     		@log_data.push ("No of rows: " + sheet.count.to_s)
         last_row = sheet.count-1
     		row = {}
-        
+
     		for r in 1..last_row do
           #puts sheet[r].inspect
     			row["last_name"] = sheet[r][0]

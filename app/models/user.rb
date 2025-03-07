@@ -9,34 +9,24 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   serialize :roles, type: Array
 
-  #belongs_to :lime_user, foreign_key: :username, primary_key: :users_name
+  # belongs_to :lime_user, foreign_key: :username, primary_key: :users_name
+
   belongs_to :permission_group, inverse_of: :users
   belongs_to :cohort
 
-  #has_many :dashboard_widgets, through: :dashboard  ## disabled dashboard_widgets
+  has_many :dashboard_widgets, through: :dashboard  ## disabled dashboard_widgets
   has_many :permission_ls_groups, through: :permission_group
 
   has_many :user_externals, dependent: :delete_all, inverse_of: :user
-  has_many :goals, -> { order 'created_at DESC' }, class_name: 'Coaching::Goal',
-    dependent: :destroy
-  has_many :meetings, class_name: 'Coaching::Meeting', dependent: :destroy
-  has_many :messages, dependent: :destroy
-  has_one :room, as: :discussable
+  # has_many :goals, -> { order 'created_at DESC' }, class_name: 'Coaching::Goal',
+  #   dependent: :destroy
+  # has_many :meetings, class_name: 'Coaching::Meeting', dependent: :destroy
+  # has_many :messages, dependent: :destroy
+  # has_one :room, as: :discussable
 
 
   has_one :dashboard, dependent: :destroy
-
   has_many :artifacts, dependent: :destroy
-
-
-
-
-
-
-  has_one :advisor, foreign_key: :email, dependent: :destroy
-
-  has_many :events, inverse_of: :user, dependent: :destroy
-
 
   accepts_nested_attributes_for :user_externals, allow_destroy: true
 
@@ -221,9 +211,9 @@ class User < ActiveRecord::Base
       field :institution do
         read_only true
       end
-      # field :lime_user do
-      #   read_only true
-      # end
+      field :lime_user do
+        read_only true
+      end
       field :email
       field :username
       field :full_name

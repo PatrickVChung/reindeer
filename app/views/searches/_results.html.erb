@@ -47,73 +47,8 @@
             <% else %>
               <td></td>
             <% end %>
-            <% bls_record = result.ume_bls %>
-            <% if !bls_record.nil? %>
-               <% if bls_record.expiration_date.after? (Date.today) %>
-                   <td style="text-align:center; color:green"> <b><%= bls_record.expiration_date.strftime("%F") %></b></td>
-               <% else %>
-                   <td style="text-align:center; color:red"> <b><%= bls_record.expiration_date.strftime("%F") %></b></td>
-               <% end %>
-            <% else %>
-              <td></td>
-            <% end %>
 
-            <td style="text-align:center;color:purple"><b><%= result.epas.where.not(involvement: 0).count.to_s %></b></td>
-            <td style="text-align:center;color:purple"><b><%= result.epa_masters.where('status = ? and status_date < ?','Badge', hf_releaseDate(result)).count.to_s %></b></td>
-            <td>
-              <%= link_to("<b>View Artifacts</b>".html_safe, artifacts_path(uuid: result.uuid), target: '_blank')  %> <br />
-              <%= link_to("<b>Clinical Phase Dataset</b>".html_safe, user_competencies_path(user_id: result.id), class: "link-to-text-color") %><br>
-                <% fom_block_array = [] %>
-                <%  hf_exists_in_FomExam(result.id).each do |block| %>
-                    <% cohort = block["cohort"] %>
-                    <% permission_group_id = block["permission_group_id"] %>
-                    <% course_code = block["course_code"] %>
-                    <% if !course_code.include? "DISABLED" %>
-                      <% session[:attach_id] = -1 %>
-                      <% hf_check_aes_key %>
-                      <% fom_block_array.push course_code %>
-                      <li><%= link_to("<b>#{cohort}:Foundation of Medicine: #{course_code}</b>".html_safe,
-                              display_fom_fom_exams_path(permission_group_id: AES.encrypt(permission_group_id.to_s, session[:aes_key]), course_code: AES.encrypt(course_code, session[:aes_key] ), uuid: result.uuid), method: :get,  target: '_blank') %> </li>
-                    <% else %>
-                       <%= sanitize "<b>#{cohort}:Foundation of Medicine: #{course_code}</b><br />".html_safe %>
-                    <% end %>
-                <% end %>
-              <% cohort = hf_exists_in_PreceptorEval(result.id) %>
-              <% if !cohort.blank? %>
-                <%= link_to("<b>#{cohort}:Foundation of Medicine: Preceptorship Evaluations</b>".html_safe,
-                        preceptor_eval_path(uuid: result.uuid),  target: '_blank') %> <br>
-              <% end %>
-
-
-              <% hf_datasets(result, @temp_hash).each do |dataset| %>
-                 <% sid = dataset.split("~").first %>
-                 <% if !dataset.split("~").last.include? "Core Clinical/Electives" %>
-                    <% if !fom_block_array.include? dataset.split(":").last %>
-                       <%= link_to dataset.split("~").last, polymorphic_path([hf_graph_type(dataset).to_sym, :ls_report], sid: sid, pk: @pk), target: '_blank',
-                        class: "modal-click", 'data-bs-target': '#modal-dataset' %> <br>
-                    <% end %>
-                <% end %>
-              <% end %>
-            </td>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-            <% if ['chungp','fruhwirt', 'nmai' ].include? current_user.username %>
-              <%= link_to '<i class="fa fa-cog" style="color:#23A9BD"></i> Add USMLE/Step Exams'.html_safe, usmle_exams_path(user_id: result.id, full_name: result.full_name), target: '_blank', class: "btn btn-link" %>
-            <% end %>
-            </td>
-          </tr>
-
         <% end %>
       </table>
       <% hf_write_hash(@temp_hash) %>

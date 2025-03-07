@@ -2,11 +2,11 @@ class PermissionLsGroup < ActiveRecord::Base
 
   belongs_to :permission_group, inverse_of: :permission_ls_groups
 
-  has_one :role_aggregate, through: :lime_survey
+  # has_one :role_aggregate, through: :lime_survey
   has_many :permission_ls_group_filters, dependent: :destroy,
    inverse_of: :permission_ls_group
 
-  validates_presence_of :role_aggregate
+  # validates_presence_of :role_aggregate
 
   validate :validate_enabled_allowed
 
@@ -32,5 +32,5 @@ class PermissionLsGroup < ActiveRecord::Base
     )
   end
 
-  
+
 end

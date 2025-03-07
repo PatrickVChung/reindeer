@@ -5,93 +5,15 @@
     <div class="card" style="width: 600px">
       <div class="card-body">
            <span class="caret"><b><%= result.full_name %></b></span>
-            <ul class="nested">
-              <li>
+
                 <table class="table table-hover main-table table-light responsive-sm">
-                  <% if ['chungp', 'fruhwirt', 'meltond', 'petesama', 'bumstedt', 'itot'].include? current_user.username %>
-                    <tr><td style="text-align:left">Email</td><td style="color:brown"><%= link_to result.email.to_s, update_loa_users_path(email: result.email), class: "nav-link blue-text" ,target: :_blank %></td></tr>
-                    <tr><td style="text-align:left">SID</td><td> <%= link_to result.sid.to_s, update_loa_users_path(sid: result.sid), class: "nav-link blue-text", target: :_blank %></td></tr>
-                  <% else %>
-                      <tr><td style="text-align:left">Email</td><td style="color:brown"><%= result.email %> </td></tr>
-                      <tr><td style="text-align:left">SID</td><td><%= result.sid %> </td></tr>
-                  <% end %>
 
                   <tr><td style="text-align:left">Current Cohort</td><td><%= result.permission_group.title.to_s  %> </td></tr>
                   <tr><td style="text-align:left">Previous Cohort</td><td><%= hf_get_permission_title(result.prev_permission_group_id)  %> </td></tr>
                   <tr><td style="text-align:left">Program Status</td><td><%= result.spec_program %> </td></tr>
                   <tr><td style="text-align:left">Matriculated Date</td><td><%= result.matriculated_date.to_s %> </td></tr>
-                  <tr>
-                    <% bls_record = result.ume_bls %>
-                    <% if !bls_record.nil? %>
-                       <% if bls_record.expiration_date.after? (Date.today) %>
-                           <td style="text-align:left">BLS ExpDate</td><td style="color:green"> <b><%= bls_record.expiration_date.strftime("%F") %></b></td>
-                       <% else %>
-                           <td style="text-align:left">BLS ExpDate</td><td style="color:red"> <b><%= bls_record.expiration_date.strftime("%F") %></b></td>
-                       <% end %>
-                    <% else %>
-                        <td style="text-align:left">BLS ExpDate</td><td style="color:red"><b>No BLS Data</b></td>
-                    <% end %>
-                  </tr>
-                  <tr><td style="text-align:left"># of WBAs (All levels)</td><td style="color:purple"><b><%= result.epas.where.not(involvement: 0).count.to_s %></b></td></tr>
-                  <tr><td style="text-align:left"># of Badges Awarded</td><td style="color:purple"><b><%= result.epa_masters.where('status = ? and status_date < ?','Badge', hf_releaseDate(result)).count.to_s %></b></td></tr>
+
                 </table>
-              </li>
-
-              <li><span class="caret">Datasets</span>
-                <ul class="nested">
-                  <li><%= link_to("<b>View Artifacts</b>".html_safe, artifacts_path(uuid: result.uuid), class: "nav-link blue-text", target: '_blank')  %> </li>
-                  <% if result.permission_group_id >= 21 %>
-                    <li><%= link_to("<b>Clinical Phase Dataset</b>".html_safe, user_new_competencies_path(user_id: result.id), class: "nav-link link-to-text-color", target: '_blank') %></li>
-                  <% else %>
-                    <li><%= link_to("<b>Clinical Phase Dataset</b>".html_safe, user_competencies_path(user_id: result.id), class: "nav-link link-to-text-color", target: '_blank') %></li>
-                  <% end %>
-                  <li><%= link_to("<b>Overall Progress on Badges/WBAs..</b>".html_safe, user_overall_progresses_path(user_id: result.id), class: "nav-link link-to-text-color", target: '_blank') %></li>
-                  <li><%= link_to("<b>Detail WBAs Listing</b>".html_safe, epas_path(uuid: result.uuid), class: "nav-link link-to-text-color", target: '_blank') %></li>
-
-                    <% fom_block_array = [] %>
-                    <%  hf_exists_in_FomExam(result.id).each do |block| %>
-                        <% cohort = block["cohort"] %>
-                        <% permission_group_id = block["permission_group_id"] %>
-                        <% course_code = block["course_code"] %>
-
-                        <% if !course_code.include? "DISABLED" %>
-                          <% session[:attach_id] = -1 %>
-                          <% hf_check_aes_key %>
-
-                          <% fom_block_array.push course_code %>
-                          <li><%= link_to("<b>#{cohort}:Foundation of Medicine: #{course_code}</b>".html_safe,
-                                  display_fom_fom_exams_path(permission_group_id: AES.encrypt(permission_group_id.to_s, session[:aes_key]), course_code: AES.encrypt(course_code, session[:aes_key] ),
-                                  uuid: result.uuid), method: :get, class: "nav-link blue-text", target: '_blank') %> </li>
-                        <% else %>
-                           <li><%= sanitize "<b>#{cohort}:Foundation of Medicine: #{course_code}</b><br />".html_safe %></li>
-                        <% end %>
-                    <% end %>
-                    <% cohort = hf_exists_in_PreceptorEval(result.id) %>
-
-                    <% if !cohort.blank? %>
-                      <%= link_to("<b>#{cohort}:Foundation of Medicine: Preceptorship Evaluations</b>".html_safe,
-                              preceptor_eval_path(uuid: result.uuid), class: "nav-link blue-text", target: '_blank') %> <br>
-                    <% end %>
-
-
-                    <% hf_datasets(result, @temp_hash).each do |dataset| %>
-                       <% sid = dataset.split("~").first %>
-                       <% if !dataset.split("~").last.include? "Core Clinical/Electives" %>
-                          <% if !fom_block_array.include? dataset.split(":").last %>
-                             <%= link_to dataset.split("~").last, polymorphic_path([hf_graph_type(dataset).to_sym, :ls_report], sid: sid, pk: @pk), target: '_blank',
-                              class: "modal-click", 'data-bs-target': '#modal-dataset' %> <br>
-                          <% end %>
-                      <% end %>
-                    <% end %>
-
-                    <% if ['chungp','fruhwirt','meltond', 'nmai' ].include? current_user.username %>
-                      <%= link_to '<i class="fa fa-cog" style="color:#23A9BD"></i> Add USMLE/Step Exams'.html_safe, usmle_exams_path(user_id: result.id, full_name: result.full_name),
-                      target: '_blank', class: "nav-link blue-text" %>
-                    <% end %>
-
-                </ul>
-              </li>
-            </ul>
 
         </div>
       </div>
