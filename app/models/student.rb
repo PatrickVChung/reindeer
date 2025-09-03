@@ -29,11 +29,12 @@ class Student < ApplicationRecord
     "Preventive Surgery",
     "Preventive Medicine",
     "Psychiatry",
+    "Psychiatry/Neurology/Peds",
     "Radiation Oncology",
     "Thoracic Surgery",
     "Transition Year",
     "Urology",
     "Vascular Surgery",
-    "Other - Please Specify"]
+    "Other - Please Check & Specify"]
   end
 end

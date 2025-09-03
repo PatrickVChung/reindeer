@@ -22,19 +22,35 @@
       </div>
       <br>
       <div class="form-group">
-        <% if @user.career_interest.present? %>
-          <%= f.input :career_interest, as: :array, input_html: {style: 'width: 600px; background-color: #B4F8C8; border-radius: 5px;'}, wrapper: :horizontal_form  %>
-        <% else %>
-          <%= f.input :career_interest, as: :string, input_html: { name: 'user[career_interest][]' }, placeholder: '1st Choice' %>
-          <%= f.input :career_interest, as: :string, input_html: { name: 'user[career_interest][]' }, placeholder: '2nd Choice' %>
-          <%= f.input :career_interest, as: :string, input_html: { name: 'user[career_interest][]' }, placeholder: '3rd Choice' %>
-        <% end %>
+
+        <div class="card ms-5" style="width: 600px">
+          <div class="card-body">
+            <div class="form-check">
+               <% i = 0 %>
+               <% Student.specialties.each do |specialty| %>
+                 <% i += 1 %>
+                 <div class="form-check">
+                   <% if @career_interest.include? specialty %>
+                    <input class="form-check-input MyCheckBoxSpecialties" type="checkbox" id="checkboxId_<%= i %>" value="<%= specialty %>" name="specialties[]" checked>
+                   <% else %>
+                    <input class="form-check-input MyCheckBoxSpecialties" type="checkbox" id="checkboxId_<%= i %>" value="<%= specialty %>" name="specialties[]" >
+                   <% end %>
+                   <label class="form-check-label" for="checkboxId_<%= i %>">
+                     <%= specialty %>
+                   </label>
+                 </div>
+                <% end %>
+                <input id="other_specialty" name="other_specialty" type="text" value="<%= @other_interest %>" placeholder="other" class="form-control" >
+            </div>
+          </div>
+        </div>
+
 
       </div>
     </div>
     <br>
     <div class="form-actions">
-      <%= f.button :submit, "Save Career Interests", class: 'btn btn-success' %>
+      <%= f.button :submit, "Save Specialties Interest", class: 'btn btn-success' %>
       <%= link_to "Cancel", :back, class: 'btn btn-warning' %>
     </div>
   <% end %>

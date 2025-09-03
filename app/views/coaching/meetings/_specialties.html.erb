@@ -13,13 +13,18 @@
                <% i = 0 %>
                <% Student.specialties.each do |specialty| %>
                  <% i += 1 %>
-                 <div class="form-check MyCheckBoxSpecialties">
-                   <input class="form-check-input" type="checkbox" id="checkboxId_<%= i %>" value="<%= specialty %>" name="specialties[]" >
+                 <div class="form-check">
+                   <% if @career_interest.include? specialty %>
+                    <input class="form-check-input MyCheckBoxSpecialties" type="checkbox" id="checkboxId_<%= i %>" value="<%= specialty %>" name="specialties[]" checked>
+                   <% else %>
+                    <input class="form-check-input MyCheckBoxSpecialties" type="checkbox" id="checkboxId_<%= i %>" value="<%= specialty %>" name="specialties[]" >
+                   <% end %>
                    <label class="form-check-label" for="checkboxId_<%= i %>">
                      <%= specialty %>
                    </label>
                  </div>
                 <% end %>
+                <input id="other_specialty" name="other_specialty" type="text" value="<%= @other_interest %>" placeholder="other" class="form-control" >
             </div>
           </div>
         </div>

@@ -40,6 +40,7 @@ $(document).on 'click', '#SaveMeeting', (e) ->
   updatedAcademicOutcomesOther = $('#academic_outcomes_other').val()
   updatedStudyResourcesOther = $('#study_resources_other').val()
   updatedAdvisorType = $('#advisor_type').data("advisor_type")
+  updatedOtherSpecialty = $('#other_specialty').val()
 
   console.log("Goal.coffee - advisor_type: " + updatedAdvisorType)
   console.log("advisor notes: " + updatedAdvisorNotes)
@@ -94,7 +95,8 @@ $(document).on 'click', '#SaveMeeting', (e) ->
             academic_discussed_other: updatedAcademicOutcomesOther, \
             academic_outcomes_other: updatedAcademicOutcomesOther, \
             study_resources_other: updatedStudyResourcesOther, \
-            specialties: checked_specialties}
+            specialties: checked_specialties, \
+            other_specialty: updatedOtherSpecialty}
   #alert("meetingId: " + objectId + " m_status:" + newStatus)
   xhr = $.ajax({
     url: "/coaching/" + controller + "/" + objectId
