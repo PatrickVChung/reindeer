@@ -98,8 +98,8 @@ module Coaching::StudentsHelper
         return ("Student: #{@student.full_name} - #{hf_get_cohort(@student)} #{grad_text}" +
                "<span style='font-size:20px;color:black'> (Total # of WBAs: <b>#{no_of_wbas}</b> " +
                "out of 100 & Total # of Badges Awarded: <b>#{no_of_badges}</b> out of 13) | " +
-               "#{link_to "Career Interest:", update_career_interests_users_path(uuid: @student.uuid),  target: :_blank}" +
-               "#{@student.career_interest}</span>").html_safe
+               "#{link_to "Specialties Interest:", update_career_interests_users_path(uuid: @student.uuid),  target: :_blank}" +
+               "#{hf_format_other_specialty(@student.career_interest)}</span>").html_safe
       else
         return ""
       end

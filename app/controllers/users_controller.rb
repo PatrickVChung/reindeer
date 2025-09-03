@@ -72,8 +72,13 @@ class UsersController < ApplicationController
   def save_career_interests
 
     @user = params[:user]
+    temp_spec_array = params["specialties"]
+    if params["specialties"].last.include? "Other"
+      temp_spec_array[-1] = params["specialties"].last + "~" + params["other_specialty"]
+    end
+
     if !@user["uuid"].nil?
-      user = User.find_by(uuid: @user["uuid"]).update(career_interest: @user["career_interest"])
+      user = User.find_by(uuid: @user["uuid"]).update(career_interest: temp_spec_array)
       if user
         redirect_to main_app.dashboards_path, notice: 'Upldated Student Career Interest!'
       else
@@ -89,6 +94,13 @@ class UsersController < ApplicationController
 
     if params[:uuid].present?
       @user = User.find_by(uuid: params[:uuid].to_s)
+      @career_interest = @user.career_interest
+      if !@career_interest.empty? and @career_interest.last.include? "Other"
+        @other_interest = @career_interest.last.split("~").last
+        other_label = @career_interest.last.split("~").first
+        @career_interest[-1] = other_label
+      end
+
     elsif params[:email].present?
       @user = User.find_by(email: params[:email])
     end
