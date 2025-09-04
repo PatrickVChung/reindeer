@@ -103,10 +103,12 @@ module Coaching
     def edit
       @meeting = Meeting.find params[:id]
       @career_interest = User.find_by(id: @meeting.user_id).career_interest
-      if @career_interest.last.include? "Other"
-        @other_interest = @career_interest.last.split("~").last
-        other_label = @career_interest.last.split("~").first
-        @career_interest[-1] = other_label
+      if !@career_interest.nil?
+        if @career_interest.last.include? "Other"
+          @other_interest = @career_interest.last.split("~").last
+          other_label = @career_interest.last.split("~").first
+          @career_interest[-1] = other_label
+        end
       end
 
       respond_to do |format|
@@ -122,13 +124,13 @@ module Coaching
     def update
       @meeting = Meeting.find params[:id]
       temp_spec_array = params["specialties"]
-      if temp_spec_array.last.include? "Other"
-        temp_spec_array[-1] = params["specialties"].last + "~" + params["other_specialty"]
+
+      if !temp_spec_array.nil?
+        if temp_spec_array.last.include? "Other"
+          temp_spec_array[-1] = params["specialties"].last + "~" + params["other_specialty"]
+          User.find_by(id: @meeting.user_id).update(career_interest: temp_spec_array)
+        end
       end
-
-      User.find_by(id: @meeting.user_id).update(career_interest: temp_spec_array)
-
-
       respond_to do |format|
         if @meeting.update(meeting_update_params)
           format.js { render action: 'update', status: :ok }
