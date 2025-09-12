@@ -1,10 +1,10 @@
 module SearchesHelper
 
   def hf_format_other_specialty (in_array)
-    if in_array.empty?
+    if in_array.nil? and in_array.empty?
       return []
     end
-    if in_array.last.include? "Other"
+    if !in_array.last.nil? and in_array.last.include? "Other"
       in_array[-1] = "Other: " + in_array.last.split("~").last
       return in_array
     end

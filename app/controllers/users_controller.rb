@@ -94,7 +94,7 @@ class UsersController < ApplicationController
 
     if params[:uuid].present?
       @user = User.find_by(uuid: params[:uuid].to_s)
-      @career_interest = @user.career_interest
+      @career_interest = @user.career_interest.compact
       if !@career_interest.empty? and @career_interest.last.include? "Other"
         @other_interest = @career_interest.last.split("~").last
         other_label = @career_interest.last.split("~").first

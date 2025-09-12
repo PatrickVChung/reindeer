@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-body">
+    <div class="input-group mb-3">
+      <%= form_with(url: medhub_apis_get_courses_path, remote: true, method: :get) do |form| %>
+        <div class="input-group">
+           <span class="input-group-text"><strong>Course Code</strong></span>
+
+             <%= form.text_field :course_code, class: "form-control" %>
+             <%= form.submit 'Search', class: "btn btn-primary" %>
+
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div id="course_data">
+      <% if !@courses.nil? %>
+        <%= render partial: "course_data", locals: { courses: @courses} %>
+      <% end %>
+    </div>
+</div>

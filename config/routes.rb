@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+
+  get "medhub_apis/final_evals"
+  get "medhub_apis/all_courses"
+  get "medhub_apis/get_courses"
+
   resources :precep_meetings
   resources :new_competencies do
     collection  do

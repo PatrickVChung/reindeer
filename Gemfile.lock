@@ -219,6 +219,10 @@ GEM
     high_voltage (4.0.0)
     highcharts-rails (6.0.3)
       railties (>= 3.1)
+    httparty (0.23.1)
+      csv
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     icalendar (2.11.2)
@@ -314,6 +318,8 @@ GEM
     momentjs-rails (2.20.1)
       railties (>= 3.1)
     multi_json (1.17.0)
+    multi_xml (0.7.2)
+      bigdecimal (~> 3.1)
     nenv (0.3.0)
     nested_form (0.3.2)
     nested_form_fields (0.8.4)
@@ -603,6 +609,7 @@ DEPENDENCIES
   guard-rspec
   high_voltage
   highcharts-rails
+  httparty
   icalendar
   image_processing
   importmap-rails (~> 2.0)
@@ -652,6 +659,7 @@ DEPENDENCIES
   sprockets (< 4)
   statistics2
   subprocess
+  timeout
   twitter-bootstrap-rails
   uglifier
   webrick (>= 1.8.1)
