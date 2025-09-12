@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_10_151739) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_05_195947) do
   create_schema "source"
   create_schema "target"
   create_schema "transform"
@@ -1059,6 +1059,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_151739) do
     t.unique_constraint ["email"], name: "med25_mspe_email_key"
   end
 
+  create_table "med26_mspes", primary_key: "sid", id: { type: :string, limit: 10 }, force: :cascade do |t|
+    t.string "email", limit: 50, null: false
+    t.string "full_name", limit: 50
+    t.bigint "user_id"
+    t.integer "permission_group_id"
+    t.index ["user_id"], name: "index_med26_mspes_on_user_id"
+    t.unique_constraint ["email"], name: "med26_mspe_email_key"
+  end
+
+  create_table "medhub_courses", force: :cascade do |t|
+    t.string "course_code"
+    t.integer "course_id"
+    t.string "course_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_code"], name: "index_medhub_courses_on_course_code"
+  end
+
   create_table "medhub_period_ids", id: false, force: :cascade do |t|
     t.integer "courseID"
     t.integer "periodID"
@@ -1563,6 +1581,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_151739) do
   add_foreign_key "med23_mspes", "users"
   add_foreign_key "med24_mspes", "users"
   add_foreign_key "med25_mspes", "users"
+  add_foreign_key "med26_mspes", "users"
   add_foreign_key "precep_meetings", "users"
   add_foreign_key "preceptor_assesses", "users"
   add_foreign_key "preceptor_evals", "users"

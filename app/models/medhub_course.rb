@@ -1,0 +1,3 @@
+class MedhubCourse < ApplicationRecord
+
+end

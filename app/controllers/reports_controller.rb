@@ -50,7 +50,7 @@ class ReportsController < ApplicationController
       end
       respond_to do |format|
         format.html
-        format.js { render action: 'competency_data', status: 200 }
+        #format.js { render action: 'competency_data', status: 200 }
       end
     end
   end

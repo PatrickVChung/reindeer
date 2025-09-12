@@ -38,9 +38,23 @@
               <% if can? :crud, Dashboard %>
                 <%= link_to '<i class="fa fa-home" style="color:#0C2D83"></i> Home'.html_safe,  auto_path, class: "nav-link"  %>
               <% end %>
+
+            <li class="nav-item dropdown">
+              <% if ['chungp'].include? current_user.username %>
+                  <a class="nav-link dropdown-toggle" role="button"  href="#medhubtMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                  Medhub
+                  </a>
+                  <ul class="dropdown-menu" id="medhubMenu">
+                    <li><%= link_to '<i> Final Evals </i>'.html_safe, medhub_apis_get_courses_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> All Courses </i>'.html_safe, medhub_apis_all_courses_path, target: '_blank', class: "dropdown-item" %></li>
+
+                  </ul>
+              <% end %>
             </li>
+
+
             <li class="nav-item">
-              <% if ['chungp','itot', 'budd', 'bumstedt', 'bettybogus'].include? current_user.username  %>
+              <% if ['chungp','itot', 'budd', 'schneibe', 'bettybogus'].include? current_user.username  %>
                 <%= link_to '<i style="color:#31a34f;" class="fa fa-book"></i> Course Catalog'.html_safe, courses_path(), target: '_blank', class: "nav-link" %>
               <% end %>
             </li>
