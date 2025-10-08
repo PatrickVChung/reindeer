@@ -21,7 +21,7 @@
   <tr>
     <td style="text-align:center"> <%= link_to result.full_name, search_searches_path(search: result.email), target: :blank %></td>
     <td style="text-align:center"> <%= result.email %></td>
-    <% if ['chungp', 'haedinge', 'petesama', 'bumstedt'].include? current_user.username %>
+    <% if ['chungp', 'fruhwirt', 'dunnbri', 'schneibe'].include? current_user.username %>
       <td style="text-align:center"> <%= link_to result.sid.to_s, update_loa_users_path(sid: result.sid), target: :_blank %></td>
     <% else %>
       <td style="text-align:center"> <%= result.sid.to_s  %></td>
@@ -37,7 +37,7 @@
     <td style="text-align:center"> <%= result.new_competency? ? 'Yes' : '<b style="color:red">No</b>'.html_safe %></td>
     <td style="text-align:center"> <%= result.is_ldap? ? 'Yes' : '<b style="color:red">No</b>'.html_safe %></td>
     <td style="text-align:center"> <%= result.former_name %></td>
-    <td style="text-align:center"> <%= result.career_interest.join(", ") %></td>    
+    <td style="text-align:center"> <%= result.career_interest.join(", ") %></td>
   </tr>
 <% end %>
 </table>

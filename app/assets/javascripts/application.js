@@ -88,6 +88,7 @@
 //= require course_schedules
 //= require flatpickr
 //= require precep_meetings
+//= require medhub_apis
 //= require flatpickr/plugins/confirmDate/confirmDate
 
 

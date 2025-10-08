@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
 
-  get "medhub_apis/final_evals"
-  get "medhub_apis/all_courses"
-  get "medhub_apis/get_courses"
+  resources :medhub_apis do
+    collection do
+      get "final_evals", controller: 'medhub_apis', to: 'medhub_apis#final_evals'
+      get "all_courses", controller: 'medhub_apis', to: 'medhub_apis#all_courses'
+      get "get_courses", controller: 'medhub_apis', to: 'medhub_apis#get_courses'
+    end
+  end
 
   resources :precep_meetings
   resources :new_competencies do
@@ -245,6 +249,7 @@ Rails.application.routes.draw do
   #match '*unmatched', to: 'application#route_not_found', via: :all   # this will break the activestorage url_for(document) - make the document not viewable.
 
   get "pages/*id", to: "high_voltage/pages#show", as: :page, format: false
+  get '/.well-known/appspecific/com.chrome.devtools.json', to: proc { [200, {}, ['']] }
 
   #match "*any", via: :all, to: "errors#file_not_found"
 end
