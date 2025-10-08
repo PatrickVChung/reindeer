@@ -71,10 +71,13 @@ class SearchesController < ApplicationController
       redirect_to(root_path, alert: "No records found for #{params[:search]}")
     end
 
-    # respond_to do |format|
-    #   #format.js { render partial: 'search-results'}
-    #   format.html
-    # end
+    #render :search
+
+    respond_to do |format|
+      #format.js { render partial: 'search-results', status: 200}
+      format.html {render :search}
+    end
+
   end
 
   def download_file

@@ -5,7 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ##############################
 gem "bundler", '~>2.0'
 #gem 'rails'  #, '~>6.1.3' #'~> 5.2.2.1'
-gem 'rails', '~> 8.0', '>= 8.0.2'
+gem 'rails', '~> 8.0.2.1'
 gem "rdoc" # '~>6.3.1'
 gem "psych", '< 4'
 gem 'sprockets', '< 4'
@@ -135,7 +135,7 @@ end
 # To use debugger
 group :development do
   gem "rack-mini-profiler", require: false
-  gem "rack", ">= 2.2.12"
+  gem "rack" #, ">= 2.2.12"
   gem "webrick", ">= 1.8.1"
   gem "puma", "~> 6.4.2"
   gem "rails_layout"

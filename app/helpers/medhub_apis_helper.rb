@@ -457,7 +457,6 @@ module MedhubApisHelper
       end
   end
 
-
   def hf_access_medhub(course_ids, debug)
     @debug = debug
     init_global_vars
@@ -467,7 +466,6 @@ module MedhubApisHelper
     end
 
   end
-
 
 def init_global_vars
 

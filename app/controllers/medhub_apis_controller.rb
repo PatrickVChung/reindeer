@@ -15,10 +15,11 @@ class MedhubApisController < ApplicationController
       medhub_api_log_file_path = Rails.root.join('log', 'medhub_api.log')
       @medhub_api_log_content = File.read(medhub_api_log_file_path)
       respond_to do |format|
-        format.html
+        format.html {render :final_evals}
+        # format.js {render :final_evals, status: 200}
+        #format.json {render @evals_log, layout: false, status: 200}
       end
     end
-
 
   end
 
@@ -27,15 +28,13 @@ class MedhubApisController < ApplicationController
   end
 
   def get_courses
-
     if params[:course_code].present?
       @courses = MedhubCourse.where("course_name like ?", "%#{params[:course_code]}%")
       respond_to do |format|
-        format.html
-        format.js { render action: 'course_data', status: 200 }
+        format.html {render :get_course}
+        #format.js {render 'get_courses', layout: false, status: 200}
       end
     end
-
   end
 
   private

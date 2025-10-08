@@ -45,8 +45,8 @@
                   Medhub
                   </a>
                   <ul class="dropdown-menu" id="medhubMenu">
-                    <li><%= link_to '<i> Final Evals </i>'.html_safe, medhub_apis_get_courses_path, target: '_blank', class: "dropdown-item" %></li>
-                    <li><%= link_to '<i> All Courses </i>'.html_safe, medhub_apis_all_courses_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> Final Evals </i>'.html_safe, get_courses_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> All Courses </i>'.html_safe, all_courses_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
 
                   </ul>
               <% end %>
@@ -65,7 +65,7 @@
             </li>
 
             <li class="nav-item dropdown">
-              <% if (['admin'].include? current_user.coaching_type and current_user.spec_program !='Wellness') or (['itot', 'schneibe', 'fruhwirt', 'petesama'].include? current_user.username) %>
+              <% if (['admin'].include? current_user.coaching_type and current_user.spec_program !='Wellness') or (['itot', 'schneibe', 'fruhwirt', 'dunnbri'].include? current_user.username) %>
                   <a class="nav-link dropdown-toggle" role="button"  href="#reportMenu" data-bs-toggle="dropdown" aria-expanded="false">
                   Report
                   </a>

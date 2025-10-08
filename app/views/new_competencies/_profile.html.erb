@@ -1,6 +1,6 @@
 <% if !current_user.nil? %>
   <table class="table table-hover table-striped table-light responsive-sm">
-    <% if ['chungp', 'fruhwirt', 'meltond', 'petesama', 'bumstedt', 'itot'].include? current_user.username %>
+    <% if ['chungp', 'fruhwirt', 'larsonem', 'dunnbri', 'schneibe', 'itot'].include? current_user.username %>
       <tr><td style="text-align:left">Email</td><td style="color:brown"><%= link_to result.email.to_s, update_loa_users_path(email: result.email), class: "nav-link blue-text" ,target: :_blank %></td></tr>
       <tr><td style="text-align:left">SID</td><td> <%= link_to result.sid.to_s, update_loa_users_path(sid: result.sid), class: "nav-link blue-text", target: :_blank %></td></tr>
     <% else %>
