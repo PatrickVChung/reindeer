@@ -72,11 +72,11 @@ class SearchesController < ApplicationController
       redirect_to(root_path, alert: "No records found for #{params[:search]}")
     end
 
-    #render :search
+    render :index
 
-    respond_to do |format|
-      format.html 
-    end
+    # respond_to do |format|
+    #   format.html
+    # end
 
   end
 

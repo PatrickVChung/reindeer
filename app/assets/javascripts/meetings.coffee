@@ -16,9 +16,10 @@ $ ->
     advisorType = $('#coaching_meeting_advisor_type').val()
     if advisorType == 'Career'
       permissioGroupID = $('#coaching_meeting_permission_group_id').val()
-      if (permissioGroupID > 21)  ## Med26 -> 20, Med27 -> 21
-        alert("Career Advisors are prioritizing MS4 ERAS and MS3 lottery needs at this time. If you are not a M26 or M27 student, please hold on scheduling appointments until October.")
-        return
+      # Commented out on 10/14/2025
+      # if (permissioGroupID > 21)  ## Med26 -> 20, Med27 -> 21
+      #   alert("Career Advisors are prioritizing MS4 ERAS and MS3 lottery needs at this time. If you are not a M26 or M27 student, please hold on scheduling appointments until October.")
+      #   return
 
     $('div[data-advisors]' ).each ->
       advisors = $(this).data('advisors')

@@ -136,7 +136,7 @@
               </li>
               <% if current_user.coaching_type == 'student' %>
                 <li class="nav-item">
-                  <%= link_to '<i class="fa fa-user-md" style="color:#5BAD5A"></i>Your Datasets'.html_safe, search_searches_path(current_user), class: "nav-link"  %>
+                  <%= link_to '<i class="fa fa-user-md" style="color:#5BAD5A"></i>Your Datasets'.html_safe, searches_path(current_user), class: "nav-link"  %>
                 </li>
               <% elsif current_user.coach_or_higher? and current_user.spec_program !='Wellness' %>
                 <li class="nav-item">
