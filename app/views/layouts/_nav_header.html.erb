@@ -20,14 +20,16 @@
         <div id="SearchPlaceHolder">
           <div id="SearchInputForm">
             <% if !current_user.nil? && current_user.coaching_type != 'student' && current_user.spec_program !='Wellness' %>
-              <%= form_tag(search_searches_path, method: "get",  class: 'navbar-form navbar-left', id: 'SearchForm') do %>
+              <%= form_with url: searches_path, method: :get, local: true do |form| %>
                 <span>
                   <div class="input-group">
-                        <%= search_field_tag :search, params[:search], class: "form-control", size: 30, placeholder: "LastName, FirstName or '?' for help!" %>
-                        <%= button_tag " SEARCH", class: 'button btn btn-info fa fa-search', style: 'font-size:15px', id: 'SearchButton', html: {autocomplete: 'off'},
-                            'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> SEARCHING...".html_safe %>
+                    <%= form.label :search, "Student Name", style: "color: purple; width: 150px;", class: "form-control" %>
+                    <%= form.text_field :search, placeholder: "Enter LastName Search...", style: "width: 250px;", value: params[:search], class: "form-control" %>
+                    <%= form.button type: "submit", class: "btn btn-info", data: { "disable-with": "<i class='fa fa-spinner fa-spin'></i> Searching..." } do %>
+                      <i class="fa fa-search"></i> Search
+                    <% end %>
                   </div>
-                </span>
+                <span>
               <% end %>
             <% end %>
           </div>
@@ -40,19 +42,17 @@
               <% end %>
 
             <li class="nav-item dropdown">
-              <% if ['chungp'].include? current_user.username %>
+              <% if ['chungp', 'fruhwirt', 'budd'].include? current_user.username %>
                   <a class="nav-link dropdown-toggle" role="button"  href="#medhubtMenu" data-bs-toggle="dropdown" aria-expanded="false">
                   Medhub
                   </a>
                   <ul class="dropdown-menu" id="medhubMenu">
-                    <li><%= link_to '<i> Final Evals </i>'.html_safe, get_courses_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
-                    <li><%= link_to '<i> All Courses </i>'.html_safe, all_courses_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> Accesssing Final Evals </i>'.html_safe, get_courses_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> All Medhub Courses </i>'.html_safe, all_courses_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
 
                   </ul>
               <% end %>
             </li>
-
-
             <li class="nav-item">
               <% if ['chungp','itot', 'budd', 'schneibe', 'bettybogus'].include? current_user.username  %>
                 <%= link_to '<i style="color:#31a34f;" class="fa fa-book"></i> Course Catalog'.html_safe, courses_path(), target: '_blank', class: "nav-link" %>

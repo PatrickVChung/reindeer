@@ -144,21 +144,16 @@ module MedhubApisHelper
       if a_value.empty?
           return
       end
-      temp_str = q_text.split(". ").first
-      desc = q_text.split(". ").second
-      if desc.nil?
-          desc = q_text
-     end
-      code  = temp_str.split(" ").first
+      temp_str = q_text.split(": ")
+      code = temp_str.first
+      desc = temp_str.second
       if code == "Student"
           return
       end
-      num = temp_str.split(" ").second.to_i.to_s
-
       if code == "PPD"
           code = "PPPD"
       end
-      code = (code + num).downcase
+      code = code.gsub(" ", "").downcase
 
       if @debug == "Y"
           MedhubLog.info  "=========================================="
@@ -266,16 +261,16 @@ module MedhubApisHelper
       response = get_data(call_path_str, req_str)
       question_hash = JSON.parse(response.body)
 
-      # if @debug == "Y"
-      #     MedhubLog.info "***************@question_hash ************************************"
-      #     MedhubLog.info "***** evaluationID: #{evaluationID} *******************************"
-      #     question_hash.each do |key, value|
-      #         key.each do |k, v|
-      #             MedhubLog.info "#{k.rjust(20)} : #{v}"
-      #         end
-      #     end
-      #     MedhubLog.info "***************************************************"
-      # end
+      if @debug == "Y"
+          MedhubLog.info "***************@question_hash ************************************"
+          MedhubLog.info "***** evaluationID: #{evaluationID} *******************************"
+          question_hash.each do |key, value|
+              key.each do |k, v|
+                  MedhubLog.info "#{k.rjust(20)} : #{v}"
+              end
+          end
+          MedhubLog.info "***************************************************"
+      end
 
       prof_concerns_hash = load_prof_concerns(question_hash, "any areas of student's professionalism")
 
@@ -287,15 +282,15 @@ module MedhubApisHelper
 
       #NewCompetency.where(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create.update(row_hash)
       if NewCompetency.exists?(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"])
+        NewCompetency.where(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create.update(row_hash)
         MedhubLog.info "======================================================================"
         MedhubLog.info "#### Updated:  #{full_name} ###########"
         MedhubLog.info "----------------------------------------------------------------------"
-        NewCompetency.where(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create.update(row_hash)
       else
+        NewCompetency.where(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create(row_hash)
         MedhubLog.info "======================================================================"
         MedhubLog.info "#### Inserted:  #{full_name} ###########"
         MedhubLog.info "----------------------------------------------------------------------"
-        NewCompetency.where(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create(row_hash)
       end
 
       # @prof_concerns_hash = {}
@@ -306,11 +301,11 @@ module MedhubApisHelper
 
   end
 
-  def get_evals_responses(userID, grade, courseID, email, medhubID)
+  def get_evals_responses(userID, grade, courseID, email, medhubID, eval_start_date)
       userID = userID.to_i
       courseID = courseID.to_i
 
-      req_str = {"startDate":"2025-01-01",
+      req_str = {"startDate": eval_start_date,
                  "types":[5,18],
                  "evaluatees":[userID],
                  "courses":[courseID]
@@ -378,14 +373,14 @@ module MedhubApisHelper
      end
   end
 
-  def get_users (grade, userID, start_date, end_date, courseID)
+  def get_users (grade, userID, start_date, end_date, courseID, level_year, eval_start_date)
     req_str = {"userID":userID}
     call_path_str = "users/studentInfo"
     response2 = get_data(call_path_str, req_str)
     response2_hash = JSON.parse(response2.body)
     matr_start_date  = response2_hash["start_date"]
 
-    if response2_hash["level"].to_i >= 4 and grade.to_s != ""
+    if response2_hash["level"].to_i >= level_year.to_i and grade.to_s != ""
         email = response2_hash["email"].to_s
         studentID = response2_hash["studentID"]
         studentName = response2_hash["name_last"].to_s + ", " + response2_hash["name_first"].to_s
@@ -394,13 +389,13 @@ module MedhubApisHelper
         if NewCompetency.exists?(medhub_id: medhubID, course_id: courseID)
           MedhubLog.info (" ***** Found in NewCompetency, Skipping Update! ****")
         else
-          get_evals_responses(userID, grade, courseID, email, medhubID)   ## get comments and competency information
+          get_evals_responses(userID, grade, courseID, email, medhubID, eval_start_date)   ## get comments and competency information
         end
      end
 
   end
 
-  def schedules_enrollment(start_date, end_date, periodID, courseID)
+  def schedules_enrollment(start_date, end_date, periodID, courseID, level_year, eval_start_date)
         call_path_str = "schedules/enrollment"
         req_str = {"periodID":periodID, "courseID":courseID}
         response = get_data(call_path_str, req_str)
@@ -419,17 +414,16 @@ module MedhubApisHelper
         if !data_hash.empty?
            data_hash.each do |data|
              if data["grade"].to_s != ""
-               get_users(data["grade"], data["userID"], start_date, end_date, courseID)
+               get_users(data["grade"], data["userID"], start_date, end_date, courseID, level_year, eval_start_date)
 
              end
            end
         end
   end
 
-  def get_schedules_periods(courseID)
-
+  def get_schedules_periods(courseID, rotationStartYr, rotationEndYr, level_year, eval_start_date)
      call_path_str = "schedules/periods"
-     for rotationsetID in 25..25 #10..18  #21..22
+     for rotationsetID in rotationStartYr..rotationEndYr #10..18  #21..22
         req_str = {"courseID":courseID, "rotationsetID":rotationsetID}
         response = get_data(call_path_str, req_str)
         data_hash = JSON.parse(response.body)
@@ -449,7 +443,7 @@ module MedhubApisHelper
                   periodID   = data["periodID"]
 
                   MedhubLog.info "processing startDate: #{start_date}   endDate: #{end_date}   periodID: #{periodID}"
-                  schedules_enrollment(start_date, end_date, periodID, courseID)
+                  schedules_enrollment(start_date, end_date, periodID, courseID, level_year, eval_start_date)
               end
             end
 
@@ -457,12 +451,12 @@ module MedhubApisHelper
       end
   end
 
-  def hf_access_medhub(course_ids, debug)
+  def hf_access_medhub(course_ids, rotationStartYr, rotationEndYr, level_year, eval_start_date, debug)
     @debug = debug
     init_global_vars
     course_ids.each do |course_id|
-      MedhubLog.info("Processing #{course_id}")
-      get_schedules_periods(course_id)
+      MedhubLog.info("Processing #{course_id}  --> rotation Year from: #{rotationStartYr} to #{rotationEndYr}; EvalStartDate: #{eval_start_date}")
+      get_schedules_periods(course_id, rotationStartYr, rotationEndYr, level_year, eval_start_date)
     end
 
   end
@@ -473,4 +467,8 @@ def init_global_vars
    @no_of_rec_rejected = 0
    @no_of_rec_updated  = 0
    @no_of_rec_inserted = 0
+end
+
+def hf_eval_start_date
+  return Date.today.months_ago(6).strftime("%Y/%m/%d")
 end
