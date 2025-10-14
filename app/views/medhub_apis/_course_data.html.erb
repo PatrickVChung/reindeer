@@ -1,8 +1,8 @@
-<%= form_with(url: final_evals_medhub_apis_path, method: :get, html: { target: "_blank" }) do |form| %>
+<%= form_with(url: final_evals_medhub_apis_path, method: :get) do |form| %>
   <table id="courseDataTable" class="table table-hover table-striped table-responsive" data-sort="true" >
     <thead>
       <tr class="filters">
-        <th>Check Courses To Retreive Data from Medhub </th>
+        <th style="width: 20%">Check Courses To Retreive FinalEvals from Medhub </th>
         <th style="text-align:center">CourseID</th>
         <th style="text-align:center">CourseCore</th>
         <th style="text-align:left">Coourse Name</th>
@@ -24,6 +24,28 @@
           <td style="text-align:left"> <%= course.course_name%> </td>
         </tr>
       <% end %>
+
+      <tr>
+        <td>
+          <span>
+              <div class="form-input inline">
+                <label for="startYr" class="form-label">Rotation Start Year (YY)</label>
+                <input type="text" class="form-control w-25" name="rotationStartYr" value=25>
+                <label for="endYr" class="form-label">Rotation End Year (YY)</label>
+                <input type="text" class="form-control w-25" name="rotationEndYr"value=26>
+                <label for="studentLevel" class="form-label">Student Level </label>
+                <input type="text" class="form-control w-25" name="studentLevel" value=4 placeholder="Enter 3 or 4">
+                <label for="evalStartDate" class="form-label">Eval Start Date (YYYY/MM/DD) </label>
+                <% eval_start_date = hf_eval_start_date %>
+                <input type="text" class="form-control w-25" name="evalStartDate" value="<%= eval_start_date %>" placeholder="Default to Beginning of Year">
+              </div>
+          <span>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
       <tr>
           <td>
             <div class="form-check">
@@ -31,10 +53,14 @@
               <label class="form-check-label" for="EnabledDebug">
                 Enable Debug
               </label>
-              <%= form.submit 'Access Medhub for Final Evals', class: "btn btn-primary" %>
+              <%= form.button type: "submit", class: "btn btn-info", data: { "disable-with": "<i class='fa fa-spinner fa-spin'></i> Accessing..." } do %>
+                <i class="fa fa-file"></i> Accessing Mehdub APIs..
+              <% end %>
             </div>
-
           </td>
+          <td></td>
+          <td></td>
+          <td></td>
       </tr>
   </table>
 <% end %>

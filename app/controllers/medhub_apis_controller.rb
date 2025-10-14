@@ -11,13 +11,12 @@ class MedhubApisController < ApplicationController
       else
         debug = 'N'
       end
-      @evals_log = hf_access_medhub(params[:course_ids], debug)
+
+      @evals_log = hf_access_medhub(params[:course_ids], params[:rotationStartYr], params[:rotationEndYr], params[:studentLevel], params[:evalStartDate], debug)
       medhub_api_log_file_path = Rails.root.join('log', 'medhub_api.log')
       @medhub_api_log_content = File.read(medhub_api_log_file_path)
       respond_to do |format|
         format.html {render :final_evals}
-        # format.js {render :final_evals, status: 200}
-        #format.json {render @evals_log, layout: false, status: 200}
       end
     end
 
@@ -31,7 +30,7 @@ class MedhubApisController < ApplicationController
     if params[:course_code].present?
       @courses = MedhubCourse.where("course_name like ?", "%#{params[:course_code]}%")
       respond_to do |format|
-        format.html {render :get_course}
+        format.html
         #format.js {render 'get_courses', layout: false, status: 200}
       end
     end

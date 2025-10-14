@@ -2,6 +2,7 @@ class SearchesController < ApplicationController
   before_action :authenticate_user!, :set_resources
   include SearchesHelper
   layout 'full_width_csl'
+  respond_to :js, :json, :html, :ics
 
   def search_by_email
     if params[:email].present?
@@ -10,7 +11,7 @@ class SearchesController < ApplicationController
     end
   end
 
-  def search
+  def index
     if current_user.coaching_type == "student" and params[:search].nil?
       @results = []
       @results.push current_user
@@ -74,8 +75,7 @@ class SearchesController < ApplicationController
     #render :search
 
     respond_to do |format|
-      #format.js { render partial: 'search-results', status: 200}
-      format.html {render :search}
+      format.html 
     end
 
   end
