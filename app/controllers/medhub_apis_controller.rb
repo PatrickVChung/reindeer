@@ -23,7 +23,11 @@ class MedhubApisController < ApplicationController
   end
 
   def all_courses
-
+    @all_courses = MedhubCourse.all
+    @headers = MedhubCourse.columns.map(&:name)
+    respond_to do |format|
+      format.html
+    end
   end
 
   def get_courses

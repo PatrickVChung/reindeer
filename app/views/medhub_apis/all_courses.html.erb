@@ -1,2 +1,24 @@
-<h1>MedhubApis#all_courses</h1>
-<p>Find me in app/views/medhub_apis/all_courses.html.erb</p>
+<h4>Medhub Courses (total: <%= @all_courses.count %>)</h4>
+<div class="card">
+  <div class="d-flex justify-content-center">
+    <table id="courseDataTable2" class="table table-hover table-striped table-responsive" data-sort="true" >
+      <thead>
+        <tr class="filters">
+          <% @headers.each do |header| %>
+            <th><%= header.titleize %></th>
+          <% end %>
+        </tr>
+        </thead>
+          <% @all_courses.each do |course| %>
+            <tr>
+              <td><%= course.id %></td>
+              <td><%= course.course_code %></td>
+              <td><%= course.course_id %></td>
+              <td><%= course.course_name %></td>
+              <td><%= course.created_at %></td>
+              <td><%= course.updated_at %></td>
+            </tr>
+          <% end %>
+    </table>
+  </div>
+</div>
