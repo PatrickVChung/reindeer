@@ -22,8 +22,8 @@
 
               <% if epa_master.badged? %>
                 <%= link_to '-View', edit_epa_review_path(id: review.id), {remote: true, controller: 'epa_reviews', action: :edit,
-                    'data-bs-target' => '#mymodal-epa-review', class: "button-primary fa fa-eye"}  %> &nbsp;&nbsp;
-                    <%= link_to 'Unbadged', unbadged_epa_reviews_path(id: review.id), {controller: 'epa_reviews', action: :unbadged }%>                   
+                    'data-bs-target' => '#mymodal-epa-review', class: "btn btn-primary fa fa-eye"}  %> &nbsp;&nbsp;
+                    <%= link_to 'Unbadged', unbadged_epa_reviews_path(id: review.id), {controller: 'epa_reviews', action: :unbadged }%>
               <% else %>
 
                   <% if !str_html1.empty? and !str_html2.empty? %>
@@ -32,7 +32,7 @@
                   <% end %>
 
                   <%= link_to '-Review', edit_epa_review_path(id: review.id), {remote: true, controller: 'epa_reviews', action: :edit,
-                      'data-bs-target' => '#mymodal-epa-review', class: "button-primary fa fa-edit"}  %> &nbsp;&nbsp;
+                      'data-bs-target' => '#mymodal-epa-review', class: "btn btn-primary fa fa-edit"}  %> &nbsp;&nbsp;
                   <%= link_to '-Delete', epa_review_path(id: review.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: 'delete_review fa fa-trash' %>
               <% end %>
               </h5>
