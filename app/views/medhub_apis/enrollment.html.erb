@@ -1,0 +1,25 @@
+<div class="container" >
+      <br />
+        <div class="card">
+          <div class="card-body">
+            <%= form_tag(enrollment_medhub_apis_path, method: "get", id: 'enrollment_form') do %>
+              <div class="input-group">
+                 <span class="input-group-text"><b>Course</b></span>
+                  <%= select_tag :course_id, options_for_select(@all_courses.sort.collect{|s| [s.course_code + " - " + s.course_name, s.course_id]}, selected: params[:course_id]), include_blank: '--',
+                    prompt: "Please Select a Course", class: "searchable-select form-control w-50" %>
+                    <%= text_field_tag :rotation_start_yr, 25, class: "form-control" %>
+                    <%= text_field_tag :rotation_end_yr, 26, class: "form-control" %>
+                  <%= submit_tag "List Enrollment", class: 'btn btn-primary' %>
+              </div>
+
+            <% end %>
+          </div>
+        </div>
+
+      <br />
+      <% if !@enrollments.nil? %>
+            <%= render partial: 'detail_enrollment' %>
+      <% else %>
+            <h5> No Enrollment Found! </h5>
+      <% end %>
+</div>

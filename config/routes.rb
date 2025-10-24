@@ -5,6 +5,8 @@ Rails.application.routes.draw do
       get "final_evals", controller: 'medhub_apis', to: 'medhub_apis#final_evals'
       get "all_courses", controller: 'medhub_apis', to: 'medhub_apis#all_courses'
       get "get_courses", controller: 'medhub_apis', to: 'medhub_apis#get_courses'
+      get "enrollment", controller: 'medhub_apis', to: 'medhub_apis#enrollment'
+
     end
   end
 

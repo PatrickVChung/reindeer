@@ -21,9 +21,8 @@ class MedhubApisController < ApplicationController
     end
 
   end
-
+  
   def all_courses
-    @all_courses = MedhubCourse.all
     @headers = MedhubCourse.columns.map(&:name)
     respond_to do |format|
       format.html
@@ -40,10 +39,16 @@ class MedhubApisController < ApplicationController
     end
   end
 
+  def enrollment
+    @enrollments = hf_access_enrollment(params[:course_id], params[:rotation_start_yr], params[:rotation_end_yr]).sort if params[:course_id].present?
+  end
+
   private
 
   def set_resources
     medhub_api_log_file_path = Rails.root.join('log', 'medhub_api.log')
     File.open(medhub_api_log_file_path, "w") { |file| file.truncate(0) }
+
+    @all_courses = MedhubCourse.all
   end
 end

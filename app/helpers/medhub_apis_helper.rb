@@ -380,7 +380,7 @@ module MedhubApisHelper
     response2_hash = JSON.parse(response2.body)
     matr_start_date  = response2_hash["start_date"]
 
-    if response2_hash["level"].to_i >= level_year.to_i and grade.to_s != ""
+    if response2_hash["level"].to_i == level_year.to_i and grade.to_s != ""
         email = response2_hash["email"].to_s
         studentID = response2_hash["studentID"]
         studentName = response2_hash["name_last"].to_s + ", " + response2_hash["name_first"].to_s
@@ -471,4 +471,74 @@ end
 
 def hf_eval_start_date
   return Date.today.months_ago(6).strftime("%Y/%m/%d")
+end
+#----------------------------------------------------------------------------------------------------------
+
+def get_users_enroll (grade, userID, start_date, end_date, courseID, level_year, eval_start_date)
+  req_str = {"userID":userID}
+  call_path_str = "users/studentInfo"
+  response2 = get_data(call_path_str, req_str)
+  response2_hash = JSON.parse(response2.body)
+  matr_start_date  = response2_hash["start_date"]
+
+  if response2_hash["level"].to_i >= level_year.to_i #and grade.to_s != ""
+      email = response2_hash["email"].to_s
+      studentID = response2_hash["studentID"]
+      studentName = response2_hash["name_last"].to_s + ", " + response2_hash["name_first"].to_s
+      MedhubLog.info ("processing:  #{studentName}  #{email}  #{grade} matr_start_date: #{matr_start_date} --> level: #{response2_hash["level"]}")
+      # medhubID = userID.to_s
+      # if NewCompetency.exists?(medhub_id: medhubID, course_id: courseID)
+      #   MedhubLog.info (" ***** Found in NewCompetency, Skipping Update! ****")
+      # else
+      #   get_evals_responses(userID, grade, courseID, email, medhubID, eval_start_date)   ## get comments and competency information
+      # end
+   end
+
+end
+
+def hf_access_enrollment(courseID, rotation_start_yr, rotation_end_yr)
+  enroll_hash = {}
+  MedhubLog.info ("processing courseID: #{courseID} --> RotationStartYear: #{rotation_start_yr} to endYear: #{rotation_end_yr}")
+  call_path_str = "schedules/periods"
+  for rotationsetID in rotation_start_yr..rotation_end_yr #10..18  #21..22
+     req_str = {"courseID":courseID, "rotationsetID":rotationsetID}
+     response = get_data(call_path_str, req_str)
+     data_hash = JSON.parse(response.body)
+     data_hash = data_hash.uniq
+
+     MedhubLog.info ("*** Schedules/Periods *********")
+     MedhubLog.info (data_hash.inspect)
+     MedhubLog.info ("********************************")
+
+     if !data_hash.empty? and !data_hash.first.include? "ErrorCode"
+         data_hash.each do |data|
+             start_date = data["start_date"]
+             end_date   = data["end_date"]
+             periodID   = data["periodID"]
+             MedhubLog.info ("processing startDate: #{start_date}   endDate: #{end_date}   periodID: #{periodID}")
+             call_path_str = "schedules/enrollment"
+             req_str = {"periodID":periodID, "courseID":courseID}
+             enrollment_responses = get_data(call_path_str, req_str)
+             enrollments = JSON.parse(enrollment_responses.body)
+             enrollments = enrollments.uniq
+             if !enrollments.empty?
+               temp_array = []
+                enrollments.each do |enroll|
+                  MedhubLog.info ("----- enroll.inspect --------------------")
+                  MedhubLog.info (enroll.inspect)
+                  MedhubLog.info ("------------------------------------------")
+                  temp_array.push enroll
+                  level_year = 2
+                  eval_start_date = "2025-04-01"
+                  #get_users_enroll(data["grade"], data["userID"], start_date, end_date, courseID, level_year, eval_start_date)
+                end
+             end
+             enroll_hash["#{start_date}!#{end_date}!#{periodID}"] = temp_array
+            end
+        elsif !data_hash.empty? and data_hash.first.include? "ErrorCode"
+              enroll_hash["#{data_hash.first}!#{data_hash.second}"] = nil
+
+         end
+   end
+   return enroll_hash
 end
