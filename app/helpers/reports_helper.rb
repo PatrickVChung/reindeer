@@ -41,7 +41,7 @@ module ReportsHelper
   }
 
   NEW_EPA_CODES = ["EPA1A", "EPA1B", "EPA2", "EPA3", "EPA4", "EPA5", "EPA6", "EPA7", "EPA8", "EPA9", "EPA10", "EPA11"]
-  CORE_CODES = ["FAMP", "IMED", "NEUR", "OBGY", "PEDI", "PSYG", "SURG"]
+  CORE_CODES = ["FAMP", "IMED", "NEUR", "OBGY", "PEDI", "PSYC", "SURG"]
 
   BLOCKS = ['1-FUND', '2-BLHD', '3-SBM', '4-CPR', '5-HODI', '6-NSF', '7-DEVH']
 
