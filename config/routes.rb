@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       get 'download_file', param: :file_name, action: :download_file,  controller: 'reports', to: "reports#download_file"
       get 'competency', action: :competency, controller: 'reports', to: 'reports#competency'
       get 'mspe', action: :mspe, controller: 'reports', to: "reports#mspe"
+      get 'famp_core_mspe_analysis', action: :famp_core_mspe_analysis, to: "reports#famp_core_mspe_analysis"
     end
   end
 
