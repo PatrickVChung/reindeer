@@ -301,8 +301,8 @@ module ReportsHelper
     file_name = "#{Rails.root}/config/Med27_FAMP_CORE_Input_Data.txt"
     new_comp_array = []
     CSV.foreach(file_name, headers: true, col_sep: "\t") do |row|
-      new_competency = NewCompetency.where("email=? and (course_name like ? or course_name like ?)", row["email"], "%#{course_codes.first} 730%", "%#{course_codes.second} 730%").first
-      if !new_competency.nil?
+      new_competency = NewCompetency.where("email=? and (course_name like ? or course_name like ?)", row["email"], "%#{course_codes.first} 730%", "%#{course_codes.second} 730%")
+      if !new_competency.empty?
         new_comp_array.push new_competency
       end
     end

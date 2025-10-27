@@ -17,7 +17,7 @@
   </div>
 </div>
 
-<% if !@famp_core_mspes.nil? %>
+<% if !@famp_core_mspes.empty? %>
   <table id="FampCoreAnaysisTable" class="table table-hover table-striped table-responsive" data-sort="true" >
       <tr class="filters">
         <th>UserID</th>
@@ -33,20 +33,22 @@
         <th>MSPE Comment</th>
       </tr>
 
-      <% @famp_core_mspes.each do |data| %>
-        <tr>
-          <td style="text-align:center"><%= data.user_id %></td>
-          <td><%= data.user.full_name %></td>
-          <td><%= data.email %></td>
-          <td><%= data.course_id %></td>
-          <td><%= data.course_name %></td>
-          <td><%= data.start_date %></td>
-          <td><%= data.end_date %></td>
-          <td><%= data.submit_date %></td>
-          <td><%= data.evaluator %></td>
-          <td><%= data.final_grade %></td>
-          <td><%= hf_highlight_mspe(data.mspe) %></td>
-        </tr>
+      <% @famp_core_mspes.each do |cores| %>
+        <% cores.each do |data| %>
+          <tr>
+            <td style="text-align:center"><%= data.user_id %></td>
+            <td><%= data.user.full_name %></td>
+            <td><%= data.email %></td>
+            <td><%= data.course_id %></td>
+            <td><%= data.course_name %></td>
+            <td><%= data.start_date %></td>
+            <td><%= data.end_date %></td>
+            <td><%= data.submit_date %></td>
+            <td><%= data.evaluator %></td>
+            <td><%= data.final_grade %></td>
+            <td><%= hf_highlight_mspe(data.mspe) %></td>
+          </tr>
+        <% end %>
       <% end %>
   </table>
 <% end %>
