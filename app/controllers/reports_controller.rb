@@ -82,6 +82,7 @@ class ReportsController < ApplicationController
   end
 
   def famp_core_mspe_analysis
+    @famp_core_mspes = []
     if params[:course_codes].present?
       @famp_core_mspes = hf_read_famp_core_data(params[:course_codes])
     end
