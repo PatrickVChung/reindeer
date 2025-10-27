@@ -1,0 +1,81 @@
+full_name	course_code	rotation	cohort	email
+"Aaron, Ruby M."	730	S2	MED27	aaronr@ohsu.edu
+"Alteva, Gergana"	731C	S1 - S2	MED27	alteva@ohsu.edu
+"Arnold, Moriah R."	730	S3	MEDXX	arnoldmo@ohsu.edu
+"Bailey, Maisie"	730	S3	MED27	bailemai@ohsu.edu
+"Beatie, Natalie T."	730	U3	MED27	beatie@ohsu.edu
+"Bifulco, Paolo A."	730	S3	MED27	bifulco@ohsu.edu
+"Bishop, Anna"	730	S3	MED27	bishoann@ohsu.edu
+"Blasingame, Brianna A."	730	S3	MED27	blasinga@ohsu.edu
+"Bradford, William T."	730	S3	MED27	bradfota@ohsu.edu
+"Brande, Anthony K."	731A	U1 - U2	MED27	brandea@ohsu.edu
+"Burke, Alexis V."	731C	S1 - S2	MED26	burkeale@ohsu.edu
+"Clark, James"	730	U3	MED27	clarkjam@ohsu.edu
+"Claybaugh, Dillon R."	730	S2	MED27	claybaud@ohsu.edu
+"Cochran, Caroline S."	730	U3	MED27	leca@ohsu.edu
+"Davis, Alden E."	730	U3	MED27	davisald@ohsu.edu
+"Gabo, Virginia B."	730	U1	MED27	gabo@ohsu.edu
+"Gedi, Mako D."	730	U1	MED27	gedi@ohsu.edu
+"Georgioff, Benjamin M."	730	S3	MED27	georgiof@ohsu.edu
+"Gupta, Suryaa"	730	U3	MED27	guptasur@ohsu.edu
+"Habel, Cade C."	730	S1	MED27	habelc@ohsu.edu
+"Hamann, Patrick"	731C	S1 - S2	MED27	hamannp@ohsu.edu
+"Heath, Tyria"	730	S2	MED27	heathty@ohsu.edu
+"Hernandez, Cesar"	731A	S1 - S2	MED27	hernaces@ohsu.edu
+"Holden, Sarah J."	730	U1	MED27	holdens@ohsu.edu
+"Hunt-Smith, Tyler K."	730	S3	MED27	huntsmit@ohsu.edu
+"Iyer, Supriya"	730	S2	MED26	iyersu@ohsu.edu
+"Johnston, Patrick"	730	S1	MED27	johnstpa@ohsu.edu
+"Joyce, Molly"	730	S3	MED27	joycemo@ohsu.edu
+"Kato, Shun"	730	S1	MED27	katosh@ohsu.edu
+"Khair, Zumana"	730	U1	MED27	khair@ohsu.edu
+"Kilmer, Zoe S."	730	S1	MED26	kilmer@ohsu.edu
+"Korzun, Tetiana"	730	S1	MEDXX	korzun@ohsu.edu
+"Kumar, Iksha"	730	S2	MED27	kumarik@ohsu.edu
+"Kumasaka, Jill K."	730	S1	MED27	kumasakj@ohsu.edu
+"Lalwani, Nikita"	730	U1	MED27	lalwani@ohsu.edu
+"Land, Rosalee"	730	S1	MED27	landro@ohsu.edu
+"Lee, Benjamin K."	731C	U1 - U2	MED27	leeben@ohsu.edu
+"Luis, Katie M."	730	S1	MED27	luisk@ohsu.edu
+"Luu, Binh"	730	S3	MED27	luub@ohsu.edu
+"Macera, Gabriella"	730	U3	MED27	macera@ohsu.edu
+"Mazziotti, Julianna E."	731A	S1 - S2	MED27	mazziott@ohsu.edu
+"McElheran, Kylie S."	730	S3	MED27	mcelhera@ohsu.edu
+"McLean, William J."	730	U1	MED27	mcleanj@ohsu.edu
+"Mejia, Angelica T."	730	U3	MED27	mejiaan@ohsu.edu
+"Miller, Jack B."	730	U3	MED27	milljack@ohsu.edu
+"Miller-Altuner, Naomi J."	731A	S1 - S2	MED27	millenao@ohsu.edu
+"Mize, Emily J."	730	U1	MED27	mizeem@ohsu.edu
+"Modlin, Emily W."	731A	S1 - S2	MED27	modlin@ohsu.edu
+"Mudgett, Michael A."	730	S1	MED26	mudgett@ohsu.edu
+"Myers, Madeleine"	731C	U1 - U2	MED27	myersmad@ohsu.edu
+"Nelson, Lisa"	730	U1	MED27	Nelslisa@ohsu.edu
+"Ngo, Carolyn N."	730	U3	MED27	ngocar@ohsu.edu
+"Nguyen, An N."	730	U1	MED28	nguyan@ohsu.edu
+"Norris, Katherine Q."	730	U1	MED27	norriska@ohsu.edu
+"Nye, Vivian E."	730	S2	MED27	nyev@ohsu.edu
+"Pandit, Rima B."	730	S3	MED27	panditr@ohsu.edu
+"Pang, Brandi W."	730	S2	MED27	pangb@ohsu.edu
+"Peterson, Thomas"	731C	S1 - S2	MED27	petersth@ohsu.edu
+"Pina, Jasmine I."	731C	U1 - U2	MED27	pinaj@ohsu.edu
+"Plunkett, Deanna L."	730	U1	MED27	plunketd@ohsu.edu
+"Prymak, Rebecca L."	731A	U1 - U2	MED27	prymakr@ohsu.edu
+"Romanaggi, CeAnn T."	730	U3	MED27	romanagg@ohsu.edu
+"Rosenthal, Samira"	730	U3	MED27	rosentsa@ohsu.edu
+"Ross, Elsa S."	730	S2	MED27	rossel@ohsu.edu
+"Saephanh, Naiian"	730	S2	MED27	saephnai@ohsu.edu
+"Shafie, Beck B."	730	S2	MED27	shafie@ohsu.edu
+"Sharma, Srishty R."	730	S1	MED26	sharmsri@ohsu.edu
+"Sheldon, Megan"	730	U3	MED27	sheldome@ohsu.edu
+"Smith, Haley D."	730	U3	MED27	smithhal@ohsu.edu
+"Stevens, Brenna L."	730	S1	MED26	stevebre@ohsu.edu
+"Subhasree Badrinarayan, Prakrunya"	730	S2	MED27	subhasre@ohsu.edu
+"Swanson, Anthony J."	730	S2	MED27	swansant@ohsu.edu
+"Thomas, Andrew L."	730	S3	MED26	tandrew@ohsu.edu
+"Vanderhoek, Zoe K."	730	S3	MED27	vanderhz@ohsu.edu
+"Weatherly, Laila R."	730	S1	MED27	weatherl@ohsu.edu
+"Wells, Russell"	730	U1	MED27	wellsru@ohsu.edu
+"White, Steven J."	731A	S1 - S2	MED27	whitstev@ohsu.edu
+"Winslow, Samantha R."	730	U3	MED27	winslows@ohsu.edu
+"Young, Allison B."	730	U3	MED27	youngall@ohsu.edu
+"Zandler Lonai, Anna M."	730	S1	MED26	lonai@ohsu.edu

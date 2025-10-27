@@ -1,5 +1,48 @@
 module ReportsHelper
 
+  # updated on 2/27/2025
+  NEW_EPA_KEYWORDS = {
+  "EPA1A" => ["histories", "hypothesis-driven history", "hypothesis driven history", "targeted history", "focused history", "directed history", "history taking", "medical history", "patient history", "clinical history", "history of present illness", "HPI", "review of systems", "ROS", "past medical history", "PMH", "interview", "information gathering"],
+  "EPA1B" => ["physical exams", "physical exam", "physical examination", "examinations", "targeted exam", "focused physical", "directed physical", "tailored exam", "tailored physical", "clinical exam", "physical assessment", "body systems", "mental status", "H and P", "H&P"],
+  "EPA2" => ["differential diagnosis", "prioritized differential", "differential", "ddx", "diagnosis", "prioritized list", "diagnostic possibilities", "rule out", "problem list", "clinical impression", "impression", "problem formulation"],
+
+  "EPA3" => ["management plan", "management plans", "assessment and plans", "assessment and plan","interpret", "interpretation", "diagnostic testing", "screening test", "laboratory test", "lab test", "labs", "imaging", "test result", "diagnostic study", "radiology", "x-ray", "CT", "ultrasound", "MRI", "EKG", "ECG", "test interpretation", "normal values", "diagnostic assessment"],
+
+  "EPA4" => ["orders", "order entry", "ordering", "prescription", "prescribe", "medication order", "drug order", "lab order", "imaging order", "test order", "consult order", "consultation request", "order set", "dosing", "dose", "frequency", "route", "duration", "refill", "e-prescribe"],
+
+  "EPA5" => ["documentation", "medical record", "EMR", "EHR", "chart note", "written notes", "note", "notes" "progress note", "SOAP note", "H&P", "history and physical", "written documentation", "admission note", "discharge summary", "procedure note", "clinic note", "inpatient note", "outpatient note", "consult note", "consultation note", "patient record"],
+
+  "EPA6" => ["presentation", "presentations", "oral presentation", "case presentation", "clinical presentation", "patient presentation", "report", "verbal report", "bedside presentation", "presenting patient", "rounds presentation"],
+
+  "EPA7" => ["literature", "evidence", "literature search", "evidence-based medicine", "EBM", "research", "clinical question", "PICO", "clinical evidence", "journal", "publication", "guideline", "clinical guideline", "systematic review", "meta-analysis", "randomized controlled trial", "RCT", "medical literature", "PubMed", "literature review", "clinical application"],
+
+  "EPA8" => ["handover", "handoff", "hand-off", "sign out", "sign-out", "transition of care", "transfer of care", "patient transfer", "I-PASS", "SBAR", "transfer of information", "continuity of care", "care transition", "shift change", "coverage", "cross-coverage", "signout", "hand over", "pass the baton", "transfer of responsibility"],
+
+  "EPA9" => ["interprofessional", "collaboration", "team-based care", "multidisciplinary", "interdisciplinary", "healthcare team", "care team", "team communication", "consultation", "nurse", "pharmacist", "social worker", "case manager", "physical therapist", "occupational therapist", "respiratory therapist", "team approach", "care coordination", "coordinated care", "team member"],
+
+  "EPA10" => ["urgent", "emergent", "emergency", "critical", "rapid response", "code", "code blue", "deterioration", "unstable", "escalation", "escalate care", "decompensation", "triage", "patient safety", "immediate intervention", "life-threatening", "critical situation", "acute change", "resuscitation", "CPR", "ACLS", "BLS"],
+
+  "EPA11" => ["shared decision making", "shared decision-making", "informed consent", "patient preference", "treatment options", "patient values", "risk communication", "benefit-risk", "risks and benefits", "patient autonomy", "patient education", "decision aid", "informed choice", "patient-centered", "patient centered", "preference-sensitive", "decision support", "joint decision"]
+}
+
+  NEW_EPA_COLORS = {
+    "EPA1A" => "#4AC24E",  #green shade
+    "EPA1B" => "#2B22AA", # indigo
+    "EPA2" => "#282CC2", # blue shade
+    "EPA3" => "#8A18C2", # purple shade
+    "EPA4" => "#ffc34d", # gold color
+    "EPA5" => "#C21508", # red shade
+    "EPA6" => "#FF00FF", # fushia
+    "EPA7" => "#800000", # Maroon
+    "EPA8" => "#7F00FF", # violet
+    "EPA9" => "#72c2ce", # darker lightblue
+    "EPA10" => "#FF7F50", # coral
+    "EPA11" => "#40E0D0" # Turquoise
+  }
+
+  NEW_EPA_CODES = ["EPA1A", "EPA1B", "EPA2", "EPA3", "EPA4", "EPA5", "EPA6", "EPA7", "EPA8", "EPA9", "EPA10", "EPA11"]
+  CORE_CODES = ["FAMP", "IMED", "NEUR", "OBGY", "PEDI", "PSYG", "SURG"]
+
   BLOCKS = ['1-FUND', '2-BLHD', '3-SBM', '4-CPR', '5-HODI', '6-NSF', '7-DEVH']
 
   WHERE_QUERY =
@@ -15,6 +58,10 @@ module ReportsHelper
           'course_name not like ? and course_name not like ? and ' +
           'course_name not like ? and course_name not like ? '
 
+
+  def hf_core_codes
+    return CORE_CODES
+  end
 
   def average_summary(summary_data, user)
     student_hash = {}
@@ -233,6 +280,33 @@ module ReportsHelper
 
     return chart
 
+  end
+
+  def hf_highlight_mspe(text)
+    text_marked = ""
+    NEW_EPA_CODES.each do |epa_code|
+      keywords = NEW_EPA_KEYWORDS[epa_code]
+      epa_color = NEW_EPA_COLORS[epa_code]
+
+      text = text.gsub(/\b(#{keywords.join("|")})\b/i,
+                '<span style="color:' + "#{epa_color}" + '">' + "#{epa_code}: " + '<b>\1' +  '</span></b>').html_safe
+
+    end
+
+    return text
+
+  end
+
+  def hf_read_famp_core_data(course_codes)
+    file_name = "#{Rails.root}/config/Med27_FAMP_CORE_Input_Data.txt"
+    new_comp_array = []
+    CSV.foreach(file_name, headers: true, col_sep: "\t") do |row|
+      new_competency = NewCompetency.where("email=? and (course_name like ? or course_name like ?)", row["email"], "%#{course_codes.first} 730%", "%#{course_codes.second} 730%").first
+      if !new_competency.nil?
+        new_comp_array.push new_competency
+      end
+    end
+    return new_comp_array
   end
 
 
