@@ -77,6 +77,8 @@ module NewCompetenciesHelper
 
    }
 
+   FOM_BLOCK_IDS=["FUND710", "BLHD710", "SBM710", "CPR710", "HODI710", "NSF710", "DEVH710"]
+
    #============ New Updated EPA Definiation - from Logan Jones
    # EPA 1:  Split into two EPAs Below
    # EPA 1a Obtain a hypothesis-driven history
@@ -103,6 +105,17 @@ module NewCompetenciesHelper
 
    def hf_new_epa_assessors
      return NEW_COMP_ASSESSORS
+   end
+
+   def hf_collect_comp_data(comp)
+     comp_data = {}
+     NEW_COMP_CODES.each do |code|
+       if comp[code].to_s != "0" and !comp[code].nil?
+         comp_data[code] = comp[code]
+       end
+     end
+     comp_str = comp_data.inspect
+     return comp_str
    end
 
    def hf_new_epa_level(rs_data, epa_code, level)
@@ -279,7 +292,7 @@ module NewCompetenciesHelper
     elsif course_type == 'Electives'
       selected_competencies = competencies.select{|c| c if !c.course_name.include? "730" and !c.course_name.include? "731" and !c.course_name.include? "770" and \
             !c.course_name.include? "INTS" and !c.course_name.include? "TRAN" and !c.course_name.include? "SCHI" and \
-            !c.course_name.include? "FoM" and !c.course_name.include? "CPX"}
+            !c.course_name.include? "FoM" and !c.course_name.include? "CPX" and !FOM_BLOCK_IDS.include? c.course_id}
     elsif course_type == 'Scholarly'
       selected_competencies = competencies.select{|c| c if c.course_name.include? "SCHI"}
     elsif course_type == 'Transition'
@@ -288,6 +301,8 @@ module NewCompetenciesHelper
       selected_competencies = competencies.select{|c| c if c.course_name.include? "Testing"}
     elsif course_type == 'CPX'
       selected_competencies = competencies.select{|c| c if c.course_name.include? "CPX"}
+    elsif course_type == 'FoM Comp'
+      selected_competencies = competencies.select{|c| c if FOM_BLOCK_IDS.include? c.course_id}
     elsif course_type == 'AllCourses'
       selected_competencies = competencies
 

@@ -63,7 +63,11 @@
                     </li>
                     <li>
                         <a href="#fom" class="nav-link py-1 px-1" title="" data-bs-toggle="tab" data-bs-placement="right" data-bs-original-title="FoM">
-                          <h6><b>FoM</b></h6>
+                          <% if @selected_user.permission_group_id >= 23 %>
+                              <h6><b>FoM (Competency)</b></h6>
+                          <% else %>
+                            <h6><b>FoM</b></h6>
+                          <% end %>
                         </a>
                     </li>
                     <li>
@@ -143,6 +147,16 @@
                 <%= render partial: 'preceptor_assesses' %>
               </div>
               <div id="fom" class="tab-pane fade" role="tabpanel"  aria-labelledby="fom-tab">
+                  <% if @selected_user.permission_group_id >= 23 %>
+                    <div class="card bg-success p-2 text-dark bg-opacity-10">
+                      <div class="card-header">
+                        <h5>FoM Competency</h5>
+                      </div>
+                      <div class="body">
+                        <%= render partial: "milestone_table", locals: {new_competencies: @new_competencies, course_type: "FoM Comp"} %>
+                      </div>
+                    </div>
+                  <% end %>
                   <div class="card">
                     <% if !@all_blocks.first.second.empty?  %>
                       <%= render partial: "competencies/fom_blocks" %>
