@@ -108,7 +108,6 @@ module ArtifactsHelper
     elsif ["dean", "admin"].include?  current_user.coaching_type
       return true
     end
-
      record_found = FileuploadSetting.find_by(permission_group_id: current_user.permission_group_id, code: code)
      if (!record_found.nil?) and (record_found.visible)
        return true
@@ -118,5 +117,12 @@ module ArtifactsHelper
 
  end
 
+ def hf_get_user_document(document)
+   pdf_content = document.blob.download
+   reader = PDF::Reader.new(StringIO.new(pdf_content))
+   extracted_text = reader.pages.map(&:text).join("\n")
+   sid = extracted_text.split("\n").compact[11][0..12].split(" ").second  # get sid => ID: U001234567
+   return sid
+ end
 
 end

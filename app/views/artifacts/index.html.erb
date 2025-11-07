@@ -25,11 +25,12 @@
           <% if current_user.coaching_type != 'student' or !artifact.content.to_s.include? "Progress Board" %>
             <%= link_to 'Destroy Artifact', artifact, method: :delete, data: { confirm: 'Are you sure?' } %>
           <% end %>
-          <% if current_user.coaching_type == 'admin' %>
+          <% if current_user.coaching_type == 'admin' or (['nmai', 'fruhwirt'].include? current_user.username) %>
             /
             <%= link_to 'Move files', move_files_artifact_path(artifact)  %>
             /
-            <%= link_to 'Step 2 Move files', step_2_move_files_artifact_path(artifact)  %>
+            <% #=link_to 'Step 2 Move files', step_2_move_files_artifact_path(artifact)  %>
+            <%= link_to 'Ultimate Method', ultimate_method_artifact_path(artifact)  %>
 
           <% end %>
           <% if artifact.content.to_s.include? "Preceptor" and (current_user.coaching_type == 'dean' or current_user.coaching_type == 'admin') %>

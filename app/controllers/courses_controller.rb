@@ -106,8 +106,8 @@ class CoursesController < ApplicationController
     def set_resources
       @category ||= ["All"] + Course.all.pluck(:category).uniq
       #@duration = Course.all.pluck(:duration).uniq
-      @departments ||= ["All"] + Course.all.pluck(:department).uniq.sort
-      @duration ||= Course.all.pluck(:duration).uniq.sort
+      @departments ||= ["All"] + Course.all.pluck(:department).uniq.compact.sort
+      @duration ||= Course.all.pluck(:duration).uniq.compact.sort
       sc ||= CourseSchedule.select(:year, :block).distinct.where.not(year: nil).order(:year)
       @course_schedules = sc.map{|s| s.year.to_s + " " + s.block}
 

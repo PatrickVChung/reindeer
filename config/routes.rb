@@ -146,6 +146,7 @@ Rails.application.routes.draw do
        get 'process_formative_feedback'
        get 'process_comp_excel'
        get 'process_bls_excel'
+       get 'ultimate_method'
      end
      collection do
        get 'get_sub_components'

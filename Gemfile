@@ -191,3 +191,4 @@ gem "rails-html-sanitizer", ">= 1.6.1"
 gem "rails_admin_import", "~> 3.0"
 gem "httparty"
 gem "timeout"
+gem 'pdf-reader', '~> 1.4'
