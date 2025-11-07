@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    Ascii85 (1.0.3)
     actioncable (8.0.2.1)
       actionpack (= 8.0.2.1)
       activesupport (= 8.0.2.1)
@@ -84,6 +85,7 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     aes (0.5.1)
+    afm (0.2.2)
     autoprefixer-rails (10.4.21.0)
       execjs (~> 2)
     awesome_print (1.9.2)
@@ -216,6 +218,7 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     hash-deep-merge (0.1.1)
+    hashery (2.1.2)
     high_voltage (4.0.0)
     highcharts-rails (6.0.3)
       railties (>= 3.1)
@@ -364,6 +367,12 @@ GEM
       activerecord (>= 6.1)
       request_store (~> 1.4)
     pdf-core (0.10.0)
+    pdf-reader (1.4.1)
+      Ascii85 (~> 1.0.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     pg (1.6.2)
     pg (1.6.2-aarch64-linux)
     pg (1.6.2-aarch64-linux-musl)
@@ -485,6 +494,7 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.6)
+    ruby-rc4 (0.1.5)
     ruby-vips (2.2.5)
       ffi (~> 1.12)
       logger
@@ -631,6 +641,7 @@ DEPENDENCIES
   net-imap (>= 0.4.20)
   nokogiri
   paper_trail
+  pdf-reader (~> 1.4)
   pg
   php-serialize
   popper_js (>= 2.11.8, < 3)
