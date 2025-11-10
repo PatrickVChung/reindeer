@@ -99,6 +99,10 @@ module NewCompetenciesHelper
      return NEW_EPA_ARRAY
    end
 
+   def hf_new_comp_codes
+     return NEW_COMP_CODES 
+   end
+
    def hf_get_new_epa_desc(epa_code)
      return NEW_EPA_DESC[epa_code]
    end
