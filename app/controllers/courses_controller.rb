@@ -2,7 +2,7 @@ class CoursesController < ApplicationController
   layout 'full_width_csl'
   before_action :authenticate_user!
   before_action :set_resources, only: %i[ index show edit update destroy ]
-  include CompetenciesHelper
+  include NewCompetenciesHelper
 
   # GET /courses or /courses.json
   def index

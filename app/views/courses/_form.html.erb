@@ -31,7 +31,7 @@
         <%= f.input :course_coordinator_email %>
         <%= f.input :qualified_assessor %>
         <%= f.input :qualified_assessor_email %>
-        <% hf_comp_codes.each do |code| %>
+        <% hf_new_comp_codes.each do |code| %>
           <% code = code.upcase %>
           <div class="form-check form-check-inline">
           <% if @course.competencies.include? code %>

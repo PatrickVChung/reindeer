@@ -205,21 +205,27 @@ class ArtifactsController < ApplicationController
         data_array.push document.filename
         sid = hf_get_user_document(document)
         student_user = User.find_by(sid: sid)
-        full_name = student_user.full_name
+        if !student_user.nil?
+          full_name = student_user.full_name
 
-        data_array.push full_name
-        data_array.push sid
+          data_array.push full_name
+          data_array.push sid
 
-        temp_artifact = Artifact.find_or_create_by(user_id: student_user.id, content: @problem_artifact.content, title: @problem_artifact.title) do |a|
-          a.content = @problem_artifact.content
-          a.title = @problem_artifact.title
-          a.documents.attach(ActiveStorage::Blob.find(document.blob_id))
+          temp_artifact = Artifact.find_or_create_by(user_id: student_user.id, content: @problem_artifact.content, title: @problem_artifact.title) do |a|
+            a.content = @problem_artifact.content
+            a.title = @problem_artifact.title
+            a.documents.attach(ActiveStorage::Blob.find(document.blob_id))
+          end
+          if !temp_artifact.documents.exists?(blob_id: document.blob_id)
+             temp_artifact.documents.attach(ActiveStorage::Blob.find(document.blob_id))
+          end
+          document.destroy # remove it from the artifact
+          @moved_files.push data_array
+        else
+          data_array.push full_name
+          data_array.push sid + " - Not Found in User Table!"
+          @moved_files.push data_array
         end
-        if !temp_artifact.documents.exists?(blob_id: document.blob_id)
-           temp_artifact.documents.attach(ActiveStorage::Blob.find(document.blob_id))
-        end
-        document.destroy # remove it from the artifact
-        @moved_files.push data_array
 
       end
 

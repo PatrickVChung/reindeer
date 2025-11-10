@@ -121,7 +121,8 @@ module ArtifactsHelper
    pdf_content = document.blob.download
    reader = PDF::Reader.new(StringIO.new(pdf_content))
    extracted_text = reader.pages.map(&:text).join("\n")
-   sid = extracted_text.split("\n").compact[11][0..12].split(" ").second  # get sid => ID: U001234567
+   sid = extracted_text[extracted_text.index("ID: ")+4,9] #find 'ID: ' in text and substring the SID out
+   #sid = extracted_text.split("\n").compact[11][0..12].split(" ").second  # get sid => ID: U001234567  ==> this one works but if the id is moved, then it will not work
    return sid
  end
 
