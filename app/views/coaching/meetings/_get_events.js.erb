@@ -61,14 +61,21 @@ var emailErika = 'If you don’t see any availability, please contact ' + '<a hr
 
 var advisor_name = $('#coaching_meeting_advisor_id option:selected').text();
 var tr_length = $('#EventsTable tbody tr:visible').length;
+var selectedAdvisorType = $('#coaching_meeting_advisor_type option:selected').text();
 // removed the logic below for Pope Bailey
 //  && !advisor_name.includes("Bailey")
-if (tr_length == 0 && !advisor_name.includes("Shafir") && !advisor_name.includes("Lauren") && !advisor_name.includes("Domingo") &&
-  !advisor_name.includes("Gause") &&  !advisor_name.includes("Shafir") && !advisor_name.includes("Moberly") && !advisor_name.includes("Solotskaya") ){
-  $("#meeting-submit").prop("disabled", true);
-  alert('Please select another advisor that has appointments!!');
+console.log(" inside _get_events --> selectedAdvisorType: " + selectedAdvisorType);
+console.log(" inside _get_events --> advisor_name: " + advisor_name);
 
-}
+if (tr_length == 0 && selectedAdvisorType == "Academic" && advisor_name.includes("Travis")) {
+  alert("Dr. Travis Philipp’s REDEI advising appointments can be found under Advisor Type: Academic/Student Affairs.");
+} else if (tr_length == 0 && !advisor_name.includes("Shafir") && !advisor_name.includes("Lauren") && !advisor_name.includes("Domingo") &&
+    !advisor_name.includes("Gause") &&  !advisor_name.includes("Shafir") && !advisor_name.includes("Moberly") && !advisor_name.includes("Solotskaya") ){
+    $("#meeting-submit").prop("disabled", true);
+    alert('Please select another advisor that has appointments!!');
+
+  }
+
 
 function calendlyClick(e) {
     console.log('Click Calendly link!')
