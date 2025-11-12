@@ -58,9 +58,16 @@
                 <%= link_to '<i style="color:#31a34f;" class="fa fa-book"></i> Course Catalog'.html_safe, courses_path(), target: '_blank', class: "nav-link" %>
               <% end %>
             </li>
-            <li class="nav-item">
+            <li class="nav-item dropdown">
               <% if current_user.can_process_fom? and current_user.coaching_type != 'student'%>
-                <%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Process FoM'.html_safe, process_fom_fom_exams_path(uuid: current_user.uuid), target: '_blank', class: "nav-link" %>
+                <a class="nav-link dropdown-toggle" role="button"  href="#FoMMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i style="color:#A00000;" class="fa fa-bomb"></i> Process FoM
+                </a>
+                <ul class="dropdown-menu" id="FoMMenu">
+                  <li><%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Process FoM'.html_safe, process_fom_fom_exams_path(uuid: current_user.uuid), target: '_blank', class: "dropdown-item" %></li>
+                  <li><%= link_to 'Bulk Delete'.html_safe, bulk_remove_artifacts_path, target: '_blank', class: "dropdown-item" %></li> 
+
+                </ul>
               <% end %>
             </li>
 
