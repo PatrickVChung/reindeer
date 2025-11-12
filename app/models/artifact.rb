@@ -363,4 +363,52 @@ class Artifact < ApplicationRecord
 
   end
 
+  def self.write_bulk_remove_files(bulk_remove_files, block_code, file_type)
+    file_path = Rails.root.join('public', "FoM_#{block_code}_#{file_type}.txt")
+
+    File.open(file_path, 'w') do |file|
+      file.puts("user_id\tartifact_id\ttitle\tcontent\tblob_id\tfile_type\tfilename")
+      bulk_remove_files.each do |txt_file|
+        file.write(txt_file["user_id"] + "\t")
+        file.write(txt_file["artifact_id"] + "\t")
+        file.write(txt_file["title"] + "\t")
+        file.write(txt_file["content"] + "\t")
+        file.write(txt_file["blob_id"] + "\t")
+        file.write(txt_file["file_type"] + "\t")
+        file.write(txt_file["filename"] + "\n")
+      end
+    end
+  end
+
+
+
+  def self.gather_files_to_delete(cohort, permission_group, block_code, file_type)
+    bulk_remove_files = []
+    users = User.where(permission_group_id: permission_group.id).select(:id, :full_name)
+    users.each do |user|
+      artifacts = Artifact.where("user_id = ? and title=? and content=?", user.id, "FoM", block_code)
+      artifacts.each do |artifact|
+        if artifact.documents.attached?
+          artifact.documents.each do |document|
+            temp_hash={}
+            test_str = file_type + "_" + cohort
+            if document.filename.to_s.include? test_str
+              temp_hash["user_id"] = user.id.to_s
+              temp_hash["artifact_id"] = artifact.id.to_s
+              temp_hash["title"] = artifact.title
+              temp_hash["content"] = artifact.content
+              temp_hash["blob_id"] = document.blob.id.to_s
+              temp_hash["file_type"] = file_type
+              temp_hash["filename"] = document.filename.to_s
+              bulk_remove_files.push temp_hash
+            end
+            #puts "document name: " + document.filename.to_s
+          end
+        end
+      end
+    end
+    Artifact.write_bulk_remove_files(bulk_remove_files, block_code, file_type)
+    return bulk_remove_files
+  end
+
 end

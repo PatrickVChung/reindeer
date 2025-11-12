@@ -5,6 +5,7 @@
     <% if current_user.username == 'chungp'  %>
       <%= link_to 'Upload FoM File', new_artifact_path(file_type: 'FoM'), class: "btn btn-primary" %>
     <% end %>
+
   </div>
 
   <table class="responsive nowrap table table-hover table-striped" id="artifacts" >

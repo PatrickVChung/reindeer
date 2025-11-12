@@ -204,6 +204,7 @@ class ArtifactsController < ApplicationController
         data_array = []
         data_array.push document.filename
         sid = hf_get_user_document(document)
+
         student_user = User.find_by(sid: sid)
         if !student_user.nil?
           full_name = student_user.full_name
@@ -228,8 +229,37 @@ class ArtifactsController < ApplicationController
         end
 
       end
+  end
+  def bulk_remove
+    @bulk_remove_files = []
+    if params[:Cohort].present? and params[:BlockCode].present? and params[:FileType].present?
+      permission_group = PermissionGroup.where('title like ?', '%Med28%').first
+      #users = ["1983", "2043", "1941", "1977"]
+      @bulk_remove_files = Artifact.gather_files_to_delete(params[:Cohort], permission_group, params[:BlockCode], params[:FileType])
+    end
 
+  end
 
+  def purge_all_documents
+    if params[:content].present?
+      file_path = Rails.root.join('public', "FoM_#{params[:content]}_#{params[:file_type]}.txt")
+      CSV.foreach(file_path, col_sep: "\t", headers: true) do |row|
+        artifact_id = row["artifact_id"]
+        user_id = row["user_id"]
+        title = row["title"]
+        content = row["content"]
+        file_type = row["file_type"]
+        test_str = content + "_" + file_type
+        artifact = Artifact.find_by(title: title, content: content, id: artifact_id, user_id: user_id)
+        artifact.documents.each do |document|
+          if document.filename.to_s.include? test_str
+            document.purge
+            artifact.destroy
+          end
+        end
+
+      end
+    end
   end
 
   private
