@@ -39,6 +39,28 @@ class Artifact < ApplicationRecord
      return true
   end
 
+  def self.update_informatics_feedback(row)
+    if !row["email"].nil?
+      user = User.find_by(email: row["email"])
+    end
+    if user.nil?
+      return false
+    else
+      row["user_id"] = user.id
+      row["submit_date"] = format_date(row["submit_date"])
+      row["response_id"] = row["response_id"] + row["question_set2"]
+
+      #puts row.to_hash
+      row_hash = {}
+      row_hash = row.to_hash
+      row_hash.delete("question_set2")
+      row_hash.delete("email")
+      row_hash.delete("full_name")
+      FormativeFeedback.where(response_id: row["response_id"]).first_or_create.update(row_hash)
+    end
+    return true
+  end
+
   def self.process_upload_data (artifact, code)
     log_results = []
     row_to_hash = {}
@@ -54,6 +76,10 @@ class Artifact < ApplicationRecord
         yes_updated = false
         if code == 'PreceptorEval' and !row["email"].blank?
           yes_updated = update_preceptor_eval(row)
+        elsif code == 'InformaticsFeedback' and !row["email"].blank?
+            full_name = row["full_name"]
+            email = row["email"]
+            yes_updated = update_informatics_feedback(row)
         elsif code == 'FormativeFeedback' and !row["q1"].blank?
           yes_updated = update_formative_feedback(row)
         end
@@ -65,6 +91,8 @@ class Artifact < ApplicationRecord
             row_to_hash.store(row["full_name"], " --> NOT Updated")
           elsif code == 'FormativeFeedback'
             row_to_hash.store(row["q1"], " --> NOT Updated")
+          elsif code = "InformaticsFeedback"
+            row_to_hash.store(full_name, email + "--> NOT Updated")
           end
           no_not_updated += 1
           log_results.push row_to_hash
@@ -87,6 +115,15 @@ class Artifact < ApplicationRecord
 
   end
 
+  def self.fix_str(in_str)
+    if in_str.rstrip == "" or in_str.rstrip == "." or in_str.rstrip == "*"
+      return "N/A"
+    else
+      return in_str
+    end
+
+  end
+
   def self.update_formative_feedback(row)
     if row["sid"].nil?
       email = row["q1"].split(" - ").last
@@ -100,10 +137,11 @@ class Artifact < ApplicationRecord
       row["user_id"] = user.id
       row["submit_date"] = format_date(row["submit_date"])
       row["response_id"] = row["response_id"] + row["question_set2"]
-      row["q3"] = row["q3"].to_s.gsub("'-", "-")
-      row["q4"] = row["q4"].to_s.gsub("'-", "-")
-      row["q5"] = row["q5"].to_s.gsub("'-", "-")
-      row["q6"] = row["q6"].to_s.gsub("'-", "-")
+      # row["q3"] = row["q3"].to_s.gsub("'-", "-")
+      # row["q4"] = row["q4"].to_s.gsub("'-", "-")
+      # row["q5"] = row["q5"].to_s.gsub("'-", "-")
+      row["q6"] = Artifact.fix_str(row["q6"])
+
       #puts row.to_hash
       row_hash = {}
       row_hash = row.to_hash
@@ -379,8 +417,6 @@ class Artifact < ApplicationRecord
       end
     end
   end
-
-
 
   def self.gather_files_to_delete(cohort, permission_group, block_code, file_type)
     bulk_remove_files = []

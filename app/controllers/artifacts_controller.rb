@@ -181,6 +181,11 @@ class ArtifactsController < ApplicationController
     @log_results = Artifact.process_upload_data(@artifact, 'FormativeFeedback')
   end
 
+  def process_informatics_feedback
+    @artifact = Artifact.find(params[:id])
+    @log_results = Artifact.process_upload_data(@artifact, 'InformaticsFeedback')
+  end
+
   def process_comp_excel
     @artifact = Artifact.find(params[:id])
     Artifact.read_competency_excel(@artifact)
@@ -257,7 +262,6 @@ class ArtifactsController < ApplicationController
             artifact.destroy
           end
         end
-
       end
     end
   end

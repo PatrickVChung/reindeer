@@ -42,6 +42,13 @@
             /
             <%= link_to 'Process FormativeFeedback', process_formative_feedback_artifact_path(artifact)  %>
           <% end %>
+
+          <% if artifact.content.to_s.include? "Informatics Feedback" and (current_user.coaching_type == 'dean'  or current_user.coaching_type == 'admin') %>
+            /
+            <%= link_to 'Process InformaticsFeedback', process_informatics_feedback_artifact_path(artifact)  %>
+          <% end %>
+
+
           <% if artifact.content.to_s.include? "Competency-Excel" and (current_user.coaching_type == 'admin') %>
             /
             <%= link_to 'Process Competency', process_comp_excel_artifact_path(artifact), target: :_blank  %>

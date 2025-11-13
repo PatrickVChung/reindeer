@@ -144,6 +144,7 @@ Rails.application.routes.draw do
        get 'step_2_move_files'
        get 'process_preceptor_eval'
        get 'process_formative_feedback'
+       get 'process_informatics_feedback'
        get 'process_comp_excel'
        get 'process_bls_excel'
        get 'ultimate_method'
