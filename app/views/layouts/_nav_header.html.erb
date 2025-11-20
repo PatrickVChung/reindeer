@@ -65,7 +65,8 @@
                 </a>
                 <ul class="dropdown-menu" id="FoMMenu">
                   <li><%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Process FoM'.html_safe, process_fom_fom_exams_path(uuid: current_user.uuid), target: '_blank', class: "dropdown-item" %></li>
-                  <li><%= link_to 'Bulk Delete'.html_safe, bulk_remove_artifacts_path, target: '_blank', class: "dropdown-item" %></li> 
+                  <li><%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Bulk Delete'.html_safe, bulk_remove_artifacts_path, target: '_blank', class: "dropdown-item" %></li>
+                  <li><%= link_to 'Create Informatics Feedback (Q-PDF)'.html_safe, create_and_move_pdf_create_pdfs_path, target: '_blank', class: "dropdown-item" %></li> 
 
                 </ul>
               <% end %>
