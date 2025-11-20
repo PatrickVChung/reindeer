@@ -1,0 +1,6 @@
+<h5> PDF Files were created and moved to respective student account! </h5>
+<% counter = 0 %>
+<% @pdf_log.each do |file| %>
+  <% counter += 1 %>
+  <%= "#{counter} - #{file}" %><br >
+<% end %>

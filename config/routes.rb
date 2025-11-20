@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
 
+  resources :create_pdfs do
+    collection do
+      get "create_and_move_pdf", to: 'create_pdfs#create_and_move_pdf'
+      get "move_pdf", to: 'create_pdfs#move_pdf'
+    end
+  end
+
   resources :medhub_apis do
     collection do
       get "final_evals", controller: 'medhub_apis', to: 'medhub_apis#final_evals'
