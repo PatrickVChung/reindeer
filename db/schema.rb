@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_05_195947) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_25_195205) do
   create_schema "source"
   create_schema "target"
   create_schema "transform"
@@ -1473,6 +1473,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_05_195947) do
     t.text "feedback"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+  end
+
+  create_table "ume_assess_plans", force: :cascade do |t|
+    t.string "year"
+    t.string "competency"
+    t.string "student_learning_objective"
+    t.string "assessment_description"
+    t.string "method"
+    t.string "target"
+    t.string "resource"
+    t.boolean "target_met"
+    t.string "target_results"
+    t.boolean "rubric_used"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "ume_blses", force: :cascade do |t|

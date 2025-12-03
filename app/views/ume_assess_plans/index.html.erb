@@ -1,0 +1,70 @@
+
+  <%= form_with(url: update_plans_ume_assess_plans_path, method: :get) do |form| %>
+    <div class="input-group">
+      <h4>UME Assessessment Plans</h4>
+      <span class="input-group-text bg-warning" id="inputGroup-sizing-lg">Year</span>
+      <input type="text" class="form-control" name="year" placeholder="eg. 2024-2025" required>
+      <span class="input-group-text bg-warning" id="inputGroup-sizing-lg">Cohort</span>
+      <input type="text" class="form-control" style="width: 20em;" name="Cohort" placeholder="eg. Med28 (case sensitive)">
+      <span class="input-group-text bg-warning" id="inputGroup-sizing-lg">Start Date</span>
+      <input type="text" class="form-control" name="start_date" required>
+      <span class="input-group-text bg-warning id="inputGroup-sizing-lg">End Date</span>
+      <input type="text" class="form-control" name="end_date" required>
+      <button class="btn btn-primary" type="submit">Submit form</button>
+    </div>
+
+  <% end %>
+
+
+<table class="responsive nowrap table table-hover" id="dttb-ume_assess_plans" data-sort="true" data-source="<%= url_for(format: :json)%>">
+  <thead>
+    <tr>
+      <th data-data="id">Id</th>
+      <th data-data="year">Year</th>
+      <th data-data="competency">Competency</th>
+      <th data-data="student_learning_objective">Student learning objective</th>
+      <th data-data="assessment_description">Assessment Desc</th>
+      <th data-data="method">Method</th>
+      <th data-data="target">Target</th>
+      <th data-data="resource">Resource</th>
+      <th data-data="target_met">Target Met</th>
+      <th data-data="target_results">Target Results</th>
+      <th data-data="rubric_use">Rubric Use</th>
+      <th data-data="action">Action</th>
+      <th data-data="url" data-orderable="false" data-class-name="all" data-searchable="false" class="skip-export" width="100px"></th>
+    </tr>
+  </thead>
+  <% @ume_assess_plans.each do |plan| %>
+    <tr>
+      <td><%= plan.id %></td>
+      <td><%= plan.year %></td>
+      <td><%= plan.competency %></td>
+      <td><%= plan.student_learning_objective %></td>
+      <td><%= plan.assessment_description %></td>
+      <td><%= plan.method %></td>
+      <td><%= plan.target %></td>
+      <td><%= plan.resource %></td>
+      <td style="background-color:lightblue"><%= plan.target_met ? 'Yes' : 'No' %></td>
+      <td style="background-color:#F2AACB"><%= plan.target_results %></td>
+      <td><%= plan.rubric_used ? 'Yes' : 'No'%></td>
+      <td>
+        <%= link_to 'Edit', edit_ume_assess_plan_path(plan) %> /
+        <%= link_to 'Destroy', plan, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </td>
+    </tr>
+  <% end %>
+
+</table>
+
+<br>
+
+<%= link_to 'New Ume Assess Plan', new_ume_assess_plan_path %>
+
+
+t.string :assessment_description
+t.string :method
+t.string :target
+t.string :resource
+t.boolean :target_met
+t.string :target_results
+t.boolean :rubric_used

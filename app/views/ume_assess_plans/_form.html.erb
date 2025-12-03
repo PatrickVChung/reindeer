@@ -1,0 +1,85 @@
+
+<%= simple_form_for(@ume_assess_plan, html: { class: 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="card mx-auto" style="width: 75%;">
+    <div class="card-header"><h5>Editing UME Assessment Plan</h5>
+    </div>
+    <div class="card-body">
+      <div class="form-inputs">
+        <div class="form-group">
+          <div class="row mb-0">
+            <%= f.label :Year, class: "col-sm-2 control-label right-label" %>
+            <div class="col-sm-6">
+              <%= f.text_field :year, class: "form-control" %>
+            </div>
+          </div>
+          <div class="row mb-0">
+            <%= f.label :competency, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.text_field :competency, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="row mb-0">
+            <%= f.label :student_learning_objective, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.text_field :student_learning_objective, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="row mb-0">
+            <%= f.label :assessment_description, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.text_field :assessment_description, class: "form-control" %>
+            </div>
+          </div>
+          <div class="row mb-0">
+            <%= f.label :method, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.text_field :method, class: "form-control" %>
+            </div>
+          </div>
+          <div class="row mb-0">
+            <%= f.label :target, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.text_field :target, class: "form-control" %>
+            </div>
+          </div>
+          <div class="row mb-0">
+            <%= f.label :resource, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.text_field :resource, class: "form-control" %>
+            </div>
+          </div>
+          <div class="row mb-0">
+            <%= f.label :target_met, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.input :target_met, checked_value: :true, unchecked_value: :false, label: false  %>
+            </div>
+          </div>
+          <div class="row mb-0">
+            <%= f.label :target_results, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.text_field :target_results, class: "form-control" %>
+            </div>
+          </div>
+          <div class="row mb-0">
+            <%= f.label :rubric_used, class: "col-sm-2 control-label right-label"%>
+            <div class="col-sm-6">
+              <%= f.input :rubric_used, checked_value: :true, unchecked_value: :false, label: false %>
+            </div>
+          </div>
+
+          <div class="row mb-0">
+            <div class="form-actions">
+              <%= f.submit "Update Plan", class: "btn btn-primary" %>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
