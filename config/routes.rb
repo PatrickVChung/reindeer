@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :ume_assess_plans do
+    collection do
+      get "update_plans"
+    end
+  end
 
   resources :create_pdfs do
     collection do

@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @ume_assess_plan %>
+
+<div>
+  <%= link_to "Edit this ume assess plan", edit_ume_assess_plan_path(@ume_assess_plan) %> |
+  <%= link_to "Back to ume assess plans", ume_assess_plans_path %>
+
+  <%= button_to "Destroy this ume assess plan", @ume_assess_plan, method: :delete %>
+</div>
