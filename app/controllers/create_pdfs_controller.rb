@@ -5,8 +5,16 @@ class CreatePdfsController < ApplicationController
 
 
   def create_and_move_pdf
-    @artifact = User.find_by(id: current_user.id).artifacts.where(content: 'Q-Informatics Feedback Text File').first
-    @filename = @artifact.documents.blobs.first.filename.to_s
+    @artifact = User.find_by(id: current_user.id).artifacts.where(content: 'Q-Informatics Feedback Text File').order(:created_at).last  # always get the latest docs
+    if !@artifact.nil?
+      if @artifact.documents.attached?
+        @filename = @artifact.documents.blobs.first.filename.to_s
+      else
+        @filename = nil
+      end
+    else
+      @filename = nil
+    end
   end
 
   def move_pdf
