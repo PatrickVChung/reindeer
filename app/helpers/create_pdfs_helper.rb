@@ -71,7 +71,8 @@ formative feedback to facilitate positive change during this Foundations of Medi
       pdf.font "Times-Roman" #, :size => 12"
       row.drop(4).each do |key, val|
         pdf.text "Question: " + key
-          pdf.text "Ans/Comment: " + replace_special_chars(val), :color => "0000ff"
+          # if val is nil, be sure to set it "" and then encode to window-1252
+          pdf.text "Ans/Comment: " + (val || "").encode("Windows-1252", invalid: :replace, undef: :replace, replace: ''), :color => "0000ff"
         pdf.text " "
       end
     end
@@ -126,8 +127,10 @@ formative feedback to facilitate positive change during this Foundations of Medi
     CSV.parse(ActiveStorage::Attachment.find(artifact.documents.first.id).download, headers: true, col_sep: "\t") do |row|
       email = row["Student Name"].split(" - ").last
       user = User.find_by(email: email)
-      student_file_name = process_qualtrics(user, block_code, row, part_filename, tmp_path, header1, header2, header3)
-      pdf_log.push student_file_name
+      if !user.nil?
+        student_file_name = process_qualtrics(user, block_code, row, part_filename, tmp_path, header1, header2, header3)
+        pdf_log.push student_file_name
+      end
     end
     return pdf_log
   end

@@ -61,10 +61,10 @@ class UmeAssessPlansController < ApplicationController
 
   def update_plans
     if params[:year] && params[:start_date].present? && params[:end_date].present?
-     # @update_clinical_exp_log = UmeAssessPlan.update_clinical_exp(params[:year], params[:start_date], params[:end_date], params[:cohort])
-     # @update_core_clinical_exp_log = UmeAssessPlan.update_core_clinical_exp(params[:year], params[:start_date], params[:end_date], params[:cohort])
-     # @update_cpx_log = UmeAssessPlan.update_cpx(params[:year], params[:start_date], params[:end_date])
-     # @update_tran_704_log = UmeAssessPlan.update_trans_704(params[:year], params[:start_date], params[:end_date])
+     @update_clinical_exp_log = UmeAssessPlan.update_clinical_exp(params[:year], params[:start_date], params[:end_date], params[:cohort])
+     @update_core_clinical_exp_log = UmeAssessPlan.update_core_clinical_exp(params[:year], params[:start_date], params[:end_date], params[:cohort])
+     @update_cpx_log = UmeAssessPlan.update_cpx(params[:year], params[:start_date], params[:end_date])
+     @update_tran_704_log = UmeAssessPlan.update_trans_704(params[:year], params[:start_date], params[:end_date])
      @update_preceptors_log = UmeAssessPlan.update_preceptor(params[:year], params[:start_date], params[:end_date])
      @update_narrative_log = UmeAssessPlan.update_narrative(params[:year], params[:start_date], params[:end_date])
      @update_scholarly_project_log = UmeAssessPlan.update_scholarly_project(params[:year], params[:start_date], params[:end_date])
