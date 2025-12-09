@@ -68,6 +68,8 @@ class UmeAssessPlansController < ApplicationController
      @update_preceptors_log = UmeAssessPlan.update_preceptor(params[:year], params[:start_date], params[:end_date])
      @update_narrative_log = UmeAssessPlan.update_narrative(params[:year], params[:start_date], params[:end_date])
      @update_scholarly_project_log = UmeAssessPlan.update_scholarly_project(params[:year], params[:start_date], params[:end_date])
+     @update_step1_exam_log = UmeAssessPlan.update_step1_exam(params[:year], params[:start_date], params[:end_date])
+     @update_step2_ck_log = UmeAssessPlan.update_step2_ck(params[:year], params[:start_date], params[:end_date])
     end
 
   end

@@ -15,6 +15,10 @@ class UmeAssessPlan < ApplicationRecord
       all_plans = UmeAssessPlan.where("year = ? and assessment_description like ?", year, "Narrative Medicine%")
     elsif assess_type == "Scholarly"
       all_plans = UmeAssessPlan.where("year = ? and assessment_description like ?", year, "Scholarly%")
+    elsif assess_type == "Step1Exam"
+      all_plans = UmeAssessPlan.where("year = ? and assessment_description like ?", year, "USMLE Step 1 Exam%")
+    elsif assess_type == "Step2CK"
+      all_plans = UmeAssessPlan.where("year = ? and assessment_description like ?", year, "USMLE Step 2 CK%")      
     end
 
     target_result_str = result_str.split(";").first.split(": ").second
@@ -144,6 +148,36 @@ class UmeAssessPlan < ApplicationRecord
     # UmeAssessPlan.where(year: year, assessment_description: "Clinical Performance Exam (CPX)").update(target_results: result_str)
     # UmeAssessPlan.where(year: year, assessment_description: "Clinical Performance Evaluation (CPX)").update(target_results: result_str)
     result_str = update_ume_assess_plans("Scholarly", year, result_str)
+    competencies = nil
+    new_competencies = nil
+    return result_str
+  end
+
+  def self.compute_stats2(assess_type, result_set, start_date, end_date)
+    total_count = result_set.count
+    if assess_type == 'Step1Exam'
+      pass_count = result_set.select{|n| n if n.pass_fail == "P"}.count
+      fail_count = total_count - pass_count
+      pass_percent = (pass_count.to_f/total_count.to_f * 100).round
+      fail_percent = (fail_count.to_f/total_count.to_f * 100).round
+    end
+    result_str = "Pass: #{pass_percent}%; No Pass: #{fail_percent}%; Total Records: #{total_count}; Start Date: #{start_date}; End Date: #{end_date}"
+    return result_str
+  end
+
+  def self.update_step1_exam(year, start_date, end_date)
+    competencies = UsmleExam.where("exam_date >= ? and exam_date <= ? and exam_type='Step 1 Exam' and no_attempts=1", "2024-07-01", "2025-06-20")
+    result_str = compute_stats2("Step1Exam", competencies, start_date, end_date)
+    result_str = update_ume_assess_plans("Step1Exam", year, result_str)
+    competencies = nil
+    new_competencies = nil
+    return result_str
+  end
+
+  def self.update_step2_ck(year, start_date, end_date)
+    competencies = UsmleExam.where("exam_date >= ? and exam_date <= ? and exam_type='Step 2 CK' and no_attempts=1", "2024-07-01", "2025-06-20")
+    result_str = compute_stats2("Step1Exam", competencies, start_date, end_date)
+    result_str = update_ume_assess_plans("Step2CK", year, result_str)
     competencies = nil
     new_competencies = nil
     return result_str
