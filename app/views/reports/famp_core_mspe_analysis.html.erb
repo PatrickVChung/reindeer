@@ -1,0 +1,54 @@
+<div class="card">
+  <div class="my-checkbox-group">
+      <%= form_with(url: famp_core_mspe_analysis_reports_path, method: :get) do |form| %>
+        <% hf_core_codes.each do |core| %>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" value="<%= core %>" id="checkbox_<%= core %>" name="course_codes[]">
+            <label class="form-check-label" for="checkbox_<%= core %>">
+              <%= core %>
+            </label>
+          </div>
+        <% end %>
+        <%= form.button type: "submit", class: "btn btn-info", data: { "disable-with": "<i class='fa fa-spinner fa-spin'></i> Stay tuned..." } do %>
+          <i class="fa fa-file"></i> FAMP MSPE Analysis
+        <% end %>
+      <% end %>
+
+  </div>
+</div>
+
+<% if !@famp_core_mspes.empty? %>
+  <table id="FampCoreAnaysisTable" class="table table-hover table-striped table-responsive" data-sort="true" >
+      <tr class="filters">
+        <th>UserID</th>
+        <th>StudentName</th>
+        <th>Email</th>
+        <th>CouserID</th>
+        <th>CoourseName</th>
+        <th>StartDate</th>
+        <th>EndDate</th>
+        <th>SubmitDate</th>
+        <th>Evaluator</th>
+        <th>FinalGrade</th>
+        <th>MSPE Comment</th>
+      </tr>
+
+      <% @famp_core_mspes.each do |cores| %>
+        <% cores.each do |data| %>
+          <tr>
+            <td style="text-align:center"><%= data.user_id %></td>
+            <td><%= data.user.full_name %></td>
+            <td><%= data.email %></td>
+            <td><%= data.course_id %></td>
+            <td><%= data.course_name %></td>
+            <td><%= data.start_date %></td>
+            <td><%= data.end_date %></td>
+            <td><%= data.submit_date %></td>
+            <td><%= data.evaluator %></td>
+            <td><%= data.final_grade %></td>
+            <td><%= hf_highlight_mspe(data.mspe) %></td>
+          </tr>
+        <% end %>
+      <% end %>
+  </table>
+<% end %>

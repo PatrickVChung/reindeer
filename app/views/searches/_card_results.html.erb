@@ -8,7 +8,7 @@
             <ul class="nested">
               <li>
                 <table class="table table-hover main-table table-light responsive-sm">
-                  <% if ['chungp', 'fruhwirt', 'petesama', 'schneibe', 'itot'].include? current_user.username %>
+                  <% if ['chungp', 'fruhwirt', 'dunnbri', 'schneibe', 'itot'].include? current_user.username %>
                     <tr><td style="text-align:left">Email</td><td style="color:brown"><%= link_to result.email.to_s, update_loa_users_path(email: result.email), class: "nav-link blue-text" ,target: :_blank %></td></tr>
                     <tr><td style="text-align:left">SID</td><td> <%= link_to result.sid.to_s, update_loa_users_path(sid: result.sid), class: "nav-link blue-text", target: :_blank %></td></tr>
                   <% else %>
@@ -22,6 +22,8 @@
                   <tr><td style="text-align:left">Matriculated Date</td><td><%= result.matriculated_date.to_s %> </td></tr>
                   <tr><td style="text-align:left">New Competency</td><td style="color:red"><%= result.new_competency? ? 'Yes' : 'No' %> </td></tr>
                   <tr><td style="text-align:left">Former Name</td><td><%= result.former_name %> </td></tr>
+                  <tr><td style="text-align:left"><%= link_to "Specialties Interest (Click to update)".html_safe, update_career_interests_users_path(uuid: result.uuid),  target: :_blank %> </td>
+                    <td style="color:blue"><%= raw(hf_format_other_specialty(result.career_interest).each_with_index.map{ |item, index| "#{index + 1}. #{item}" }.join("<br>")) %></td></tr>
                   <tr>
                     <% bls_record = result.ume_bls %>
                     <% if !bls_record.nil? %>

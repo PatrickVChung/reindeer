@@ -16,7 +16,14 @@
   <% selected_competencies = hf_course_type(new_competencies, course_type) %>
   <% selected_competencies.each do |comp| %>
       <tr>
-        <td><%= comp.course_name %> </td>
+        <td>
+          <button type="button" class="btn btn-info"
+                  data-bs-container="body"
+                  data-bs-toggle="tooltip" data-bs-placement="right"
+                  title="<%= hf_collect_comp_data(comp) %>" >
+            <%= comp.course_name %>
+          </button>
+        </td>
         <td><%= comp.start_date%> </td>
         <td><%= comp.end_date %> </td>
         <td><%= comp.submit_date %> </td>

@@ -6,6 +6,7 @@ class ReportsController < ApplicationController
   before_action :authenticate_user!, :set_resources
   include ReportsHelper
   include CompetenciesHelper
+  include NewCompetenciesHelper
 
   def index
     if params[:cohort].present?
@@ -21,18 +22,24 @@ class ReportsController < ApplicationController
   end
 
   def competency
+
     if params[:cohortChecked].present?
-      @cohortChecked = JSON.parse(params[:cohortChecked])
+      @cohortChecked = params[:cohortChecked]
       @comp_class_means = {}
 
       @non_clinical_course_arry ||= hf_get_non_clinical_courses2
-
       @cohortChecked.each do |cohort_id|
-        if cohort_id.to_i >= 16
+        if cohort_id.to_i >= 20
+          cohort_title = PermissionGroup.find(cohort_id.to_i).title.scan(/\((.*)\)/).first.first
+          comp_unfiltered = NewCompetency.joins(:user).where(permission_group_id: cohort_id).map(&:attributes)
+          class_mean = hf_competency_new_class_mean(comp_unfiltered)
+          #class_mean.store("Cohort", cohort_title)
+          @comp_class_means[cohort_title] = class_mean
+
+        elsif cohort_id.to_i >= 16 and cohort_id.to_i <= 19
           cohort_title = PermissionGroup.find(cohort_id.to_i).title.scan(/\((.*)\)/).first.first
           comp_unfiltered = Competency.joins(:user).where(permission_group_id: cohort_id).map(&:attributes)
           class_mean = hf_competency_class_mean2(comp_unfiltered)
-          #class_mean.store("Cohort", cohort_title)
           @comp_class_means[cohort_title] = class_mean
         else
           cohort_title = PermissionGroup.find(cohort_id.to_i).title.scan(/\((.*)\)/).first.first
@@ -52,7 +59,6 @@ class ReportsController < ApplicationController
   def mspe
 
     if current_user.coaching_type != 'student'
-
       if params[:cohort].present? and  params[:email].present? and params[:email] != 'All'
         #@mspe_data = hf_get_mspe_data(params[:cohort])
         @student_email = params[:email]
@@ -75,12 +81,22 @@ class ReportsController < ApplicationController
       end
   end
 
+  def famp_core_mspe_analysis
+    @famp_core_mspes = []
+    if params[:course_codes].present?
+      @famp_core_mspes = hf_read_famp_core_data(params[:course_codes])
+    end
+    respond_to do |format|
+      format.html
+    end
+  end
+
   private
 
   def set_resources
     # group 7 is phd/mph/mcr students
     # group 11 is dismissed or discharged students
-    @permission_groups ||= PermissionGroup.where("id > 19 and id not in (7,11) and title like ?", "%Student%").order(:id) # get last 3 rows
+    @permission_groups ||= PermissionGroup.where("id >= 16 and id not in (7,11) and title like ?", "%Student%").order(:id) # get last 3 rows
     @permission_groups_mspe ||= PermissionGroup.where("id >= ? and title like ?", 17, "%Student%").order(:id) # get last 3 rows
   end
 

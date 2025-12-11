@@ -28,3 +28,17 @@ $(document).ready ->
         return
 
   $('#competencyForm').attr('onsubmit','return false;')
+
+  $checkboxes = $('.my-checkbox-group input[type="checkbox"]')
+  maxAllowed = 2
+  # Set the maximum number of allowed selections
+  $checkboxes.on 'change', ->
+    checkedCount = $checkboxes.filter(':checked').length
+    if checkedCount >= maxAllowed
+      # If the limit is reached, disable unchecked checkboxes
+      $checkboxes.not(':checked').prop 'disabled', true
+    else
+      # If the limit is not reached, enable all checkboxes
+      $checkboxes.prop 'disabled', false
+    return
+  return

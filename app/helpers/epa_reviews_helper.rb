@@ -15,7 +15,7 @@ module EpaReviewsHelper
   EPA_KEYWORDS = {
             "EPA1" => ["physical", "physical exams", "physical examinations", 'history', "exam", "physical exam", "examination", "interview", "information gathering", "H and P", "h&p"],
             "EPA2" => ["differential diagnosis", "differential", "differentials", "ddx"],
-            "EPA3" => ["interpret", "interpreted", "cost-effective", "labs", "test", "screening test", "testing", "diagnostic", "assessment/plans",
+            "EPA3" => ["diagnostic assessment", "interpret", "interpreted", "cost-effective", "labs", "test", "screening test", "testing", "diagnostic", "assessment/plans",
                       "assessment", "plan"],
             "EPA4" => ["orders",  "prescription"],
             "EPA5" => ["document", "documentation", "note", "notes","progress note", "written",  "written H&P", "written history and physical", "discharge summary"], # "Document a clinical encounter in the patient record",
@@ -47,17 +47,17 @@ module EpaReviewsHelper
 
   # updated on 2/27/2025
   NEW_EPA_KEYWORDS = {
-  "EPA1A" => ["hypothesis-driven history", "hypothesis driven history", "targeted history", "focused history", "directed history", "history taking", "medical history", "patient history", "clinical history", "history of present illness", "HPI", "review of systems", "ROS", "past medical history", "PMH", "interview", "information gathering"],
-  "EPA1B" => ["physical exam", "physical examination", "targeted exam", "focused physical", "directed physical", "tailored exam", "tailored physical", "clinical exam", "physical assessment", "body systems", "mental status", "H and P", "H&P"],
+  "EPA1A" => ["histories", "hypothesis-driven history", "hypothesis driven history", "targeted history", "focused history", "directed history", "history taking", "medical history", "patient history", "clinical history", "history of present illness", "HPI", "review of systems", "ROS", "past medical history", "PMH", "interview", "information gathering"],
+  "EPA1B" => ["physical exams", "physical exam", "physical examination", "examinations", "targeted exam", "focused physical", "directed physical", "tailored exam", "tailored physical", "clinical exam", "physical assessment", "body systems", "mental status", "H and P", "H&P"],
   "EPA2" => ["differential diagnosis", "prioritized differential", "differential", "ddx", "diagnosis", "prioritized list", "diagnostic possibilities", "rule out", "problem list", "clinical impression", "impression", "problem formulation"],
 
-  "EPA3" => ["interpret", "interpretation", "diagnostic testing", "screening test", "laboratory test", "lab test", "labs", "imaging", "test result", "diagnostic study", "radiology", "x-ray", "CT", "ultrasound", "MRI", "EKG", "ECG", "test interpretation", "normal values", "diagnostic assessment"],
+  "EPA3" => ["management plan", "management plans", "assessment and plans", "assessment and plan","interpret", "interpretation", "diagnostic testing", "screening test", "laboratory test", "lab test", "labs", "imaging", "test result", "diagnostic study", "radiology", "x-ray", "CT", "ultrasound", "MRI", "EKG", "ECG", "test interpretation", "normal values", "diagnostic assessment"],
 
   "EPA4" => ["orders", "order entry", "ordering", "prescription", "prescribe", "medication order", "drug order", "lab order", "imaging order", "test order", "consult order", "consultation request", "order set", "dosing", "dose", "frequency", "route", "duration", "refill", "e-prescribe"],
 
-  "EPA5" => ["documentation", "medical record", "EMR", "EHR", "chart note", "note", "progress note", "SOAP note", "H&P", "history and physical", "written documentation", "admission note", "discharge summary", "procedure note", "clinic note", "inpatient note", "outpatient note", "consult note", "consultation note", "patient record"],
+  "EPA5" => ["documentation", "medical record", "EMR", "EHR", "chart note", "written notes", "note", "notes" "progress note", "SOAP note", "H&P", "history and physical", "written documentation", "admission note", "discharge summary", "procedure note", "clinic note", "inpatient note", "outpatient note", "consult note", "consultation note", "patient record"],
 
-  "EPA6" => ["presentation", "oral presentation", "case presentation", "clinical presentation", "patient presentation", "report", "verbal report", "bedside presentation", "presenting patient", "rounds presentation"],
+  "EPA6" => ["presentation", "presentations", "oral presentation", "case presentation", "clinical presentation", "patient presentation", "report", "verbal report", "bedside presentation", "presenting patient", "rounds presentation"],
 
   "EPA7" => ["literature", "evidence", "literature search", "evidence-based medicine", "EBM", "research", "clinical question", "PICO", "clinical evidence", "journal", "publication", "guideline", "clinical guideline", "systematic review", "meta-analysis", "randomized controlled trial", "RCT", "medical literature", "PubMed", "literature review", "clinical application"],
 
@@ -138,7 +138,7 @@ module EpaReviewsHelper
 
   def hf_new_epa_keywords
     return NEW_EPA_KEYWORDS
-  end 
+  end
 
   def hf_new_epa_desc
     return NEW_EPA_DESC
@@ -204,15 +204,20 @@ module EpaReviewsHelper
     end
 
     if @new_competency
+      if epa_code == 'EPA1'  ## coming from csl_feedbacks table
+        epa_code = 'EPA1A'
+      end
       keywords = NEW_EPA_KEYWORDS[epa_code]
       epa_color = NEW_EPA_COLORS[epa_code]
     else
       keywords = EPA_KEYWORDS[epa_code]
       epa_color = EPA_COLORS[epa_code]
     end
-    text_marked = text.gsub(/\b(#{keywords.join("|")})\b/i,
-              '<span style="color:' + "#{epa_color}" + '">' + "#{epa_code}: " + '<b>\1' +  '</span></b>').html_safe
-    return text_marked.html_safe
+
+      text_marked = text.gsub(/\b(#{keywords.join("|")})\b/i,
+                '<span style="color:' + "#{epa_color}" + '">' + "#{epa_code}: " + '<b>\1' +  '</span></b>').html_safe
+      return text_marked.html_safe
+
   end
 
   def hf_wba_str(wba)

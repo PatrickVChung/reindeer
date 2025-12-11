@@ -181,6 +181,11 @@ class ArtifactsController < ApplicationController
     @log_results = Artifact.process_upload_data(@artifact, 'FormativeFeedback')
   end
 
+  def process_informatics_feedback
+    @artifact = Artifact.find(params[:id])
+    @log_results = Artifact.process_upload_data(@artifact, 'InformaticsFeedback')
+  end
+
   def process_comp_excel
     @artifact = Artifact.find(params[:id])
     Artifact.read_competency_excel(@artifact)
@@ -195,6 +200,70 @@ class ArtifactsController < ApplicationController
     todayDate = Time.now.strftime("%Y_%m_%d")
     filename = "#{Rails.root}/log/bls_#{todayDate}.log"
     render file: filename
+  end
+
+  def ultimate_method
+      @problem_artifact  = Artifact.find(params[:id])
+      @moved_files = []
+      @problem_artifact.documents.each do |document|
+        data_array = []
+        data_array.push document.filename
+        sid = hf_get_user_document(document)
+
+        student_user = User.find_by(sid: sid)
+        if !student_user.nil?
+          full_name = student_user.full_name
+
+          data_array.push full_name
+          data_array.push sid
+
+          temp_artifact = Artifact.find_or_create_by(user_id: student_user.id, content: @problem_artifact.content, title: @problem_artifact.title) do |a|
+            a.content = @problem_artifact.content
+            a.title = @problem_artifact.title
+            a.documents.attach(ActiveStorage::Blob.find(document.blob_id))
+          end
+          if !temp_artifact.documents.exists?(blob_id: document.blob_id)
+             temp_artifact.documents.attach(ActiveStorage::Blob.find(document.blob_id))
+          end
+          document.destroy # remove it from the artifact
+          @moved_files.push data_array
+        else
+          data_array.push full_name
+          data_array.push sid + " - Not Found in User Table!"
+          @moved_files.push data_array
+        end
+
+      end
+  end
+  def bulk_remove
+    @bulk_remove_files = []
+    if params[:Cohort].present? and params[:BlockCode].present? and params[:FileType].present?
+      permission_group = PermissionGroup.where('title like ?', '%Med28%').first
+      #users = ["1983", "2043", "1941", "1977"]
+      @bulk_remove_files = Artifact.gather_files_to_delete(params[:Cohort], permission_group, params[:BlockCode], params[:FileType])
+    end
+
+  end
+
+  def purge_all_documents
+    if params[:content].present?
+      file_path = Rails.root.join('public', "FoM_#{params[:content]}_#{params[:file_type]}.txt")
+      CSV.foreach(file_path, col_sep: "\t", headers: true) do |row|
+        artifact_id = row["artifact_id"]
+        user_id = row["user_id"]
+        title = row["title"]
+        content = row["content"]
+        file_type = row["file_type"]
+        test_str = content + "_" + file_type
+        artifact = Artifact.find_by(title: title, content: content, id: artifact_id, user_id: user_id)
+        artifact.documents.each do |document|
+          if document.filename.to_s.include? test_str
+            document.purge
+            artifact.destroy
+          end
+        end
+      end
+    end
   end
 
   private

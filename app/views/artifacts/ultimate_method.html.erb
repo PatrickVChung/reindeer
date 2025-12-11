@@ -1,0 +1,26 @@
+<% if !@moved_files.nil? %>
+ <div class='card'>
+   <div class="card-body">
+     <h5> The following files are moved to respective Student Accounts. </h5>
+    <table class="responsive nowrap table table-hover table-striped" id="prob_artifact" >
+      <thead>
+        <tr>
+          <th>Filename</th>
+          <th>Full Name</th>
+          <th>Sid</th>
+        </tr>
+      </thead>
+
+        <% @moved_files.each do |file| %>
+          <tr>
+            <td style="width: 60%"> <%= file[0] %> </td>
+            <td style="width: 40%"> <%= file[1] %></td>
+            <td><%= file[2] %></td>
+            <td></td>
+          </tr>
+        <% end %>
+    </table>
+  </div>
+</div>
+<%= link_to 'Back', artifacts_path %>
+<% end %>

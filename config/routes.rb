@@ -1,4 +1,28 @@
 Rails.application.routes.draw do
+  resources :ume_assess_plans do
+    collection do
+      get "update_plans"
+      get "download_file"
+    end
+  end
+
+  resources :create_pdfs do
+    collection do
+      get "create_and_move_pdf", to: 'create_pdfs#create_and_move_pdf'
+      get "move_pdf", to: 'create_pdfs#move_pdf'
+    end
+  end
+
+  resources :medhub_apis do
+    collection do
+      get "final_evals", controller: 'medhub_apis', to: 'medhub_apis#final_evals'
+      get "all_courses", controller: 'medhub_apis', to: 'medhub_apis#all_courses'
+      get "get_courses", controller: 'medhub_apis', to: 'medhub_apis#get_courses'
+      get "enrollment", controller: 'medhub_apis', to: 'medhub_apis#enrollment'
+
+    end
+  end
+
   resources :precep_meetings
   resources :new_competencies do
     collection  do
@@ -27,6 +51,7 @@ Rails.application.routes.draw do
       get 'download_file', param: :file_name, action: :download_file,  controller: 'reports', to: "reports#download_file"
       get 'competency', action: :competency, controller: 'reports', to: 'reports#competency'
       get 'mspe', action: :mspe, controller: 'reports', to: "reports#mspe"
+      get 'famp_core_mspe_analysis', action: :famp_core_mspe_analysis, to: "reports#famp_core_mspe_analysis"
     end
   end
 
@@ -65,6 +90,7 @@ Rails.application.routes.draw do
   resources :epa_reviews do
     collection do
       post 'local_storage'
+      get 'unbadged', action: :unbadged
     end
   end
 
@@ -131,11 +157,16 @@ Rails.application.routes.draw do
        get 'step_2_move_files'
        get 'process_preceptor_eval'
        get 'process_formative_feedback'
+       get 'process_informatics_feedback'
        get 'process_comp_excel'
        get 'process_bls_excel'
+       get 'ultimate_method'
+
      end
      collection do
        get 'get_sub_components'
+       get 'bulk_remove', controller: 'artifacts', action: :bulk_remove, to: 'artifacts#bulk_remove'
+       get 'purge_all_documents', controller: 'artifacts', to: 'artifacts#purge_all_documents'
      end
   end
   namespace :coaching do
@@ -165,14 +196,14 @@ Rails.application.routes.draw do
     end
   end
 
-  # resources :searches, param: :search, only: [:index] do
-  #   member do
-  #     get 'search'
-  #   end
-  # end
+  resources :searches do
+    collection do
+      get 'download_file'
+    end
+  end
 
-  get '/search' => 'searches#search', as: 'search_searches'
-  get '/searches/download_file'
+  # get '/search' => 'searches#search', as: 'search_searches'
+  # get '/searches/download_file'
 
   resources :coaching, only: [:index]
   resources :rooms, only: [:show, :index]
@@ -215,6 +246,8 @@ Rails.application.routes.draw do
     collection do
         get "update_loa", action: :update_loa, to: "users#update_loa#"
         get "save_update_loa", action: :save_update_loa, to: "users#save_update_loa"
+        get "update_career_interests", action: :update_career_interests, to: "users#update_career_interests"
+        get "save_career_interests", action: :save_career_interests, to: "users#save_career_interests"
     end
   end
 
@@ -237,6 +270,7 @@ Rails.application.routes.draw do
   #match '*unmatched', to: 'application#route_not_found', via: :all   # this will break the activestorage url_for(document) - make the document not viewable.
 
   get "pages/*id", to: "high_voltage/pages#show", as: :page, format: false
+  get '/.well-known/appspecific/com.chrome.devtools.json', to: proc { [200, {}, ['']] }
 
   #match "*any", via: :all, to: "errors#file_not_found"
 end

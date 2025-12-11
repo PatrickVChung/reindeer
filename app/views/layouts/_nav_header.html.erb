@@ -20,14 +20,16 @@
         <div id="SearchPlaceHolder">
           <div id="SearchInputForm">
             <% if !current_user.nil? && current_user.coaching_type != 'student' && current_user.spec_program !='Wellness' %>
-              <%= form_tag(search_searches_path, method: "get",  class: 'navbar-form navbar-left', id: 'SearchForm') do %>
+              <%= form_with url: searches_path, method: :get, local: true do |form| %>
                 <span>
                   <div class="input-group">
-                        <%= search_field_tag :search, params[:search], class: "form-control", size: 30, placeholder: "LastName, FirstName or '?' for help!" %>
-                        <%= button_tag " SEARCH", class: 'button btn btn-info fa fa-search', style: 'font-size:15px', id: 'SearchButton', html: {autocomplete: 'off'},
-                            'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> SEARCHING...".html_safe %>
+                    <%= form.label :search, "Student Name", style: "color: purple; width: 150px;", class: "form-control" %>
+                    <%= form.text_field :search, placeholder: "Enter LastName Search...", style: "width: 250px;", value: params[:search], class: "form-control" %>
+                    <%= form.button type: "submit", class: "btn btn-info", data: { "disable-with": "<i class='fa fa-spinner fa-spin'></i> Searching..." } do %>
+                      <i class="fa fa-search"></i> Search
+                    <% end %>
                   </div>
-                </span>
+                <span>
               <% end %>
             <% end %>
           </div>
@@ -38,20 +40,41 @@
               <% if can? :crud, Dashboard %>
                 <%= link_to '<i class="fa fa-home" style="color:#0C2D83"></i> Home'.html_safe,  auto_path, class: "nav-link"  %>
               <% end %>
-            </li>
-            <li class="nav-item">
-              <% if ['chungp','itot', 'budd', 'bumstedt', 'bettybogus'].include? current_user.username  %>
-                <%= link_to '<i style="color:#31a34f;" class="fa fa-book"></i> Course Catalog'.html_safe, courses_path(), target: '_blank', class: "nav-link" %>
+
+            <li class="nav-item dropdown">
+              <% if ['chungp', 'fruhwirt', 'budd'].include? current_user.username %>
+                  <a class="nav-link dropdown-toggle" role="button"  href="#medhubtMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                  Medhub
+                  </a>
+                  <ul class="dropdown-menu" id="medhubMenu">
+                    <li><%= link_to '<i> Accesssing Final Evals </i>'.html_safe, get_courses_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> All Medhub Courses </i>'.html_safe, all_courses_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> List Enrollments </i>'.html_safe, enrollment_medhub_apis_path, target: '_blank', class: "dropdown-item" %></li>
+                  </ul>
               <% end %>
             </li>
             <li class="nav-item">
+              <% if ['chungp','itot', 'budd', 'schneibe', 'bettybogus'].include? current_user.username  %>
+                <%= link_to '<i style="color:#31a34f;" class="fa fa-book"></i> Course Catalog'.html_safe, courses_path(), target: '_blank', class: "nav-link" %>
+              <% end %>
+            </li>
+            <li class="nav-item dropdown">
               <% if current_user.can_process_fom? and current_user.coaching_type != 'student'%>
-                <%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Process FoM'.html_safe, process_fom_fom_exams_path(uuid: current_user.uuid), target: '_blank', class: "nav-link" %>
+                <a class="nav-link dropdown-toggle" role="button"  href="#FoMMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i style="color:#A00000;" class="fa fa-bomb"></i> Process FoM
+                </a>
+                <ul class="dropdown-menu" id="FoMMenu">
+                  <li><%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Process FoM'.html_safe, process_fom_fom_exams_path(uuid: current_user.uuid), target: '_blank', class: "dropdown-item" %></li>
+                  <li><%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Bulk Delete'.html_safe, bulk_remove_artifacts_path, target: '_blank', class: "dropdown-item" %></li>
+                  <li><%= link_to 'Create Informatics Feedback (Q-PDF)'.html_safe, create_and_move_pdf_create_pdfs_path, target: '_blank', class: "dropdown-item" %></li>
+                  <li><%= link_to 'UME Assessment Plans'.html_safe, ume_assess_plans_path, target: '_blank', class: "dropdown-item" %></li> 
+                </ul>
               <% end %>
             </li>
 
             <li class="nav-item dropdown">
-              <% if (['admin'].include? current_user.coaching_type and current_user.spec_program !='Wellness') or (['itot', 'schneibe', 'fruhwirt', 'petesama'].include? current_user.username) %>
+              <% if (['admin', 'dean'].include? current_user.coaching_type and current_user.spec_program !='Wellness') or
+                  (['itot', 'schneibe', 'fruhwirt', 'dunnbri', 'gustafsb', 'moberly', 'budd'].include? current_user.username) %>
                   <a class="nav-link dropdown-toggle" role="button"  href="#reportMenu" data-bs-toggle="dropdown" aria-expanded="false">
                   Report
                   </a>
@@ -61,6 +84,7 @@
                     <% if ['chungp', 'fruhwirt', 'schneibe'].include? current_user.username %>
                       <li><%= link_to '<i> MSPE Data </i>'.html_safe, mspe_reports_path, target: '_blank', class: "dropdown-item" %></li>
                     <% end %>
+                    <li><%= link_to 'FAMP Core MSPE Analysis'.html_safe, famp_core_mspe_analysis_reports_path, target: '_blank', class: "dropdown-item" %></li>
                   </ul>
               <% end %>
             </li>
@@ -122,7 +146,7 @@
               </li>
               <% if current_user.coaching_type == 'student' %>
                 <li class="nav-item">
-                  <%= link_to '<i class="fa fa-user-md" style="color:#5BAD5A"></i>Your Datasets'.html_safe, search_searches_path(current_user), class: "nav-link"  %>
+                  <%= link_to '<i class="fa fa-user-md" style="color:#5BAD5A"></i>Your Datasets'.html_safe, searches_path(current_user), class: "nav-link"  %>
                 </li>
               <% elsif current_user.coach_or_higher? and current_user.spec_program !='Wellness' %>
                 <li class="nav-item">

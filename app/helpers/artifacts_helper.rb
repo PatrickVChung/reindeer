@@ -103,10 +103,11 @@ module ArtifactsHelper
   end
 
   def hf_file_visible(code)
-    if ["dean", "admin"].include?  current_user.coaching_type
+    if current_user.nil?
+      return false
+    elsif ["dean", "admin"].include?  current_user.coaching_type
       return true
     end
-
      record_found = FileuploadSetting.find_by(permission_group_id: current_user.permission_group_id, code: code)
      if (!record_found.nil?) and (record_found.visible)
        return true
@@ -116,5 +117,13 @@ module ArtifactsHelper
 
  end
 
+ def hf_get_user_document(document)
+   pdf_content = document.blob.download
+   reader = PDF::Reader.new(StringIO.new(pdf_content))
+   extracted_text = reader.pages.map(&:text).join("\n")
+   sid = extracted_text[extracted_text.index("ID: ")+4,9] #find 'ID: ' in text and substring the SID out
+   #sid = extracted_text.split("\n").compact[11][0..12].split(" ").second  # get sid => ID: U001234567  ==> this one works but if the id is moved, then it will not work
+   return sid
+ end
 
 end

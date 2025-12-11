@@ -5,6 +5,10 @@ class AdvisorsController < ApplicationController
   # GET /advisors.json
   def index
     @advisors = Advisor.all.sort_by(&:name)
+    respond_to do |format|
+      format.html 
+
+    end
   end
 
   # GET /advisors/1
