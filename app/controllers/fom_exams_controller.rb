@@ -16,6 +16,7 @@ class FomExamsController < ApplicationController
 
   def process_fom
     @artifacts = User.find_by(uuid: params[:uuid]).artifacts
+
   end
 
   def list_all_blocks

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :ume_assess_plans do
     collection do
       get "update_plans"
+      get "download_file"
     end
   end
 

@@ -2,6 +2,7 @@ class UmeAssessPlansController < ApplicationController
   layout 'full_width_csl'
   before_action :authenticate_user!
   before_action :set_ume_assess_plan, only: %i[ show edit update destroy ]
+  include UmeAssessPlansHelper
 
   # GET /ume_assess_plans or /ume_assess_plans.json
   def index
@@ -72,6 +73,14 @@ class UmeAssessPlansController < ApplicationController
      @update_step2_ck_log = UmeAssessPlan.update_step2_ck(params[:year], params[:start_date], params[:end_date])
     end
 
+  end
+
+  def download_file
+    if params[:file_name].present?
+        in_file = params[:file_name]
+        file_path = hf_create_text_file(in_file)
+        send_file  file_path, type: 'text', disposition: 'download'
+    end
   end
 
   private
