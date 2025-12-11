@@ -1,5 +1,16 @@
 module SearchesHelper
 
+  def hf_format_other_specialty (in_array)
+    if in_array.nil? and in_array.empty?
+      return []
+    end
+    if !in_array.last.nil? and in_array.last.include? "Other"
+      in_array[-1] = "Other: " + in_array.last.split("~").last
+      return in_array
+    end
+    return in_array
+  end
+
   def hf_check_aes_key
     if session[:aes_key].nil?
       aes_key = AES.key
@@ -168,7 +179,6 @@ module SearchesHelper
       block_hash.store("cohort", cohort)
       block_array.push block_hash
     end
-
 
     return block_array
   end

@@ -2,7 +2,7 @@ class CoursesController < ApplicationController
   layout 'full_width_csl'
   before_action :authenticate_user!
   before_action :set_resources, only: %i[ index show edit update destroy ]
-  include CompetenciesHelper
+  include NewCompetenciesHelper
 
   # GET /courses or /courses.json
   def index
@@ -106,8 +106,8 @@ class CoursesController < ApplicationController
     def set_resources
       @category ||= ["All"] + Course.all.pluck(:category).uniq
       #@duration = Course.all.pluck(:duration).uniq
-      @departments ||= ["All"] + Course.all.pluck(:department).uniq.sort
-      @duration ||= Course.all.pluck(:duration).uniq.sort
+      @departments ||= ["All"] + Course.all.pluck(:department).uniq.compact.sort
+      @duration ||= Course.all.pluck(:duration).uniq.compact.sort
       sc ||= CourseSchedule.select(:year, :block).distinct.where.not(year: nil).order(:year)
       @course_schedules = sc.map{|s| s.year.to_s + " " + s.block}
 

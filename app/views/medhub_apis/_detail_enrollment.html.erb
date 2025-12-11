@@ -1,0 +1,31 @@
+<div class="justify-content-center">
+    <table id="courseDataTable" class="table table-hover table-striped table-responsive" data-sort="true" >
+      <thead>
+        <tr class="filters">
+          <th style="width: 20%">Start Date&nbsp;&nbsp;End Date&nbsp;PeriodID</th>
+          <th style="text-align:center">Enrollments</th>
+
+        </tr>
+      </thead>
+      <% @enrollments.each do |key, enroll| %>
+        <tr>
+          <td style="width: 50%"><%= key.gsub("!", "&nbsp;&nbsp;&nbsp;").html_safe %></td>
+          <td>
+            <% if enroll.nil? %>
+              No Data
+            <% else %>
+              <table class="responsive table table-hover">
+                <% enroll.each do |student| %>
+                  <tr>
+                    <td style="width: 50%"><%= student["last_name"] + ", " + student["first_name"] %></td>
+                    <td><%= "grade: " + student["grade"].to_s %></td>
+                  </tr>
+                <% end %>
+              </table>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+
+    </table>
+</div>

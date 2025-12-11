@@ -1,0 +1,43 @@
+<br >
+<h5>CreatePdfs for CSA/Informatics Qualtrics Survey </h5>
+
+<hr>
+<% if !@filename.nil? %>
+  <div class="card">
+    <div class="card-body">
+      Found File Name: <b><%= @filename.to_s %></b><i> (if the File Name is BLANK, please upload the file first!)</i><br><br>
+      <%= form_with(url: move_pdf_create_pdfs_path, method: :get) do |form| %>
+        <%= form.hidden_field :found_file, value: @filename %>
+        <%= form.hidden_field :artifact_id, value: @artifact.id %>
+
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text bg-info" id="inputGroup-sizing-sm">Cohort</span>
+          <input type="text" class="form-control" Name="Cohort" placeholder="eg. Med28 (case sensitive)">
+          <span class="input-group-text bg-info" id="inputGroup-sizing-sm">Block Code</span>
+          <input type="text" class="form-control" Name="BlockCode" placeholder="ValidCode: FUND,BLHD,SBM,CPR,HODI,NSF,DEVH">
+          <span class="input-group-text bg-info" id="inputGroup-sizing-sm">File Type</span>
+          <input type="text" class="form-control" name="FileType" value="_Informatics_CSA_Qualtrics">
+
+        </div>
+        <div class="mb-3">
+          <label for="Header1" class="form-label">Header 1</label>
+          <textarea class="form-control" id="Header1" name='header1' rows="2" ><%= hf_header1 %></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="Header2" class="form-label">Header 2</label>
+          <textarea class="form-control" id="Header2" name='header2' rows="4"><%= hf_header2 %></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="Header3" class="form-label">Header 3</label>
+          <textarea class="form-control" id="Header3" name='header3' rows="4"><%= hf_header3 %></textarea>
+        </div>
+
+        <p> *** When user press the Submit Form button, this program will read the uploaded CSV on top of the screen and create a PDF file for each student and then move it to the respectively student.</p>
+
+        <button class="btn btn-primary" type="submit">Submit form</button>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <h5> You need to upload the Qualtrics Survey file first!! </h5><br><br>
+<% end %>

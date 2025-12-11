@@ -4,6 +4,7 @@ module Coaching
     before_action :set_resources
     helper  :all
     include MeetingsHelper
+    include SearchesHelper
     respond_to :html, :json
 
     def create
@@ -82,6 +83,12 @@ module Coaching
 
     def show_detail
       @meeting = Meeting.find params[:id]
+      @career_interest = User.find_by(id: @meeting.user_id).career_interest
+      if @career_interest.empty? and @career_interest.include? "Other"
+        @other_interest = @career_interest.last.split("~").last
+        other_label = @career_interest.last.split("~").first
+        @career_interest[-1] = other_label
+      end
       # added the codes to update the advisor_type. For reasons, it was missing and caused issues.
       if @meeting.advisor_type.nil?
             @meeting.advisor_type = hf_get_advisor_type(@meeting.advisor_id)
@@ -95,6 +102,14 @@ module Coaching
 
     def edit
       @meeting = Meeting.find params[:id]
+      @career_interest = User.find_by(id: @meeting.user_id).career_interest
+      if !@career_interest.nil?
+        if @career_interest.last.include? "Other"
+          @other_interest = @career_interest.last.split("~").last
+          other_label = @career_interest.last.split("~").first
+          @career_interest[-1] = other_label
+        end
+      end
 
       respond_to do |format|
         if @meeting.save
@@ -108,6 +123,14 @@ module Coaching
     # this is dirty and manual because we're not using link_to in the view :(
     def update
       @meeting = Meeting.find params[:id]
+      temp_spec_array = params["specialties"]
+
+      if !temp_spec_array.nil?
+        if temp_spec_array.last.include? "Other"
+          temp_spec_array[-1] = params["specialties"].last + "~" + params["other_specialty"]
+          User.find_by(id: @meeting.user_id).update(career_interest: temp_spec_array)
+        end
+      end
       respond_to do |format|
         if @meeting.update(meeting_update_params)
           format.js { render action: 'update', status: :ok }

@@ -65,7 +65,8 @@ epa_codes = (category_code) ->
   else if category_code == "Formative Feedback"
           cat_array = []
           cat_array.push {id: "Formative Feedback Text File", value: "Formative Feedback Text File"}
-
+          cat_array.push {id: "Informatics Feedback Text File", value: "Informatics Feedback Text File"}
+          cat_array.push {id: "Q-Informatics Feedback Text File", value: "Q-Informatics Feedback Text File"}          
   else if category_code == "FoM Grades"
           cat_array = []
           cat_array.push {id: "FoM Tab Delimited File", value: "FoM Tab Delimited File"}

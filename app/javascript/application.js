@@ -3,3 +3,6 @@
 // import 'boostrap'
 // import "@fortawesome/fontawesome-free"
 import * as bootstrap from "bootstrap"
+$(document).on("turbolinks:load", function() {
+  $('.searchable-select').select2();
+});

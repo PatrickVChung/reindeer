@@ -77,6 +77,8 @@ module NewCompetenciesHelper
 
    }
 
+   FOM_BLOCK_IDS=["FUND710", "BLHD710", "SBM710", "CPR710", "HODI710", "NSF710", "DEVH710"]
+
    #============ New Updated EPA Definiation - from Logan Jones
    # EPA 1:  Split into two EPAs Below
    # EPA 1a Obtain a hypothesis-driven history
@@ -97,12 +99,27 @@ module NewCompetenciesHelper
      return NEW_EPA_ARRAY
    end
 
+   def hf_new_comp_codes
+     return NEW_COMP_CODES 
+   end
+
    def hf_get_new_epa_desc(epa_code)
      return NEW_EPA_DESC[epa_code]
    end
 
    def hf_new_epa_assessors
      return NEW_COMP_ASSESSORS
+   end
+
+   def hf_collect_comp_data(comp)
+     comp_data = {}
+     NEW_COMP_CODES.each do |code|
+       if comp[code].to_s != "0" and !comp[code].nil?
+         comp_data[code] = comp[code]
+       end
+     end
+     comp_str = comp_data.inspect
+     return comp_str
    end
 
    def hf_new_epa_level(rs_data, epa_code, level)
@@ -279,7 +296,7 @@ module NewCompetenciesHelper
     elsif course_type == 'Electives'
       selected_competencies = competencies.select{|c| c if !c.course_name.include? "730" and !c.course_name.include? "731" and !c.course_name.include? "770" and \
             !c.course_name.include? "INTS" and !c.course_name.include? "TRAN" and !c.course_name.include? "SCHI" and \
-            !c.course_name.include? "FoM" and !c.course_name.include? "CPX"}
+            !c.course_name.include? "FoM" and !c.course_name.include? "CPX" and !FOM_BLOCK_IDS.include? c.course_id}
     elsif course_type == 'Scholarly'
       selected_competencies = competencies.select{|c| c if c.course_name.include? "SCHI"}
     elsif course_type == 'Transition'
@@ -288,6 +305,8 @@ module NewCompetenciesHelper
       selected_competencies = competencies.select{|c| c if c.course_name.include? "Testing"}
     elsif course_type == 'CPX'
       selected_competencies = competencies.select{|c| c if c.course_name.include? "CPX"}
+    elsif course_type == 'FoM Comp'
+      selected_competencies = competencies.select{|c| c if FOM_BLOCK_IDS.include? c.course_id}
     elsif course_type == 'AllCourses'
       selected_competencies = competencies
 
@@ -436,11 +455,15 @@ module NewCompetenciesHelper
     if wba.empty?
       return nil
     end
-    
+
     student_name = user.full_name  # processing student Alver
     #wba_series = wba.values # removed the first 2 items in array
     selected_categories = wba.keys
-    tot_attending = wba["Attending Faculty"].sum
+    if wba["Attending Faculty"].nil?
+      tot_attending = 0
+    else
+      tot_attending = wba["Attending Faculty"].sum
+    end
     tot_attending_str = "<br /> Total # of WBAs for Attending Faculty: <b>#{tot_attending.to_s}</b>"
     title = "Workbased Assessment by Clinical Assessors - #{student_name}" + '<br /><h4>Total # of WBAs: <b>' + "#{total_wba_count}</b>" + tot_attending_str +
              '</h4>' + '<br>' + "<b>Requirement: At Least 51 Attendings</b>"

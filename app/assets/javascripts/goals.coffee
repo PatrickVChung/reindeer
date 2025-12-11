@@ -40,6 +40,7 @@ $(document).on 'click', '#SaveMeeting', (e) ->
   updatedAcademicOutcomesOther = $('#academic_outcomes_other').val()
   updatedStudyResourcesOther = $('#study_resources_other').val()
   updatedAdvisorType = $('#advisor_type').data("advisor_type")
+  updatedOtherSpecialty = $('#other_specialty').val()
 
   console.log("Goal.coffee - advisor_type: " + updatedAdvisorType)
   console.log("advisor notes: " + updatedAdvisorNotes)
@@ -73,6 +74,13 @@ $(document).on 'click', '#SaveMeeting', (e) ->
       return
     data_array
 
+  checked_specialties = do ->
+    data_array = []
+    $('.MyCheckBoxSpecialties:checked').each ->
+      data_array.push $(this).val()
+      return
+    data_array
+
   if $(e.target).attr('data-goalId')
     objectId = $(e.target).attr('data-goalId')
     controller = "goals"
@@ -86,7 +94,9 @@ $(document).on 'click', '#SaveMeeting', (e) ->
             career_outcomes_other: updatedCareerOutcomesOther, \
             academic_discussed_other: updatedAcademicOutcomesOther, \
             academic_outcomes_other: updatedAcademicOutcomesOther, \
-            study_resources_other: updatedStudyResourcesOther }
+            study_resources_other: updatedStudyResourcesOther, \
+            specialties: checked_specialties, \
+            other_specialty: updatedOtherSpecialty}
   #alert("meetingId: " + objectId + " m_status:" + newStatus)
   xhr = $.ajax({
     url: "/coaching/" + controller + "/" + objectId
@@ -99,6 +109,7 @@ $(document).on 'click', '#SaveMeeting', (e) ->
   }).done((d) ->
     show_detail_message 'success', "Successfully updated status"
     alert("Successfully saved!")
+    console.log(data)
     disable_input_fields()
 
   ).fail((e, request) ->

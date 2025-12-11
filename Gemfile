@@ -3,9 +3,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ##############################
 # Main
 ##############################
-gem "bundler", '~>2.0'
+gem "bundler" #, '~>2.0'
 #gem 'rails'  #, '~>6.1.3' #'~> 5.2.2.1'
-gem 'rails', '~> 8.0', '>= 8.0.2'
+gem 'rails', '~> 8.0.2.1'
 gem "rdoc" # '~>6.3.1'
 gem "psych", '< 4'
 gem 'sprockets', '< 4'
@@ -53,7 +53,7 @@ gem "cssbundling-rails"
 gem "sass-rails", '>= 3.2'
 gem "coffee-rails"
 gem "uglifier"
-gem 'jquery-ui-rails', '~>7.0.0'
+gem 'jquery-ui-rails', '~>8.0.0'
 gem "jquery-rails"
 gem "jquery_context_menu-rails"
 gem "momentjs-rails"
@@ -188,3 +188,7 @@ gem "subprocess"
 gem "nokogiri"
 gem "net-imap", ">= 0.4.20"
 gem "rails-html-sanitizer", ">= 1.6.1"
+gem "rails_admin_import", "~> 3.0"
+gem "httparty"
+gem "timeout"
+gem 'pdf-reader', '~> 1.4'

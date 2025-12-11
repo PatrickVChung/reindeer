@@ -3,8 +3,8 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready ->
-  $('.button').click ->
-      $('#SearchForm').attr('onsubmit','return true;')
-      return
-  $('#SearchForm').attr('onsubmit','return false;')
+  # $('.button').click ->
+  #     $('#SearchForm').attr('onsubmit','return true;')
+  #     return
+  # $('#SearchForm').attr('onsubmit','return false;')
   $('#SearchTable').dataTable  pageLength: 150, language: searchPlaceholder: 'FirstName or LastName'
