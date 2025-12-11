@@ -70,7 +70,7 @@ formative feedback to facilitate positive change during this Foundations of Medi
 
       pdf.font "Times-Roman" #, :size => 12"
       row.drop(4).each do |key, val|
-        pdf.text "Question: " + key
+        pdf.text "Question: " + (key || "").encode("Windows-1252", invalid: :replace, undef: :replace, replace: '')
           # if val is nil, be sure to set it "" and then encode to window-1252
           pdf.text "Ans/Comment: " + (val || "").encode("Windows-1252", invalid: :replace, undef: :replace, replace: ''), :color => "0000ff"
         pdf.text " "
