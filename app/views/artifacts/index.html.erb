@@ -48,6 +48,11 @@
             <%= link_to 'Process InformaticsFeedback', process_informatics_feedback_artifact_path(artifact)  %>
           <% end %>
 
+          <% if artifact.content.to_s.include? "Mock Step 1" and (current_user.coaching_type == 'dean'  or current_user.coaching_type == 'admin') %>
+            /
+            <%= link_to 'Process USMLE Exam', process_usmle_exam_artifact_path(artifact)  %>
+          <% end %>
+
 
           <% if artifact.content.to_s.include? "Competency-Excel" and (current_user.coaching_type == 'admin') %>
             /
@@ -72,7 +77,7 @@
               </tr>
               <% artifact.documents.each do |document| %>
                 <tr>
-                  <td style="width: 60%"> <%= document.filename %> </td>
+                  <td style="width: 60%"> <%= document.filename.to_s %> </td>
                   <td style="width: 40%">
                     <%= link_to 'View', url_for(document), target: :_blank  %>
                     /

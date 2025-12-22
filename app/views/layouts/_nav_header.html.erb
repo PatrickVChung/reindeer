@@ -67,7 +67,7 @@
                   <li><%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Process FoM'.html_safe, process_fom_fom_exams_path(uuid: current_user.uuid), target: '_blank', class: "dropdown-item" %></li>
                   <li><%= link_to '<i style="color:#A00000;" class="fa fa-bomb"></i> Bulk Delete'.html_safe, bulk_remove_artifacts_path, target: '_blank', class: "dropdown-item" %></li>
                   <li><%= link_to 'Create Informatics Feedback (Q-PDF)'.html_safe, create_and_move_pdf_create_pdfs_path, target: '_blank', class: "dropdown-item" %></li>
-                  <li><%= link_to 'UME Assessment Plans'.html_safe, ume_assess_plans_path, target: '_blank', class: "dropdown-item" %></li> 
+                  <li><%= link_to 'UME Assessment Plans'.html_safe, ume_assess_plans_path, target: '_blank', class: "dropdown-item" %></li>
                 </ul>
               <% end %>
             </li>
@@ -80,7 +80,8 @@
                   </a>
                   <ul class="dropdown-menu" id="reportMenu">
                     <li><%= link_to '<i> Ranking Report </i>'.html_safe, reports_index_path, target: '_blank', class: "dropdown-item" %></li>
-                    <li><%= link_to '<i> Competency Report </i>'.html_safe, competency_reports_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> Competency Graph(s) </i>'.html_safe, competency_reports_path, target: '_blank', class: "dropdown-item" %></li>
+                    <li><%= link_to '<i> Competency Detail </i>'.html_safe, competency_detail_reports_path, target: '_blank', class: "dropdown-item" %></li>                    
                     <% if ['chungp', 'fruhwirt', 'schneibe'].include? current_user.username %>
                       <li><%= link_to '<i> MSPE Data </i>'.html_safe, mspe_reports_path, target: '_blank', class: "dropdown-item" %></li>
                     <% end %>

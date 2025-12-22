@@ -1,0 +1,48 @@
+<% if !@users.empty? %>
+  <h5> Competency Detail Report
+  <%= link_to ('<i class="fa fa-download">Download</i>').html_safe, download_file_reports_path(file_name: @competency_file_name) %></h5>
+
+  <table id="CompDetailTable" class="table table-hover table-striped responsive" data-sort="true" >
+    <thead>
+      <tr class="filters">
+        <th>StudentName </th>
+        <th>SID</th>
+        <th>CourseID</th>
+        <th>Course Name</th>
+        <th>SubmitDate</th>
+        <th>FinalGrade</th>
+        <% x = 0 %>
+        <% @users.first.new_competencies.first.attributes.drop(14).each do |key, val| %>
+            <th style="text-align:left"> <%= key %> </th>
+            <% x += 1 %>
+            <% if x > 16 %>
+              <% break %>
+            <% end %>
+        <% end %>
+      </tr>
+    </thead>
+
+    <% @users.each do |user| %>
+      <% competencies = user.new_competencies %>
+      <% competencies.each do |comp| %>
+      <tr>
+        <td> <%= user.full_name  %> </td>
+        <td style="text-align:left"> <%= user.sid %> </td>
+        <td style="text-align:left"> <%= comp.course_id %> </td>
+        <td> <%= comp.course_name %> </td>
+        <td> <%= comp.submit_date %> </td>
+        <% hash_grade = JSON.parse(comp.final_grade) %>
+        <td style="text-align:center"> <%= hash_grade["Grade"] %> </td>
+        <% i = 0%>
+        <% comp.attributes.drop(14).each do |key, val| %>
+            <td style="text-align:center"> <%= val == 0 ? "" : val %> </td>
+            <% i += 1 %>
+            <% if i > 16 %>
+              <% break %>
+            <% end %>
+        <% end %>
+      </tr>
+      <% end %>
+    <% end %>
+  </table>
+<% end %>

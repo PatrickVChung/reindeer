@@ -22,7 +22,6 @@ class ReportsController < ApplicationController
   end
 
   def competency
-
     if params[:cohortChecked].present?
       @cohortChecked = params[:cohortChecked]
       @comp_class_means = {}
@@ -56,8 +55,26 @@ class ReportsController < ApplicationController
     end
   end
 
-  def mspe
+  def competency_detail
+    @users = []
+    if params[:cohort].present? && params[:email].present? && params[:email] == 'All'
+      @users = User.where(permission_group_id: params[:cohort]).order(:full_name).includes(:new_competencies)
+      @cohort_title = PermissionGroup.find(params[:cohort]).title.scan(/\((.*)\)/).first.first
+      @competency_file_name = "#{@cohort_title}_competency_data.txt"
+      @competency_data  = hf_competency_new_data(@users, @competency_file_name)
 
+    elsif params[:cohort].present? && params[:email].present? && params[:email] != 'All'
+      @users = User.where(permission_group_id: params[:cohort], email: params[:email]).includes(:new_competencies)
+      @cohort_title = PermissionGroup.find(params[:cohort]).title.scan(/\((.*)\)/).first.first
+      @competency_file_name = "#{@cohort_title}_#{@users.first.sid}_competency_data.txt"
+      @competency_data  = hf_competency_new_data(@users, @competency_file_name)
+
+    end
+
+    #create_file @competency_data, "#{@cohort_title}_competency_data.txt"
+  end
+
+  def mspe
     if current_user.coaching_type != 'student'
       if params[:cohort].present? and  params[:email].present? and params[:email] != 'All'
         #@mspe_data = hf_get_mspe_data(params[:cohort])
@@ -65,9 +82,7 @@ class ReportsController < ApplicationController
         @mspe_data, @mspe_filename = hf_get_mspe_data_by_email(params[:email], params[:cohort])
       elsif params[:cohort].present? and  params[:email].present? and params[:email] == 'All'
         @mspe_data, @mspe_filename = hf_get_mspe_data(params[:cohort])
-
       end
-
       respond_to do |format|
         format.html
         # format.js { render partial: 'mspe_data', status: 200 }
@@ -97,7 +112,7 @@ class ReportsController < ApplicationController
     # group 7 is phd/mph/mcr students
     # group 11 is dismissed or discharged students
     @permission_groups ||= PermissionGroup.where("id >= 16 and id not in (7,11) and title like ?", "%Student%").order(:id) # get last 3 rows
-    @permission_groups_mspe ||= PermissionGroup.where("id >= ? and title like ?", 17, "%Student%").order(:id) # get last 3 rows
+    @permission_groups_mspe ||= PermissionGroup.where("id >= ? and title like ?", 20, "%Student%").order(:id) # get last 3 rows
   end
 
   def private_download in_file

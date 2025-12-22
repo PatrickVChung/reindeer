@@ -4,7 +4,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Main
 ##############################
 gem "bundler" #, '~>2.0'
-#gem 'rails'  #, '~>6.1.3' #'~> 5.2.2.1'
 gem 'rails', '~> 8.0.2.1'
 gem "rdoc" # '~>6.3.1'
 gem "psych", '< 4'
