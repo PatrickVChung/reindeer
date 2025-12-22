@@ -186,6 +186,11 @@ class ArtifactsController < ApplicationController
     @log_results = Artifact.process_upload_data(@artifact, 'InformaticsFeedback')
   end
 
+  def process_usmle_exam
+    @artifact = Artifact.find(params[:id])
+    @log_results = Artifact.process_upload_data(@artifact, 'UsmleExam')
+  end
+
   def process_comp_excel
     @artifact = Artifact.find(params[:id])
     Artifact.read_competency_excel(@artifact)

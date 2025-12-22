@@ -7,6 +7,15 @@ $(document).ready ->
   oTable = $('#rankingDataTable').dataTable()
   oTable.fnSort([9, 'desc'])  # sorting the average column on the table
 
+  # $('#CompDetailTable').DataTable columnDefs: [ {
+  #   targets: '_all'
+  #   defaultContent: ''
+  # } ]
+  $('#CompDetailTable').dataTable 'ordering': true
+  $('.dataTables_length').addClass 'bs-select'
+  oTable = $('#CompDetailTable').dataTable()
+  oTable.fnSort([4, 'asc'])  # sorting SubmitDate on the table
+
   $('.button').click ->
     # $('#competencyForm').attr('onsubmit','return true;')
     cohortChecked = [];

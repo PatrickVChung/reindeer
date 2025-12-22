@@ -61,6 +61,22 @@ class Artifact < ApplicationRecord
     return true
   end
 
+  def self.update_usmle_exam(row)
+    user = User.find_by(sid: row["sid"])
+    if user.nil?
+     return false
+    else
+      row["user_id"] = user.id
+      row["exam_date"] = format_date(row["exam_date"])
+      row.delete("full_name")
+      row.delete("sid")
+      row_hash = {}
+      row_hash = row.to_hash
+      UsmleExam.where(user_id: row["user_id"], exam_type: row["exam_type"], no_attempts: row["no_attempts"]).first_or_create.update(row_hash)
+      return true
+    end
+  end
+
   def self.process_upload_data (artifact, code)
     log_results = []
     row_to_hash = {}
@@ -69,19 +85,20 @@ class Artifact < ApplicationRecord
     total_count = 0
 
     CSV.parse(ActiveStorage::Attachment.find(artifact.documents.first.id).download, headers: true, col_sep: "\t", encoding: 'cp1252') do |row|
-
       #yes_updated = true
       total_count += 1
 
         yes_updated = false
-        if code == 'PreceptorEval' and !row["email"].blank?
+        if code == 'PreceptorEval' && !row["email"].blank?
           yes_updated = update_preceptor_eval(row)
-        elsif code == 'InformaticsFeedback' and !row["email"].blank?
+        elsif code == 'InformaticsFeedback' && !row["email"].blank?
             full_name = row["full_name"]
             email = row["email"]
             yes_updated = update_informatics_feedback(row)
-        elsif code == 'FormativeFeedback' and !row["q1"].blank?
+        elsif code == 'FormativeFeedback' && !row["q1"].blank?
           yes_updated = update_formative_feedback(row)
+        elsif code == 'UsmleExam' && !row["sid"].blank?
+          yes_updated = update_usmle_exam(row)
         end
 
         if yes_updated
@@ -91,14 +108,14 @@ class Artifact < ApplicationRecord
             row_to_hash.store(row["full_name"], " --> NOT Updated")
           elsif code == 'FormativeFeedback'
             row_to_hash.store(row["q1"], " --> NOT Updated")
-          elsif code = "InformaticsFeedback"
-            row_to_hash.store(full_name, email + "--> NOT Updated")
+          elsif code == "InformaticsFeedback"
+            row_to_hash.store(full_name, email + " --> NOT Updated")
+          elsif code == "UsmleExam"
+              row_to_hash.store(full_name, row["sid"] + " --> NOT Updated")
           end
           no_not_updated += 1
           log_results.push row_to_hash
         end
-
-
     end
     # attachment = ActiveStorage::Attachment.find(artifact.documents.first.id)
     # filename = attachment.blob.filename.to_s
@@ -112,7 +129,6 @@ class Artifact < ApplicationRecord
     log_results.push row_to_hash
 
     return log_results
-
   end
 
   def self.fix_str(in_str)

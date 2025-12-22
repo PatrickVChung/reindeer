@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     collection do
       get 'download_file', param: :file_name, action: :download_file,  controller: 'reports', to: "reports#download_file"
       get 'competency', action: :competency, controller: 'reports', to: 'reports#competency'
+      get 'competency_detail', action: :competency_detail, controller: 'reports', to: 'reports#competency_detail'
       get 'mspe', action: :mspe, controller: 'reports', to: "reports#mspe"
       get 'famp_core_mspe_analysis', action: :famp_core_mspe_analysis, to: "reports#famp_core_mspe_analysis"
     end
@@ -158,6 +159,7 @@ Rails.application.routes.draw do
        get 'process_preceptor_eval'
        get 'process_formative_feedback'
        get 'process_informatics_feedback'
+       get 'process_usmle_exam'
        get 'process_comp_excel'
        get 'process_bls_excel'
        get 'ultimate_method'

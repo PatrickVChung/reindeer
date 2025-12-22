@@ -103,17 +103,20 @@ module ArtifactsHelper
   end
 
   def hf_file_visible(code)
-    if current_user.nil?
-      return false
-    elsif ["dean", "admin"].include?  current_user.coaching_type
-      return true
-    end
-     record_found = FileuploadSetting.find_by(permission_group_id: current_user.permission_group_id, code: code)
-     if (!record_found.nil?) and (record_found.visible)
-       return true
-     else
-       return false
-     end
+    #always visible - disable this feature as it is no longer necessary on 12/10/2025
+    # if current_user.nil?
+    #   return false
+    # elsif ["dean", "admin"].include?  current_user.coaching_type
+    #   return true
+    # end
+    return true
+    # always return true as this feature is being disable
+     # record_found = FileuploadSetting.find_by(permission_group_id: current_user.permission_group_id, code: code)
+     # if (!record_found.nil?) and (record_found.visible)
+     #   return true
+     # else
+     #   return false
+     # end
 
  end
 
