@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+
+  get 'uploads/new', to: 'uploads#new', as: 'new_upload'
+  post 'uploads', to: 'uploads#create'
+  # The :filename constraint allows for dots (like .jpg) in the URL
+  delete 'uploads/:filename', to: 'uploads#destroy', as: 'delete_upload', constraints: { filename: /[^\/]+/ }
+
   resources :ume_assess_plans do
     collection do
       get "update_plans"
