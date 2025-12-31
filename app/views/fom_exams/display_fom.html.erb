@@ -98,6 +98,11 @@
                     Dropped Weekly Quiz: <b><%= @comp_exams.first["comp1_dropped_quiz"] %></b> <br />
                     Dropped Score: <b><%= @comp_exams.first["comp1_dropped_score"] %></b>
                   <% end %>
+                  <% if comp == 'comp4_nbme' %>
+                  <hr>
+                  <% image_file = hf_get_nbme_histogram_graph(@cohort, @course_code) %>
+                    <%= image_tag(image_file, style: "width: auto; height: auto; display: block; margin-left: auto; margin-right: auto;") %>
+                  <% end %>
                  <% end %>
               </div>
             </div>

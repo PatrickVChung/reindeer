@@ -110,7 +110,7 @@ module SearchesHelper
         return ave, med, cohort_title
       end
     elsif user.coaching_type == 'dean' or user.coaching_type == 'admin'
-      cohorts = PermissionGroup.where("id >= ?", 18).order(:title)
+      cohorts = PermissionGroup.where("id >= ?", 20).order(:title)
       cohorts_stat = {}
       stat = []
       cohorts.each do |cohort|

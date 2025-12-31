@@ -83,5 +83,6 @@ Rails.application.config.assets.precompile += %w(
     medhub_apis.css
     create_pdfs.css
     ume_assess_plans.css
+    uploads.css
    )
 Rails.application.config.assets.precompile << "bootstrap.min.js"

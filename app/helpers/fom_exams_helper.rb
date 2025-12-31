@@ -416,6 +416,14 @@ end
     return results
   end
 
+  def hf_get_nbme_histogram_graph(cohort, block_code)
+    #directory = Rails.root.join('public', 'uploads')
+    cohort = cohort.titleize
+    block_code = block_code.split("-").second
+    histogram_file = "/uploads/#{cohort}_#{block_code}_NBME_Histogram.png"
+    return histogram_file
+  end
+
   def hf_create_graph(component, class_data, avg_data, categories, permission_group)
 
     student_name = class_data.first["full_name"]  # processing student Alver
