@@ -31,8 +31,8 @@
 
 <%= form_with url: uploads_path, local: true, multipart: true do |f| %>
   <div style="margin-bottom: 10px;">
-    <%= f.label :my_file, "Select File(s)" %>
-    <%= f.file_field :my_file, multiple: true, class: "btn btn-success" %>
+    <%= f.label :my_file, "Select File" %>
+    <%= f.file_field :my_file %>
   </div>
 
   <%= f.submit "Upload Now", class: "btn btn-primary" %>
