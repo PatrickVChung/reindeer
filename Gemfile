@@ -47,7 +47,7 @@ gem 'bootstrap', '~> 5.3.2' # '~> 4.4.0'
 gem 'flatpickr'    # calendar picker
 gem "jbuilder", '~> 2.5'
 gem "popper_js", '>=2.11.8', '<3' #"~> 1.14.3"
-gem "cssbundling-rails"
+#gem "cssbundling-rails"  # commented out on 1/2/2026 otherwise, the @import won't work
 #gem "bootstrap-sass"   #, '~> 3.4.1'
 gem "sass-rails", '>= 3.2'
 gem "coffee-rails"
