@@ -1,193 +1,138 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
-##############################
-# Main
-##############################
-gem "bundler" #, '~>2.0'
-gem 'rails', '~> 8.0.2.1'
-gem "rdoc" # '~>6.3.1'
-gem "psych", '< 4'
-gem 'sprockets', '< 4'
-gem 'bcrypt'
-# Database
-#gem 'pg', '~> 1.3', '>= 1.3.4'
-gem 'pg'
-#gem "composite_primary_keys"
-# commented redis server out on 3/11/2022
-# To disable ActionCable
-gem "redis", "~>4.1.0"
-#==============================
-# Record Versioning
-gem "paper_trail"
-# lime survey db interaction
-gem "php-serialize"
 
-##############################
-# Admin/Config/Security
-##############################
-#gem "rails_admin",  "~> 3.1.3"
-gem 'rails_admin', '~> 3.3'
+########################################
+# Core
+########################################
+gem "rails", "~> 7.1"
+gem "bundler"
+gem "pg"
+gem "bcrypt"
+gem "rdoc"
+gem "psych", "< 4"
 
-# Config file loader
-# see ./lib/settings.rb and ./config/settings.yml for details
+########################################
+# Sprockets (Rails 7.1 still supports it)
+########################################
+gem "sprockets-rails"     # REQUIRED for your asset pipeline gems
+gem "sassc-rails"         # Rails 7.1 supports SassC
+gem "coffee-rails"        # Works only with Sprockets
+
+########################################
+# Admin / Auth / Config
+########################################
+gem "rails_admin", "~> 3.3"
+gem "rails_admin_import", "~> 3.0"
 gem "settingslogic"
-
 gem "cancancan"
-#gem "devise", "~> 4.6.2"
-gem 'devise', '~> 4.7', '>= 4.7.3'
-# LDAP
+gem "devise", "~> 4.7"
 gem "devise_ldap_authenticatable"
-# Prevent Excessive log file information
 gem "lograge"
 
-##############################
-# JavaScript and CSS
-##############################
-gem 'bootstrap', '~> 5.3.2' # '~> 4.4.0'
-gem 'flatpickr'    # calendar picker
-gem "jbuilder", '~> 2.5'
-gem "popper_js", '>=2.11.8', '<3' #"~> 1.14.3"
-#gem "cssbundling-rails"  # commented out on 1/2/2026 otherwise, the @import won't work
-#gem "bootstrap-sass"   #, '~> 3.4.1'
-gem "sass-rails", '>= 3.2'
-gem "coffee-rails"
-gem "uglifier"
-gem 'jquery-ui-rails', '~>8.0.0'
+########################################
+# JavaScript / CSS (Sprockets-based)
+########################################
 gem "jquery-rails"
+gem "jquery-ui-rails", "~> 8.0.0"
 gem "jquery_context_menu-rails"
 gem "momentjs-rails"
 gem "fullcalendar-rails"
-gem "fullcalendar"
-gem "prawn"
-#gem 'webpacker', '~> 3.5'
-# CSS / js
-# Random bug:
-# Error encountered while saving cache (".....") can't dump anonymous class
-# http://stackoverflow.com/questions/22276991/heroku-error-encountered-while-saving-cache
-gem "sass"#, "~> 3.2.13"
 gem "select2-rails"
+gem "font-awesome-rails"
+gem "highcharts-rails"
+gem "lazy_high_charts"
+gem "jquery-datatables"
+gem "datejs-rails", "~> 2.0.1"
+gem "twitter-bootstrap-rails"   # Bootstrap 3/4 via Sprockets
+gem "bootstrap", "~> 5.3.2"     # If you want Bootstrap 5 via CSS bundling or CDN
+gem "flatpickr"
+gem "popper_js", ">= 2.11.8", "< 3"
 
-# pagination
-gem 'kaminari'
+########################################
+# Asset Pipeline Enhancements
+########################################
+gem "autoprefixer-rails"
+gem "dartsass-rails"            # Optional: Dart Sass compiler
 
-##############################
-# UI: Charts
-##############################
-
-gem 'json', '~> 2.5', '>= 2.5.1'
-gem "gon"
-
-##############################
-# UI: Forms
-##############################
-
-# Dynamic Forms
-gem "cocoon"
+########################################
+# Forms / UI
+########################################
 gem "simple_form"
-##############################
-# UI: Misc
-##############################
+gem "cocoon"
+gem "nested_form_fields"
 
-# Static Pages
-gem "high_voltage"
-# Statistics
-gem "descriptive-statistics"
+########################################
+# Pagination
+########################################
+gem "kaminari"
+gem "will_paginate", "~> 3.1"
 
-##############################
-# Analysis
-##############################
+########################################
+# File Uploads / Active Storage
+########################################
+gem "image_processing"
+gem "activestorage-validator", "~> 0.1.0"
+gem "active_storage_drag_and_drop"
 
+########################################
+# Utilities
+########################################
+gem "gon"
+gem "prawn"
+gem "csv"
+gem "csv_hasher"
+gem "xsv"
+gem "fast_page"
+gem "aes"
+gem "httparty"
+gem "timeout"
+gem "nokogiri"
+gem "net-imap", ">= 0.4.20"
+gem "rails-html-sanitizer", ">= 1.6.1"
+gem "icalendar"
+gem "rufus-scheduler"
 gem "statistics2"
+gem "descriptive-statistics"
+gem "php-serialize"
+gem "paper_trail"
 
-##############################
-# Environments
-##############################
+########################################
+# Importmap (Rails 7.1 supports it)
+########################################
+gem "importmap-rails", "~> 2.0"
 
-group :test, :development do
+########################################
+# Development & Test
+########################################
+group :development, :test do
   gem "rspec-rails"
   gem "capybara"
   gem "rails-perftest"
   gem "factory_bot_rails"
   gem "faker"
-  gem 'rails-controller-testing'
-  gem 'letter_opener'
+  gem "rails-controller-testing"
+  gem "letter_opener"
 end
 
-group :test, :development do
-  if RUBY_VERSION =~ /^1.9.3/
-    # Better error messages in development
-    gem "better_errors", "~> 1.1"
-  elsif RUBY_VERSION =~ /^3./
-    gem "byebug"
-    gem "better_errors"
-    # gem "stackprof"
-    # gem "ruby-prof"
-    # gem "pry"
-  end
-end
-
-group :production do
-  # Send emails to admin when an error occurs
-  gem "exception_notification"
-end
-
-# To use debugger
 group :development do
+  gem "better_errors"
+  gem "byebug"
   gem "rack-mini-profiler", require: false
   gem "rack", ">= 2.2.12"
   gem "webrick", ">= 1.8.2"
   gem "puma", "~> 6.4.2"
   gem "rails_layout"
   gem "awesome_print"
-
-  # Interactive debugging from the web
   gem "binding_of_caller"
   gem "redcarpet"
-  gem "twitter-bootstrap-rails"
-
-  # guard
   gem "guard"
   gem "guard-rspec"
+  gem "bullet"
 end
-gem 'mini_racer'
-gem 'autoprefixer-rails'
-gem 'rufus-scheduler'    # gem "stackprof"
-    # gem "ruby-prof"
-    # gem "pry"
-gem 'whenever', require: false
-gem 'nested_form_fields'
-#gem 'turbolinks'  #, '~> 5.0', '>= 5.0.1'
-gem 'rails-ujs', '~> 0.1.0'
-# highchart
-gem "highcharts-rails"
-gem "lazy_high_charts"
-#gem 'chartkick'
-#gem 'groupdate'
-#=======================
-# dataTables
-gem 'jquery-datatables'
-#========================
-gem "csv_hasher"
-gem 'activestorage-validator', '~> 0.1.0'
-gem 'bullet', group: 'development'
-gem 'font-awesome-sass', '~> 4.4.0'
-gem "font-awesome-rails"
-gem 'will_paginate', '~> 3.1'
-gem 'datejs-rails', "~> 2.0.1"
-gem 'icalendar'
-gem 'sassc-rails'
-gem 'xsv'
-gem 'fast_page'
-gem 'aes'
-gem 'active_storage_drag_and_drop'
-gem 'image_processing'
-gem 'csv'
-gem "importmap-rails", "~> 2.0"
-gem "subprocess"
-gem "nokogiri"
-gem "net-imap", ">= 0.4.20"
-gem "rails-html-sanitizer", ">= 1.6.1"
-gem "rails_admin_import", "~> 3.0"
-gem "httparty"
-gem "timeout"
-gem 'pdf-reader', '~> 1.4'
+
+group :production do
+  gem "exception_notification"
+end
+
+gem "mini_racer"
+gem "whenever", require: false

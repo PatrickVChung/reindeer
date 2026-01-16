@@ -41,11 +41,22 @@ Rails.application.routes.draw do
   resources :courses
   #get 'overall_progresses/index'
   resources :eg_members
-  get 'fix_eg_members/index'
-  get 'fix_eg_members/reviewer_update'
-  get 'fix_eg_members/process_eg_file'
-  get 'fix_eg_members/eg_assignment'
-  get 'fix_eg_members/download_file'
+
+  resources :fix_eg_members, only: :index do
+    collection do
+      get  :process_eg_file
+      get  :reviewer_update
+      get  :eg_assignment
+      get  :download_file
+    end
+  end
+
+
+  # get 'fix_eg_members/index'
+  # get 'fix_eg_members/reviewer_update'
+  # get 'fix_eg_members/process_eg_file'
+  # get 'fix_eg_members/eg_assignment', controller: 'fix_eg_members', actiion: :
+  # get 'fix_eg_members/download_file'
 
 
   get 'reports/index'

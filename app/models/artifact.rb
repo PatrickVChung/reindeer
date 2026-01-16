@@ -22,6 +22,7 @@ class Artifact < ApplicationRecord
   end
 
   def self.update_preceptor_eval(row)
+
      user = User.find_by(email: row["email"])
      if user.nil?
        return false
@@ -30,7 +31,7 @@ class Artifact < ApplicationRecord
        row["submit_date"] = format_date(row["submit_date"])
        #puts row.to_hash
        row_hash = {}
-       row_hash = row.to_hash
+       row_hash = row.to_hash.reject{|key, val| key.nil?}
        row_hash.delete("email")
        row_hash.delete("full_name")
        PreceptorAssess.where(response_id: row["response_id"]).first_or_create.update(row_hash)

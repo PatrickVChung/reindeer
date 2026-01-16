@@ -1,65 +1,72 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the top of the
- * compiled file, but it's generally better to create a new file per style scope.
- * @import "jquery.contextMenu";
+ * Application-wide SCSS manifest.
+ * Only import what you actually need.
+ * Vendor CSS first, then app-specific styles.
  */
 
-@import 'fullcalendar';
-@import 'jquery-ui';
-@import 'bootstrap';
-@import 'select2';
-@import 'select2-bootstrap';
-@import 'bootstrap-callouts';
-@import 'introjs';
-@import 'animations';
-@import 'font-awesome';
-@import 'base';
-@import 'scrollspy';
-@import 'typeahead';
-@import 'mini_profiler';
-@import 'ls_reports';
-@import 'dashboard';
-@import 'nav_header';
-@import 'layouts';
-@import 'sessions';
-@import 'simplemde';
-@import 'rooms';
-@import 'goals';
-@import 'meetings';
-@import 'artifacts';
-@import "datatables";
-@import "font-awesome-sprockets";
+/* ----------------------------------------
+   Vendor / Library Styles
+----------------------------------------- */
+
+@import "bootstrap";
 @import "font-awesome";
+@import "jquery-ui";
+@import "fullcalendar";
+@import "select2";
+@import "select2-bootstrap";
+@import "bootstrap-callouts";
+@import "introjs";
+@import "flatpickr";
+@import "flatpickr/plugins/confirmDate/confirmDate";
 @import "jquery-contextmenu/dist/jquery.contextMenu";
 @import "jquery-contextmenu/dist/jquery.contextMenu.min.css";
-@import 'events';
-@import 'advisors';
-@import 'coaching_meetings';
-@import 'fix_eg_members.css';
-@import 'eg_members.css';
-@import 'overall_progresses.css';
-@import 'badging_dates.css';
-@import 'flatpickr';
-@import 'create_pdfs';
-@import 'ume_assess_plans';
-@import 'uploads';
-@import 'flatpickr/plugins/confirmDate/confirmDate';
+@import "datatables";
+
+/* Optional CDN import */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+
+/* ----------------------------------------
+   Application Styles
+----------------------------------------- */
+
+@import "animations";
+@import "base";
+@import "scrollspy";
+@import "typeahead";
+@import "mini_profiler";
+@import "ls_reports";
+@import "dashboard";
+@import "nav_header";
+@import "layouts";
+@import "sessions";
+@import "simplemde";
+@import "rooms";
+@import "goals";
+@import "meetings";
+@import "artifacts";
+@import "events";
+@import "advisors";
+@import "coaching_meetings";
+@import "fix_eg_members.css";
+@import "eg_members.css";
+@import "overall_progresses.css";
+@import "badging_dates.css";
+@import "create_pdfs";
+@import "ume_assess_plans";
+@import "uploads";
+@import "active_storage_drag_and_drop";
+
+/* ----------------------------------------
+   Inline Overrides
+----------------------------------------- */
 
 .alert {
   left: 0;
-  margin: auto; // Centers alert component
-  position: absolute; // So that it will display relative to the entire page
+  margin: auto;
+  position: absolute;
   right: 0;
-  text-align: center; // Centers 'Alert Test' text
+  text-align: center;
   top: 5em;
   width: 40%;
-  z-index: 1; // Displays over app and bootstrap Navbar
+  z-index: 1;
 }
-@import 'active_storage_drag_and_drop';
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css")

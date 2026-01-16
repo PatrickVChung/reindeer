@@ -1,6 +1,6 @@
 <div id="container">
     <div class="form-row">
-      <% if current_user.dean_or_higher? and ['chungp', 'bumstedt', 'chomina', 'cantone', 'schneibe'].include? current_user.username %>
+      <% if current_user.dean_or_higher? and ['chungp', 'sigman', 'phillipp', 'chomina', 'cantone', 'schneibe'].include? current_user.username %>
             <%= form_tag(advisor_reports_coaching_student_path, method: :post, remote: true, id: 'advisor_report_form_id') do %>
                     <div class="card mx-auto" style="width: 75%;">
                       <div class="card-body">
@@ -27,7 +27,7 @@
                                  <%= select_tag "Status", options_for_select(["All", "No Show", "Rescheduled", "Scheduled", "Completed"]), class: "form-select", style: "max-width:200px; display: inline-block" %>
                                  &nbsp; &nbsp;
                                  <%= button_tag " SUBMIT", class: 'button btn btn-primary', html: {autocomplete: 'off'},
-                                     'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Processing...".html_safe %>              
+                                     'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Processing...".html_safe %>
                          </div>
                        </div>
                      </div>

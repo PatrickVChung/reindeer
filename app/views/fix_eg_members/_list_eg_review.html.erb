@@ -15,7 +15,7 @@
                 <% epa_review_values = review.serializable_hash.values %>
                 <% epa_review_values.each do |value| %>
                   <% if c==4 or c==10 %>
-                    <td style="color:green;"><b><%= link_to value, fix_eg_members_reviewer_update_path(user_id: @user.id) %></b></td>
+                    <td style="color:green;"><b><%= link_to value, reviewer_update_fix_eg_members_path(user_id: @user.id) %></b></td>
                   <% else %>
                     <td><%= value %></td>
                   <% end %>

@@ -1,74 +1,74 @@
 <br />
 <div class="row">
-  <div class="table-responsive col-md-6">
-    <table class="responsive nowrap table table-hover table3-striped">
-      <% @course_detail.each do |data| %>
-          <% data.each do |key, val| %>
-            <tr>
-                <td style="width: 25%"><b><i><%= key.titleize %></i></b></td>
-                <td>
-                  <% if val.to_s == 'false' %>
-                      <b>NO</b>
-                  <% elsif val.to_s == 'true' %>
-                      <b>YES</b>
-                  <% else %>
-                      <%= val %>
-                  <% end %>
-                  </td>
-            </tr>
-          <% end %>
-      <% end %>
-    </table>
-  </div>
-  <div class="col-md-6">
-    <% if current_user.can_process_course_catalog? %>
-      <h5><b>Course Schedules (Admin View)</b><%= link_to 'New Course Schedule', new_course_schedule_path(course_id: @course_detail.first["id"]), class: "btn btn-sm, btn-primary", target: :_blank %></h5>
-      <% if !@course_schedules.empty? %>
-        <% @temp_schedules = @course_schedules.map(&:attributes) %>
-        <table class="responsive nowrap table table-hover table2-striped">
+  <div class="card w-75">
+    <h3 style="font-family:cambria; text-align: right;">YourMD Course Catalog</h3>
+    <hr style="height:3px; background-color:grey;">
+
+    <% course_detail = @course_detail.first  %>
+    <h4 style="color:#0092ca;font-family:cambria"><strong><%= course_detail["course_number"].to_s %> <%= course_detail["course_name"] %></strong></h4>
+    <h5><i style="color:#455d7a;font-family:cambria"><%= course_detail["department"] %> </i></h5>
+    <div class="calibri-font">
+      <strong>Course Purpose Statement:</strong>&ensp;<%= course_detail["course_purpose_statement"] %><br><br>
+      <strong>Special Notes:</strong>&ensp;<%= course_detail["special_notes"] %><br><br>
+      <strong>Required Prerequisite(s):</strong>&ensp;<%= course_detail["required_prerequisites"] %><br>
+      <i>Course Director may waive prerequisites on a case-by-case basis for this course..</i>
+      <hr style="height:3px; background-color:#3e4a61;">
+      <div class="row">
+        <div class="col-md-6">
+          <strong>Duration:</strong>&ensp;<%= course_detail["duration"] %><br>
+          <strong>Site(s):</strong>&ensp;<%= course_detail["site"] %><br>
+          <strong>Type:</strong>&ensp;<%= course_detail["content_type"] %> <br>
+          <strong>Credits:</strong>&ensp;<%= course_detail["credits"] %><br>
+          <strong>Available through the lottery: </strong>&ensp;<%= course_detail["available_through_the_lottery"] %>
+        </div>
+        <div class="col-md-6">
+          <strong>Course Director (name / email):</strong>&ensp;<%= course_detail["course_director"] %> / <%= course_detail["course_director_email"] %><br>
+          <strong>Course Coordinator (name / email):</strong>&ensp;<%= course_detail["course_coordinator"] %> / <%= course_detail["course_coordinator_email"] %> <br>
+        </div>
+      </div>
+      <hr style="height:3px; background-color:#3e4a61;">
+    </div>
+    <div class="row">
+      <div class="col-9">
+        <h6 style="text-align: center;"><strong> Available Blocks: </strong></h6>
+        <table class="table-responsive nowrap table table-hover table-bordered table3-striped custom-grid-color">
           <thead>
             <tr>
-              <% @temp_schedules.first.keys.each do |key| %>
-                <% if !key.include? "created_at" %>
-                    <th><%= key.titleize %> </th>
-                <% end %>
-              <% end %>
-              <% if ['dean', 'admin'].include? current_user.coaching_type  %>
-                <th>Action<th>
-              <% end %>
-
+            <th style="text-align: center;">Year</th>
+            <th style="text-align: center; width: 15%;">Block</th>
+            <th style="text-align: center; width: 15%;">StartDate</th>
+            <th style="text-align: center; width: 15%;">EndDate</th>
+            <th style="text-align: center;">Capacity / Status </th>
             </tr>
           </thead>
           <% @course_schedules.each do |course_schedule| %>
             <tr>
-              <td class="small-font" style="text-align: center; width: 3%;"><%= course_schedule.id %></td>
-              <td class="small-font" style="text-align: center; width: 8%;"><%= course_schedule.course_id %></td>
-              <td class="small-font" style="width: 6%"><%= course_schedule.year %></td>
-              <td class="small-font" style="width: 7%"><%= course_schedule.block %></td>
-              <td class="small-font" style="width: 8%"><%= course_schedule.start_date.strftime("%m-%d-%Y") %></td>
-              <td class="small-font" style="width: 8%"><%= course_schedule.end_date.strftime("%m-%d-%Y") %></td>
-              <td class="small-font" style="text-align: center; width: 10%"><%= course_schedule.no_of_seats %></td>
-              <td class="small-font"><%= course_schedule.comment %></td>
-              <td class="small-font" style="width: 15%"><%= course_schedule.updated_at.strftime("%m-%d-%Y %H:%M %P") %></td>
-              <% if ['dean', 'admin'].include? current_user.coaching_type  %>
-                <td class="small-font" style="width: 10%">
-                    <%= link_to 'Edit', edit_course_schedule_path(course_schedule) %> /
-                    <%= link_to 'Destroy', course_schedule, method: :delete, data: { confirm: 'Are you sure?' } %>
-                </td>
+              <td style="text-align: center;"><%= course_schedule.year %></td>
+              <td style="text-align: center;"><%= course_schedule.block %></td>
+              <td style="text-align: center;"><%= course_schedule.start_date %></td>
+              <td style="text-align: center;"><%= course_schedule.end_date %></td>
+              <% if (course_schedule.no_of_seats.nil? || course_schedule.comment.nil?) %>
+                <td style="text-align: center;"><%= course_schedule.no_of_seats %><%= course_schedule.comment%></td>
+              <% else %>
+                <td style="text-align: center;"><%= course_schedule.no_of_seats %> / <%= course_schedule.comment%></td>
               <% end %>
-
             </tr>
           <% end %>
+
         </table>
-         <% if !@long_course_schedules.nil?  %>
-            <%= render "student_view_schedules" %>
-         <% end %>
 
-      <% end %>
-
-    <% else %>
-      <%= render "student_view_schedules" %>
-    <% end %>
-
+      </div>
+      <div class="col-sm-2">
+        <div class="grid-container">
+          <strong>Competencies Assessed: </strong>
+          <ul>
+            <% course_detail["competencies"].each do |comp| %>
+              <li><%= comp %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <hr style="height:4px; background-color:#B2DBED;">
+      <h6 style="color: #0092ca;"><strong> <%= course_detail["category"] %> </strong></h6>
+    </div>
   </div>
-</div>

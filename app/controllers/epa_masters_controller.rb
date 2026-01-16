@@ -30,15 +30,26 @@ class EpaMastersController < ApplicationController
   def load_epa_masters
     #@epa_masters = EpaMaster.where("epa not in ('EPA12', 'EPA13') and user_id=?", @user.id).order(:epa, :id)
     @epa_masters = @user.epa_masters.order(:epa)
-    if @epa_masters.first.epa == "EPA10" && @epa_masters.second.epa == "EPA11" && @epa_masters.third.epa == "EPA12"
+    if @epa_masters.empty?
+      create_epa_masters
+    elsif @epa_masters.first.epa == "EPA10" && @epa_masters.second.epa == "EPA11" && @epa_masters.third.epa == "EPA12"
       @epa_masters = @epa_masters.rotate(3)
     elsif @epa_masters.first.epa == "EPA10" && @epa_masters.second.epa == "EPA11" ## move EPA10 & EPA11 & EPA12 to end of array
       @epa_masters = @epa_masters.rotate(2)
     end
     @full_name = @user.full_name
     @user_id = @user.id
+
+
+    respond_to do |format|
+      format.html
+      format.js { render partial: 'search-results' and return}
+    end
+  end
+
+  def create_epa_masters
     if @epa_masters.empty?
-      if (@user.new_competency) or (@user.username == 'peterbogus' or Date.today.strftime("%Y/%m/%d") >= "2025/07/01" ) ## Med28 student and
+      if (@user.new_competency) #or (@user.username == 'peterbogus' or Date.today.strftime("%Y/%m/%d") >= "2025/07/01" ) ## Med28 student and
         hf_create_new_epas(@user.id, @user.email, @eg_cohorts)
       else
         create_epas @user.id, @user.email
@@ -46,10 +57,6 @@ class EpaMastersController < ApplicationController
       @epa_masters = EpaMaster.where(user_id: @user.id).order(:id)
     elsif @user.new_competency || Date.today.strftime("%Y/%m/%d") >= "2025/07/01"
       EpaMaster.split_epa1(@user)
-    end
-    respond_to do |format|
-      format.html
-      format.js { render partial: 'search-results' and return}
     end
   end
 

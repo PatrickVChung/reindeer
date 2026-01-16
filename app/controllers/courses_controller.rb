@@ -4,30 +4,44 @@ class CoursesController < ApplicationController
   before_action :set_resources, only: %i[ index show edit update destroy ]
   include NewCompetenciesHelper
 
-  # GET /courses or /courses.json
+
   def index
+    # @courses = Course.where(category: params[:category]) if params[:category].present?
+    # @courses = Course.where("competencies @> ?", "{PCP3, MK3}") if params[:competencies].present?
+    if params[:searchWord].present?
+      @courses = Course.where("course_number like ? or course_name like ? or course_purpose_statement like ?", "%#{params[:searchWord]}%",
+        "%#{params[:searchWord]}%", "%#{params[:searchWord]}%")
+    else
 
-    if params[:category].present? and params[:department].present?
+      selected_categories   = params[:categories] || []
+      selected_departments  = params[:departments] || []
+      selected_durations    = params[:durations] || []
+      selected_course_info  = params[:course_info] || []
+      selected_competencies = params[:competencies] || []
+      selected_offerings    = params[:offerings] || []
+      selected_offerings    = params[:offerings].map{|o| o.split(": ").second} if params[:offerings].present? # only interesed on the block not the year
+      selected_years        =  params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
 
-      params_filter, params_filter2 = get_params
-      @courses = Course.where("category like ? and department like ?", params_filter2["category"], params_filter2["department"]).where(params_filter)
-        .select(:id, :category, :course_number, :course_name, :department, :content_type, :available_through_the_lottery,
-         :rural, :continuity, :prerequisites,  :duration, :credits, :course_purpose_statement).order(:course_number)
-      #@courses_hash = @courses.map(&:attributes)
-      #@course_col_names = Course.column_names
-    elsif params[:course_schedule].present?
-      year, block = params[:course_schedule].split(" ", 2)
-      @selected_course_schedules = CourseSchedule.where("year = ? and block = ? and no_of_seats is not NULL and no_of_seats > ?", year, block, 0).order(:start_date)
-      # if params[:course_name].include? ":"
-      #   query_string = params[:course_name].split(":")
-      #   @courses = Course.where("course_number like ? and course_name like ?", "%#{query_string[0]}%", "%#{query_string[1]}%").
-      #      select(:id, :category, :course_number, :course_name, :department, :content_type, :available_through_the_lottery, :rural, :continuity, :duration, :prerequisites, :credits, :course_purpose_statement).order(:course_number)
-      # else
-      #   @courses = Course.where("course_name like ?", "%#{params[:course_name]}%").
-      #      select(:id, :category, :course_number, :course_name, :department, :content_type, :available_through_the_lottery, :rural, :continuity, :duration, :credits, :course_purpose_statement).order(:course_number)
-      #
-      # end
+      @courses = Course.all.order(:category, :department)
+      @courses = @courses.where(category: selected_categories) if params[:categories].present?
+      @courses = @courses.where(department: selected_departments) if params[:departments].present?
+      @courses = @courses.where(duration: selected_durations) if params[:durations].present?
+      @courses = @courses.joins(:course_schedules).where(course_schedules: {year: selected_years, block: selected_offerings}).distinct if params[:offerings].present?
+
+      if selected_course_info.include? "Lottery"
+        @courses = @courses.where(available_through_the_lottery: true)
+      elsif selected_course_info.include? "Non-Lottery"
+        @courses = @courses.where(available_through_the_lottery: false)
+      elsif selected_course_info.include? "Rural"
+        @courses = @courses.where(rural: true)
+      elsif selected_course_info.include? "Continuity"
+        @courses = @courses.where(continuity: true)
+      else
+        @courses = @courses.where(content_type: selected_course_info) if params[:course_info].present?
+      end
+      @courses = @courses.where("competencies && ARRAY[?]", selected_competencies) if params[:competencies].present?
     end
+
   end
 
   # GET /courses/1 or /courses/1.json
@@ -99,48 +113,41 @@ class CoursesController < ApplicationController
         :continuity, :available_through_the_lottery, :department, :course_purpose_statement, :special_notes, :prerequisites,
         :required_prerequisites, :waive_prereq_requirements, :waive_notes, :duration, :site, :weekly_workload, :credits,
         :course_director, :course_director_email, :course_coordinator, :course_coordinator_email, :grading_method, :qualified_assessor, :qualified_assessor_email,
-        :competencies)
+        :competency_note, :competencies)
 
     end
 
     def set_resources
-      @category ||= ["All"] + Course.all.pluck(:category).uniq
-      #@duration = Course.all.pluck(:duration).uniq
-      @departments ||= ["All"] + Course.all.pluck(:department).uniq.compact.sort
-      @duration ||= Course.all.pluck(:duration).uniq.compact.sort
+
+      @category_count ||= Course.group(:category).count.sort.to_h
+      @categories = @category_count.keys
+      @department_count ||= Course.group(:department).count.sort.to_h
+      @departments = @department_count.keys  #Course.all.pluck(:department).uniq.compact.sort
+      @duration_count ||= Course.group(:duration).count.sort.to_h
+      @durations ||= @duration_count.keys  #Course.all.pluck(:duration).uniq.compact.sort
+      #@offerings = ["Summer 1", "Summer 2", "Summer 3", "Fall 1", "Fall 2", "Fall 3", "Winter 1", "Winter 2", "Winter 3", "Spring 1", "Spring 2", "Spring 3"]
+      @offering_count = CourseSchedule.group(:year, :block).count.to_h
+      @offering_count = @offering_count.transform_keys {|year, term| "#{year}: #{term}"}
+      @offerings = @offering_count.keys.sort
+
+      @course_info_count ||= Course.group(:content_type).count.sort.to_h
+      @course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity"] + @course_info_count.keys
+      #@course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity", "Clinical", "Non-Clinical", "Special Elective", "Sub-I/Acting Intern"]
+      lottery_data ||= Course.group(:available_through_the_lottery).count
+      rural_data ||= Course.group(:rural).count
+      continuity_data = Course.group(:continuity).count
+      @course_info_count["Lottery"] = lottery_data[true]
+      @course_info_count["Non-Lottery"] = lottery_data[false]
+      @course_info_count["Rural"] = rural_data[true]
+      @course_info_count["Continuity"] = continuity_data[true]
+
       sc ||= CourseSchedule.select(:year, :block).distinct.where.not(year: nil).order(:year)
       @course_schedules = sc.map{|s| s.year.to_s + " " + s.block}
 
-      @courses ||= Course.where(category: 'Core').
-      select(:id, :category, :course_number, :course_name, :department, :content_type, :available_through_the_lottery, :rural, :continuity, :prerequisites, :duration, :credits, :course_purpose_statement).order(:course_number)
+      #@courses ||= Course.where(category: 'Core').order(:course_number)
+      @competencies_count ||= Course.competencies_count
       #@courses_hash = @courses.map(&:attributes)
       #@course_col_names = Course.column_names
-
-    end
-
-    def get_params
-      filters = ["category", "department", "lottery", "rural", "continuity", "prerequisites", "duration"]
-      params_filter = {}
-      params_filter2 = {}
-      filters.each do |filter|
-
-        if params["#{filter}"].present?
-          if filter == "lottery"
-            params_filter["available_through_the_lottery"] = params["#{filter}"]
-          else
-            if filter == "category" or filter == "department"
-              if params["#{filter}"] == "All"
-                params_filter2["#{filter}"] = "%"
-              else
-                params_filter2["#{filter}"] =  params["#{filter}"]
-              end
-            else
-              params_filter["#{filter}"] =  params["#{filter}"]
-            end
-          end
-        end
-      end
-      return params_filter, params_filter2
 
     end
 end

@@ -63,9 +63,9 @@
             <%= link_to 'Process BLS', process_bls_excel_artifact_path(artifact), target: :_blank  %>
           <% end %>
 
-          <% if artifact.content.to_s.include? "EG-Cohorts" and (current_user.coaching_type == 'dean' or current_user.coaching_type=='admin') %>
+          <% if artifact.content.to_s.include? "EG-Cohorts" and (current_user.can_process_eg_assignment?) %>
             /
-            <%= link_to 'Process EG Cohorts File', fix_eg_members_process_eg_file_path(artifact_id: artifact), target: :_blank  %>
+            <%= link_to 'Process EG Cohorts File', process_eg_file_fix_eg_members_path(artifact_id: artifact), target: :_blank  %>
           <% end %>
         </td>
         <td>

@@ -1,6 +1,6 @@
 class FixEgMembersController < ApplicationController
   layout 'full_width_csl'
-  authorize_resource class: FixEgMembersController
+  #authorize_resource class: FixEgMembersController
   protect_from_forgery prepend: true, with: :exception
   before_action :authenticate_user!
   before_action :load_eg_cohorts, :set_resources
