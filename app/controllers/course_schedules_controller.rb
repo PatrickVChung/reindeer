@@ -1,5 +1,4 @@
 class CourseSchedulesController < ApplicationController
-  layout 'full_width_csl'
   before_action :set_course_schedule, only: %i[ show edit update destroy ]
 
   include CourseSchedulesHelper
@@ -7,7 +6,8 @@ class CourseSchedulesController < ApplicationController
   # GET /course_schedules or /course_schedules.json
   def index
     if params[:course_id].present?
-      @course_schedules = CourseSchedule.where("course_id = ? and start_date > ? and no_of_seats <> 0 and comment is not null", params[:course_id], DateTime.now - 2.month).order(:start_date)
+      current_year = Time.now.year
+      @course_schedules = CourseSchedule.where("course_id = ? and year >= ?", params[:course_id], current_year).order(:start_date)
       @course_detail = Course.where(id: params[:course_id]).map(&:attributes)
     elsif session[:course_id].present?
       @course_schedules = temp_schedules = CourseSchedule.where("course_id = ? and start_date > ? and no_of_seats <> 0 and comment is not null", session[:course_id], DateTime.now - 2.month).order(:start_date)

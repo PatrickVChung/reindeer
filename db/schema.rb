@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_25_195205) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_16_192407) do
   create_schema "source"
   create_schema "target"
   create_schema "transform"
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
+  enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -58,7 +58,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_195205) do
     t.string "specialty"
     t.string "formal_name"
     t.text "brief_cv"
-
   end
 
   create_table "artifacts", force: :cascade do |t|
@@ -193,6 +192,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_195205) do
     t.boolean "resizeable", default: true
   end
 
+  create_table "course_schedules", force: :cascade do |t|
+    t.bigint "course_id"
+    t.integer "year"
+    t.string "block"
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "no_of_seats"
+    t.string "comment"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.index ["course_id"], name: "index_course_schedules_on_course_id"
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string "category"
     t.string "course_number"
@@ -223,6 +235,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_195205) do
     t.text "competencies", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "competency_note"
   end
 
   create_table "cpxes", force: :cascade do |t|
@@ -233,7 +246,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_195205) do
     t.index ["email"], name: "index_cpxes_on_email", unique: true
     t.index ["user_id"], name: "index_cpxes_on_user_id"
   end
-
 
   create_table "critical_values", primary_key: ["alpha", "df"], force: :cascade do |t|
     t.integer "df", null: false

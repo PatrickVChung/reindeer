@@ -7,12 +7,33 @@
 .table3-striped>tbody>tr:nth-child(odd)>th {
  background-color: #B2DBED;
 }
+.custom-grid-color {
+  --bs-table-border-color: #A0C5D5; /* Your custom color */
+}
 
 .small-font{
   font-size: 11pt;
   font-style: italic;
 }
 
+.calibri-font {
+    font-family: calibri;
+    font-size: 17px;
+    color: #333;
+  }
+  ul {
+      list-style-type: disc !important;
+      padding-left:1em !important;
+      margin-left:1em;
+  }
+
+  grid-container {
+    display: flex;
+    justify-content: center;  /* Centers the <ul> horizontally */
+    align-items: center;      /* Centers the <ul> vertically */
+    height: 100vh;            /* Example: makes container the full height of viewport */
+    border: 1px solid #ccc;   /* Optional: visualize the container */
+  }
 
 // tbody, thead tr { display: block; }
 
