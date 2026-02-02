@@ -38,7 +38,7 @@
                     <%= render partial: "epa_reviews/form" %>
                   </div>
                   <div id="EvidenceTab" class="tab-pane fade" role="tabpanel" >
-                    <h5> Evidence Body </h5>
+
                     <% if @percent_complete.keys.first.include? 'epa' %>
                       <% epa_idx = @epa_review_epa.downcase %>
                     <% else %>
@@ -46,8 +46,13 @@
                     <% end %>
 
                     <div class="row">
-                      <div class="col-auto">
+                      <div class="col-sm-4">
+                          <div class="card-body">
+                            <hr>
+                            <h5> Evidence Body </h5>
+                            <hr>
                             <div id='WbaInfo'> <%= render partial: "wba_info", locals: {epa: @epa_review_epa, wba: @wba["#{@epa_review_epa}"], qa_percent: @percent_complete[epa_idx]} %></div>
+                          </div>
                       </div>
                       <div class="col-sm-4">
                         <div clas="card">

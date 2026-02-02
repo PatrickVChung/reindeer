@@ -1,6 +1,7 @@
 <div class="accordion-item">
-  <h2 class="accordion-header">
-    <% collapse_id = "collapse_#{prefix}" %>
+  <% collapse_id = "collapse_#{prefix}" %>
+  <% header_id = "header_#{prefix}" %>
+  <h2 class="accordion-header" id="<%= header_id %>">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<%= collapse_id %>" aria-expanded="false" aria-controls="<%= collapse_id %>">
       <strong><%= title %></strong>
     </button>

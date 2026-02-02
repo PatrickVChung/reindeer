@@ -10,7 +10,7 @@
         <div class="card-body">
           <%= form_with url: courses_path, method: :get, local: true do |form| %>
               <div class="card-header">
-                <strong>Keyword Search </strong>
+                <strong>Keyword Search </strong><button id="clearAllCheckboxesBtn" class="btn btn-sm btn-primary">Clear All Checkboxes</button>
               </div>
               <div class="card-body">
                <input type="text" class="form-control" id="searchWord" name="searchWord" placeholder="Enter keywords here" value="<%= params[:searchWord] %>">
