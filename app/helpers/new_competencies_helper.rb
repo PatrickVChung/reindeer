@@ -100,7 +100,7 @@ module NewCompetenciesHelper
    end
 
    def hf_new_comp_codes
-     return NEW_COMP_CODES 
+     return NEW_COMP_CODES
    end
 
    def hf_get_new_epa_desc(epa_code)
@@ -376,10 +376,10 @@ module NewCompetenciesHelper
 
   def hf_get_wbas_involvement(user_id)
     epa = {}
-    NEW_EPA_ARRAY.each do |epa_code|
+    NEW_EPA_ARRAY_EXTRA.each do |epa_code|
         temp_involve = []
         (1..4).each do |k|
-          if epa_code == 'epa1a' || epa_code == 'epa1b'
+          if epa_code == 'epa1a&1b'
             temp_data = Epa.where(epa: "EPA1A&1B", involvement: k, user_id: user_id).count
             temp_involve.push temp_data
           else
@@ -389,6 +389,9 @@ module NewCompetenciesHelper
         end
         epa["#{epa_code.upcase}"] = temp_involve
     end
+
+    epa["EPA1A"] = epa["EPA1A"].zip(epa["EPA1A&1B"]).map{|a,b| a + b}
+    epa["EPA1B"] = epa["EPA1B"].zip(epa["EPA1A&1B"]).map{|a,b| a + b}
 
     return epa
   end

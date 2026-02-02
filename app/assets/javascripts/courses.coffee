@@ -16,3 +16,30 @@ $(document).ready ->
   $('input[type="checkbox"]').on 'click', ->
     $('#searchWord').val ''
     return
+
+  $('#clearAllCheckboxesBtn').click ->
+    $('input[type=\'checkbox\']').attr 'checked', false
+    return
+
+  $('.accordion').on 'change', 'input[type="checkbox"]', ->
+    $checkbox = $(this)
+    $item = $checkbox.closest('.accordion-item')
+    $panel = $item.find('.accordion-collapse')
+    $header = $item.find('.accordion-header')
+    hasChecked = $panel.find('input[type="checkbox"]:checked').length > 0
+    # Debug (optional)
+    console.log 'Changed in item:', $item.attr('id') or '(no id)', 'hasChecked:', hasChecked
+    collapse = bootstrap.Collapse.getOrCreateInstance($panel[0])
+    if hasChecked
+      collapse.show()
+      $header.addClass 'has-checked'
+    else
+      $header.removeClass 'has-checked'
+      # Optional: auto-close when no checks
+      # collapse.hide();
+    return
+  $('.accordion-collapse').on 'hide.bs.collapse', (e) ->
+    if $(this).find('input[type="checkbox"]:checked').length > 0
+      e.preventDefault()
+    return
+  return

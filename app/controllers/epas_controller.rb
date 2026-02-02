@@ -79,7 +79,7 @@ class EpasController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def epa_params
-      params.require(:epa).permit(:submit_date, :student_assessed, :epa, :clinical_discipline, :clinical_setting, :clinical_assessor,
+      params.require(:epa).permit(:submit_date, :student_assessed, :epa, :clinical_discipline, :clinical_setting, :clinical_assessor, :involvement,
         :assessor_name, :assessor_email)
     end
 end

@@ -26,3 +26,8 @@
 .custom-clickable-row {
 	cursor: pointer;
 }
+
+.accordion-header.has-checked .accordion-button {
+    background-color: #8CE3D0;
+    font-weight: 600;
+}

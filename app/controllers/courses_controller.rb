@@ -3,14 +3,16 @@ class CoursesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_resources, only: %i[ index show edit update destroy ]
   include NewCompetenciesHelper
+  include CoursesHelper
 
 
   def index
     # @courses = Course.where(category: params[:category]) if params[:category].present?
     # @courses = Course.where("competencies @> ?", "{PCP3, MK3}") if params[:competencies].present?
     if params[:searchWord].present?
-      @courses = Course.where("course_number like ? or course_name like ? or course_purpose_statement like ?", "%#{params[:searchWord]}%",
-        "%#{params[:searchWord]}%", "%#{params[:searchWord]}%")
+      searchWord = params[:searchWord].strip.downcase
+      @courses = Course.where("course_number like ? or LOWER(course_name) like ? or LOWER(course_purpose_statement) like ?", "%#{searchWord}%",
+        "%#{searchWord}%", "%#{searchWord}%").order(:course_number)
     else
 
       selected_categories   = params[:categories] || []
@@ -124,8 +126,8 @@ class CoursesController < ApplicationController
       @department_count ||= Course.group(:department).count.sort.to_h
       @departments = @department_count.keys  #Course.all.pluck(:department).uniq.compact.sort
       @duration_count ||= Course.group(:duration).count.sort.to_h
-      @durations ||= @duration_count.keys  #Course.all.pluck(:duration).uniq.compact.sort
-      #@offerings = ["Summer 1", "Summer 2", "Summer 3", "Fall 1", "Fall 2", "Fall 3", "Winter 1", "Winter 2", "Winter 3", "Spring 1", "Spring 2", "Spring 3"]
+      @durations ||= hf_custom_sort(@duration_count.keys )
+
       @offering_count = CourseSchedule.group(:year, :block).count.to_h
       @offering_count = @offering_count.transform_keys {|year, term| "#{year}: #{term}"}
       @offerings = @offering_count.keys.sort
