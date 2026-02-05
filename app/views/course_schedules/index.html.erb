@@ -43,13 +43,11 @@
           </thead>
           <% @course_schedules.each do |course_schedule| %>
             <tr>
-              <td style="text-align: center;"><%= course_schedule.year %></td>
-              <td style="text-align: center;"><%= course_schedule.block %></td>
-              <td style="text-align: center;"><%= course_schedule.start_date %></td>
-              <td style="text-align: center;"><%= course_schedule.end_date %></td>
-              <% if (course_schedule.no_of_seats.nil? || course_schedule.comment.nil?) %>
-                <td style="text-align: center;"><%= course_schedule.no_of_seats %><%= course_schedule.comment%></td>
-              <% else %>
+              <% if (course_schedule.no_of_seats != 0 && !course_schedule.no_of_seats.nil?) %>
+                <td style="text-align: center;"><%= course_schedule.year %></td>
+                <td style="text-align: center;"><%= course_schedule.block %></td>
+                <td style="text-align: center;"><%= course_schedule.start_date %></td>
+                <td style="text-align: center;"><%= course_schedule.end_date %></td>
                 <td style="text-align: center;"><%= course_schedule.no_of_seats %> / <%= course_schedule.comment%></td>
               <% end %>
             </tr>
@@ -62,7 +60,7 @@
         <div class="grid-container">
           <strong>Competencies Assessed: </strong>
           <ul>
-            <% course_detail["competencies"].each do |comp| %>
+            <% course_detail["competencies"].sort.each do |comp| %>
               <li><%= comp %></li>
             <% end %>
           </ul>

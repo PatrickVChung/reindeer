@@ -11,8 +11,9 @@ class CoursesController < ApplicationController
     # @courses = Course.where("competencies @> ?", "{PCP3, MK3}") if params[:competencies].present?
     if params[:searchWord].present?
       searchWord = params[:searchWord].strip.downcase
-      @courses = Course.where("course_number like ? or LOWER(course_name) like ? or LOWER(course_purpose_statement) like ?", "%#{searchWord}%",
+      @courses = Course.where("LOWER(course_number) like ? or LOWER(course_name) like ? or LOWER(course_purpose_statement) like ?", "%#{searchWord}%",
         "%#{searchWord}%", "%#{searchWord}%").order(:course_number)
+        
     else
 
       selected_categories   = params[:categories] || []
@@ -130,7 +131,7 @@ class CoursesController < ApplicationController
 
       @offering_count = CourseSchedule.group(:year, :block).count.to_h
       @offering_count = @offering_count.transform_keys {|year, term| "#{year}: #{term}"}
-      @offerings = @offering_count.keys.sort
+      @offerings ||= hf_seasonal_sort(@offering_count.keys)
 
       @course_info_count ||= Course.group(:content_type).count.sort.to_h
       @course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity"] + @course_info_count.keys

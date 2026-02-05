@@ -16,7 +16,7 @@
     <%= course.department %><br />
 
     <strong>Course Purpose Statement:</strong>
-    <%= course.course_purpose_statement %><br />
+    <%= highlight(course.course_purpose_statement, params[:searchWord], highlighter: '<span class="text-danger">\1</span>') %>
 
     <strong>Prerequisites:</strong>
     <%= course.prerequisites ? "Yes" : "No" %><br />
