@@ -61,8 +61,10 @@ class EpaReviewsController < ApplicationController
       @eg_members = [current_user.full_name]
     end
 
-    @epa_review.reviewer1 = @eg_full_name1.first
-    @epa_review.reviewer2 = @eg_full_name2.first
+    eg_cohort  = EgCohort.where(user_id: @user_id).select(:id, :eg_full_name1, :eg_full_name2)
+    @epa_review.reviewer1 = eg_cohort.first.eg_full_name1
+    @epa_review.reviewer2 = eg_cohort.first.eg_full_name2
+    
     @epa_review.reason1 = @eg_reasons.second
     @epa_review.reason2 = @eg_reasons.second
     @epa_review.badge_decision1 = 'Not Yet'
