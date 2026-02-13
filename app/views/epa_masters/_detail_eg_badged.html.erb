@@ -1,43 +1,63 @@
 <div class="container">
   <div class="row">
-    <div class='column'>
-      <table class="responsive nowrap table table-hover" data-sort="true" >
+    <div class='col-md-4'>
+      <table class="responsive nowrap table table-hover table-bordered table-striped" data-sort="true" >
         <thead>
           <tr class="filters">
             <th>EPA</th>
-            <th># of Badges </th>
-
+            <th class="text-center">Total Badge</th>
           </tr>
         </thead>
         <tbody>
-          <% @epa_badged_count.each do |count| %>
+          <%@epa_badged_count.each do |badge| %>
             <tr>
-              <% count.each do |val| %>
-                <td> <%= val %> </td>
-              <% end %>
+                  <td><%= badge.first %></td>
+                  <td class="text-center"><%= badge.second %></td>
+
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
 
-    <div class='column'>
-      <table class="responsive nowrap table table-hover" data-sort="true" >
+    <div class='col-md-8'>
+      <span>
+        <h5 style="text-align:center"> Detail EPA Badged Report
+          <%= link_to ('<i class="fa fa-download"></i>').html_safe, download_file_epa_masters_path(file_name: 'epa_badged.txt') %>
+        </h5>
+          <h5 style="text-align:center">Cohort: <%= @cohort_title %></h5>
+      </span>
+
+      <table id="BadgedTable" class="responsive nowrap table table-hover table-bordered table-striped" data-sort="true" >
         <thead>
           <tr class="filters">
-            <th>Student</th>
-            <th># of Badges </th>
-
+            <th>Full Name</th>
+            <th>SID</th>
+            <% if params[:cohort] >= "20" %>
+              <% hf_epa_codes_new.each do |epa| %>
+                <th><%= epa %></th>
+              <% end %>
+            <% else %>
+                <% for i in 1..13 %>
+                  <th><%= "EPA#{i}" %></th>
+                <% end %>
+            <% end %>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
-          <% @student_epa_count.each do |count| %>
-            <tr>
-              <% count.each do |val| %>
-                <td> <%= val %> </td>
-              <% end %>
-            </tr>
-          <% end %>
+
+            <% @epa_badged2.each do |badge| %>
+              <tr>
+                <td><%= badge["Full Name"] %></td>
+                <td><%= badge["SID"] %></td>
+                <% badge["Badge"].each do |key, value| %>
+                  <td class="text-center"> <%= value %> </td>
+                <% end %>
+                <td class="text-center"><strong><%= badge["Badge"].compact.values.sum %></strong></td>
+              </tr>
+            <% end %>
+
         </tbody>
       </table>
     </div>

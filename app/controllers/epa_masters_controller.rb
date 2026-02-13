@@ -13,11 +13,15 @@ class EpaMastersController < ApplicationController
   # GET /epa_masters
   def index
 
-    if params[:uniq_cohort].present? and (params[:uniq_cohort] == 'CaseStudies' or params[:uniq_cohort] == 'CaseStudies2')
-      @eg_cohorts = @all_cohorts.select{|eg| eg if eg["cohort"] == params[:uniq_cohort] }
-    elsif params[:uniq_cohort].present?
-      #@eg_cohorts = @all_cohorts.select{|eg| eg if eg["permission_group_id"] == params[:uniq_cohort].to_i and (eg["eg_email1"] == current_user.email or eg["eg_email2"] == current_user.email)}
-      @eg_cohorts = EpaMaster.get_eg_cohort(params[:uniq_cohort], current_user.email)
+    # if params[:uniq_cohort].present? and (params[:uniq_cohort] == 'CaseStudies' or params[:uniq_cohort] == 'CaseStudies2')
+    #   @eg_cohorts = @all_cohorts.select{|eg| eg if eg["cohort"] == params[:uniq_cohort] }
+    # els
+    if params[:uniq_cohort].present?
+      if params[:uniq_cohort] == "1"
+        @eg_cohorts = EpaMaster.get_eg_cohort_caseStudies(params[:uniq_cohort])
+      else
+        @eg_cohorts = EpaMaster.get_eg_cohort(params[:uniq_cohort], current_user.email)
+      end
       EpaMaster.update_not_yet_and_grounded_epas(params[:uniq_cohort])
     end
     if params[:email].present?
@@ -327,9 +331,10 @@ class EpaMastersController < ApplicationController
 
   def eg_badged
     if params[:cohort].present?
-      epa_badged = EpaMaster.get_epa_badged params[:cohort]
-      @epa_badged_count, @student_epa_count = EpaMaster.process_epa_badged epa_badged, params[:cohort]
-
+      @cohort_title = PermissionGroup.find(params[:cohort].to_i).title
+      @epa_badged2 = EpaMaster.get_epa_badged_new(params[:cohort])
+      @epa_badged_count = EpaMaster.process_epa_badged2 @epa_badged2, params[:cohort]
+      create_file @epa_badged2, "epa_badged.txt"
     end
     respond_to do |format|
       format.html
@@ -432,7 +437,7 @@ class EpaMastersController < ApplicationController
         end
       end
 
-      @uniq_cohorts = PermissionGroup.where("title like '%Med%' and id >= ?", 13).select(:id, :title).order(:id)
+      @uniq_cohorts = PermissionGroup.where("title like '%Med%' and id >= ? or id=1", 13).select(:id, :title).order(:id)
       # EgCohort.distinct.pluck(:permission_group_id).sort
       #@uniq_cohorts ||= @all_cohorts.map{|eg| eg["cohort"]}.uniq
       @uniq_eg_members ||= @all_cohorts.map{|c| [c["eg_full_name1"], c["eg_full_name2"]]}.flatten.uniq.compact.sort

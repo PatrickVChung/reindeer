@@ -34,24 +34,26 @@ module EpaReviewsHelper
   "EPA1A" => ["history","histories", "hypothesis-driven history", "hypothesis driven history", "targeted history", "focused history", "directed history", "history taking",
     "medical history", "patient history", "clinical history", "history of present illness", "HPI", "review of systems", "ROS", "past medical history", "PMH",
     "interview", "information gathering", "H&P", "H&Ps","H and P"],
-  "EPA1B" => ["exam","physical exams", "physical exam", "physical examination", "examinations", "targeted exam", "focused physical", "directed physical", "tailored exam",
-    "tailored physical", "clinical exam", "physical assessment", "body systems", "mental status", "H and P", "H&P", "H&Ps"],
+
+  "EPA1B" => ["exam", "exams", "physical exams", "physical exam", "physical examination", "examinations", "targeted exam", "focused physical", "directed physical", "tailored exam",
+    "tailored physical", "clinical exam", "physical assessment", "body systems", "mental status", "H and P", "H&P", "H&Ps", "physical"],
+
   "EPA2" => ["differential diagnosis", "prioritized differential", "differential", "differentials", "ddx", "diagnosis", "prioritized list", "diagnostic possibilities",
      "rule out", "problem list", "clinical impression", "impression", "problem formulation"],
 
   "EPA3" => ["management plan", "management plans", "assessment and plans", "assessment and plan","interpret", "interpretation", "diagnostic testing",
     "screening test", "laboratory test", "lab test", "labs", "imaging", "test result", "diagnostic study", "radiology", "x-ray", "CT", "ultrasound",
-    "MRI", "EKG", "ECG", "test interpretation", "normal values", "diagnostic assessment"],
+    "MRI", "EKG", "ECG", "test interpretation", "normal values", "diagnostic assessment", "assessment", "treatment plan", "diagnosis"],
 
   "EPA4" => ["orders", "order entry", "ordering", "prescription", "prescribe", "medication order", "drug order", "lab order", "imaging order",
      "test order", "consult order", "consultation request", "order set", "dosing", "dose", "frequency", "route", "duration", "refill", "e-prescribe"],
 
   "EPA5" => ["document clinical encounters","documentation", "medical record", "EMR", "EHR", "chart note", "written notes", "note", "notes",
     "progress note", "SOAP note", "written documentation", "admission note", "discharge summary", "procedure note", "clinic note", "inpatient note",
-    "outpatient note", "consult note", "consultation note", "patient record", "written presentations"],
+    "outpatient note", "consult note", "consultation note", "patient record", "written presentations", "document", "written"],
 
   "EPA6" => ["oral", "presentation",  "presentations", "oral presentation", "case presentation", "clinical presentation", "patient presentation",
-    "report", "verbal report", "bedside presentation", "presenting patient", "rounds presentation"],
+    "report", "verbal report", "bedside presentation", "presenting patient", "rounds presentation", "present"],
 
   "EPA7" => ["literature", "evidence", "literature search", "evidence-based medicine", "EBM", "research", "clinical question", "PICO",
     "clinical evidence", "journal", "publication", "guideline", "clinical guideline", "systematic review", "meta-analysis",

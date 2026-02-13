@@ -417,7 +417,7 @@ module EpaMastersHelper
     return epa_hash
   end
 
-  def reorder_epas(epas)
+  def reorder_epas_old(epas)
     epa_hash = {}
     for i in 1..13 do
         epa_hash.store("EPA#{i}", epas["EPA#{i}"])
@@ -425,23 +425,50 @@ module EpaMastersHelper
     return epa_hash
   end
 
-  def total_count_on_wba(level_epa_wbas_count_hash)
-    epa_tot = []
-    for i in 1..13 do
-      epa_tot[i] = 0
+  def reorder_epas_new(epa)
+    new_order = {}
+    EPA_CODES_NEW.each do |code|
+      data = epa["#{code}"]
+      new_order.store(code, data)
     end
-    level_epa_wbas_count_hash.each do |levels, epas|
-      epas.each do |key, val|
-        if !val.nil?
-          i = key.gsub("EPA", "").to_i
-          epa_tot[i] += val
+    return new_order
+  end
+
+
+  def total_count_on_wba(level_epa_wbas_count_hash, permission_group_id)
+    if permission_group_id >= "20" #starting Med26
+      epa_tot = {}
+      EPA_CODES_NEW.each do |epa|
+        epa_tot[epa] = 0
+      end
+      level_epa_wbas_count_hash.each do |levels, epas|
+        epas.each do |key, val|
+            epa_tot[key] += val
         end
       end
+      epa_tot_hash = {}
+      EPA_CODES_NEW.each do |epa|
+        epa_tot_hash.store(epa, epa_tot[epa])
+      end
+    elsif  permission_group_id < "20"
+      epa_tot = []
+      for i in 1..13 do
+        epa_tot[i] = 0
+      end
+      level_epa_wbas_count_hash.each do |levels, epas|
+        epas.each do |key, val|
+          if !val.nil?
+            i = key.gsub("EPA", "").to_i
+            epa_tot[i] += val
+          end
+        end
+      end
+      epa_tot_hash = {}
+      for i in 1..13 do
+        epa_tot_hash.store("EPA#{i}", epa_tot[i])
+      end
     end
-    epa_tot_hash = {}
-    for i in 1..13 do
-      epa_tot_hash.store("EPA#{i}", epa_tot[i])
-    end
+
     level_epa_wbas_count_hash.store("Total Count", epa_tot_hash)
     return level_epa_wbas_count_hash
   end
@@ -451,10 +478,19 @@ module EpaMastersHelper
     .where("submit_date >= ? and submit_date <= ?",  start_date, end_date)
     .group(:epa).count(:epa)
     #epa_average = Epa.where("submit_date >= ? and submit_date <= ?", start_date, end_date).group(:epa).average(:involvement)
-    epa_average = reorder_epas(epa_average)
-    for i in 1..13 do
-      epa_average["EPA#{i}"] = epa_average["EPA#{i}"].to_f / cohort_count
+    if permission_group_id >= "20"  #starting Med26 onwards
+      epa_average = reorder_epas_new(epa_average)
+      EPA_CODES_NEW.each do |epa|
+        epa_average[epa] = epa_average[epa].to_f / cohort_count
+      end
+    elsif permission_group_id < "20"
+      epa_average = reorder_epas_old(epa_average)
+      for i in 1..13 do
+        epa_average["EPA#{i}"] = epa_average["EPA#{i}"].to_f / cohort_count
+      end
+
     end
+
     level_epa_wbas_count_hash.store("Class Mean", epa_average)
     return level_epa_wbas_count_hash
   end
@@ -469,7 +505,11 @@ module EpaMastersHelper
       ave_epa_wbas = Epa.where("submit_date >= ? and submit_date <= ? and user_id=?", start_date, end_date, student.id).group(:epa).average(:involvement)
       average_level_epa_wbas_hash["StudentId"] = student.sid
       average_level_epa_wbas_hash["Student Name"] = student.full_name
-      average_level_epa_wbas_hash.store("Ave Involvement", reorder_epas(ave_epa_wbas))
+      if permission_group_id >= "20"
+        average_level_epa_wbas_hash.store("Ave Involvement", reorder_epas_new(ave_epa_wbas))
+      elsif permission_group_id < "20"
+        average_level_epa_wbas_hash.store("Ave Involvement", reorder_epas_old(ave_epa_wbas))
+      end
       average_level_epa_wbas_array.push average_level_epa_wbas_hash
     end
 
@@ -485,9 +525,13 @@ module EpaMastersHelper
       .where("users.permission_group_id = ? and submit_date >= ? and submit_date <= ? and involvement = ?", permission_group_id, start_date, end_date, i)
       .group(:epa).count(:epa)
         #epas = Epa.where("user_id = ? and submit_date >= ? and submit_date <= ? and involvement =? ", student.id, start_date, end_date, i)
-        level_epa_wbas_count_hash.store("Level #{i}", reorder_epas(epas))
+        if permission_group_id >= "20" #Med26 onwards
+          level_epa_wbas_count_hash.store("Level #{i}", reorder_epas_new(epas))
+        elsif permission_group_id < "20"
+          level_epa_wbas_count_hash.store("Level #{i}", reorder_epas_old(epas))
+        end
     end
-    level_epa_wbas_count_hash = total_count_on_wba(level_epa_wbas_count_hash)
+    level_epa_wbas_count_hash = total_count_on_wba(level_epa_wbas_count_hash, permission_group_id)
     if cohort_counts[cohort].nil?
       cohort_counts[cohort] = PermissionGroup.find(permission_group_id).users.count
     end
@@ -617,14 +661,14 @@ module EpaMastersHelper
     end
   end
 
-  def reorder_epas (epa)
-    new_order = {}
-    EPA_CODES.each do |code|
-      data = epa["#{code}"]
-      new_order.store(code, data)
-    end
-    return new_order
-  end
+  # def reorder_epas(epa)
+  #   new_order = {}
+  #   EPA_CODES_NEW.each do |code|
+  #     data = epa["#{code}"]
+  #     new_order.store(code, data)
+  #   end
+  #   return new_order
+  # end
 
   def hf_wba_epa_graph(all_cohort_wba_epa_data)
 
