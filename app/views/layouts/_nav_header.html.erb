@@ -97,7 +97,7 @@
                 </a>
                 <ul class="dropdown-menu" id="dropdownMenuButton">
                   <%= link_to '<i class="fa fa-stethoscope" style="color:#E1191C" aria-hidden="true"></i> EG-Review'.html_safe, epa_masters_path, target: '_blank', class: "dropdown-item" %>
-                  <% if (current_user.can_process_eg_assignment? && current_user.coaching_type == 'dean') %>
+                  <% if (current_user.can_process_eg_assignment? || current_user.coaching_type == 'admin' ) %>
                     <%= link_to '<i class="fa fa-wrench" style="color:#E1191C" aria-hidden="true"></i> EG Members'.html_safe, eg_members_path, target: '_blank', class: "dropdown-item" %>
 
                     <%= link_to '<i class="fa fa-wrench" style="color:#E1191C" aria-hidden="true"></i> Fix EG Members'.html_safe, fix_eg_members_path, target: '_blank', class: "dropdown-item" %>

@@ -3,6 +3,10 @@ class EpaMaster < ApplicationRecord
   has_many   :epa_reviews, as: :reviewable,  dependent: :destroy
   accepts_nested_attributes_for :epa_reviews
 
+
+  EPA_CODES_NEW = ['EPA1A', 'EPA1B', 'EPA2', 'EPA3', 'EPA4', 'EPA5', 'EPA6',
+               'EPA7', 'EPA8', 'EPA9', 'EPA10', 'EPA11']
+
   def full_name
     self.User.find(user_id)
   end
@@ -36,6 +40,18 @@ class EpaMaster < ApplicationRecord
     return results
 
   end
+  def self.get_eg_cohort_caseStudies(permission_group_id)
+    results = EpaMaster.execute_sql("select user_id, eg_cohorts.permission_group_id, users.full_name,
+        eg_cohorts.email, eg_full_name1, eg_email1, eg_full_name2, eg_email2
+        from eg_cohorts, users
+        where eg_cohorts.email = users.email and
+        eg_cohorts.permission_group_id = ?
+        order by users.full_name", permission_group_id).to_a
+
+    return results
+
+  end
+
 
   def self.get_eg_cohort(permission_group_id, current_user_email)
     results = EpaMaster.execute_sql("select user_id, eg_cohorts.permission_group_id, users.full_name,
@@ -137,43 +153,64 @@ class EpaMaster < ApplicationRecord
             		  users.permission_group_id = ? order by full_name, epa", permission_group_id).to_a
 
     end
-
     #results = ActiveRecord::Base.connection.exec_query(sql)
     return results
   end
 
+  def self.reorder_epas_new(epa, permission_group_id)
+    new_order = {}
+    if permission_group_id.to_i >= 20 #Med26
+      EPA_CODES_NEW.each do |code|
+        data = epa["#{code}"]
+        new_order.store(code, data)
+      end
+    else
+      for i in 1..13
+        new_order.store("EPA#{i}", epa["EPA#{i}"])
+      end
+    end
+    return new_order
+  end
 
-  def self.process_epa_badged in_data, permission_group_id
+  def self.get_epa_badged_new permission_group_id
+    # if permission_group_id.to_i >= 20  # >= Med26
+      student_badges = []
+      users = PermissionGroup.find(permission_group_id).users.order(:full_name).select(:id, :full_name, :sid)
+      users.each do |user|
+        badges = user.epa_masters.where(status: 'Badge').group(:epa).count
+        student_data = {}
+        student_data["Id"]        = user.id
+        student_data["Full Name"] = user.full_name
+        student_data["SID"]       = user.sid
+        student_data["Badge"]     = reorder_epas_new(badges, permission_group_id)
+        student_badges.push student_data
+      end
+      return student_badges
+
+  end
+  def self.process_epa_badged2 in_data, permission_group_id
     epa_badged_count = {}
     if permission_group_id.to_i >= 20  # >= Med26
       #new EPAs
-      count = in_data.collect{|val| val["badge_decision1"] if val["epa"] == "EPA1A" and val["badge_decision1"] == 'Badge'}.compact.count
+      count = in_data.collect{|val| val["Badge"]["EPA1A"]}.compact.count
       epa_badged_count.store("EPA1A", count)
 
-      count = in_data.collect{|val| val["badge_decision1"] if val["epa"] == "EPA1B" and val["badge_decision1"] == 'Badge'}.compact.count
+      count = in_data.collect{|val| val["Badge"]["EPA1B"]}.compact.count
       epa_badged_count.store("EPA1B", count)
 
       for i in 2..11
-        count = in_data.collect{|val| val["badge_decision1"] if val["epa"] == "EPA#{i}" and val["badge_decision1"] == 'Badge'}.compact.count
+        epa = "EPA#{i}"
+        count = in_data.collect{|val| val["Badge"]["#{epa}"]}.compact.count
         epa_badged_count.store("EPA#{i}", count)
       end
     else
       for i in 1..13
-        count = in_data.collect{|val| val["badge_decision1"] if val["epa"] == "EPA#{i}" and val["badge_decision1"] == 'Badge'}.compact.count
+        epa = "EPA#{i}"
+        count = in_data.collect{|val| val["Badge"]["#{epa}"]}.compact.count
         epa_badged_count.store("EPA#{i}", count)
       end
-
     end
-
-    students = []
-    students_hash = {}
-    students = in_data.collect{|val| val["full_name"]}.uniq
-    students.each do |student|
-      count = in_data.collect{|val| val["badge_decision1"] if val["full_name"] == student and val["badge_decision1"] == 'Badge'}.compact.count
-      students_hash.store(student, count)
-    end
-    return epa_badged_count, students_hash
-
+    return epa_badged_count
   end
 
   def self.process_all_cohorts permission_groups
