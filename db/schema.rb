@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_16_192407) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_19_143947) do
   create_schema "source"
   create_schema "target"
   create_schema "transform"
@@ -76,6 +76,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_16_192407) do
     t.date "next_review_end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "case_studies", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "epa"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_case_studies_on_user_id"
   end
 
   create_table "chart_series", id: :serial, force: :cascade do |t|
@@ -510,6 +518,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_16_192407) do
     t.decimal "comp2a_hss19"
     t.decimal "comp2a_hss20"
     t.decimal "comp2a_hss21"
+    t.decimal "comp2a_hss22"
     t.index ["user_id", "permission_group_id", "course_code"], name: "by_user_permission_group_course_code", unique: true
     t.index ["user_id"], name: "index_fom_exams_on_user_id"
   end
@@ -1579,6 +1588,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_16_192407) do
 
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "artifacts", "users"
+  add_foreign_key "case_studies", "users"
   add_foreign_key "cohorts", "users"
   add_foreign_key "competencies", "permission_groups"
   add_foreign_key "competencies", "users"
