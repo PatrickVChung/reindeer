@@ -1,7 +1,7 @@
 <div id="<%= dom_id course %>">
 
     <strong>Course number: </strong>
-    <h5 style="display:inline;"><%= link_to "#{course.course_number}", course_schedules_path(course_id: course.id), target: '_blank' %>
+    <h5 style="display:inline;"><%= link_to "#{course.course_number}", course_schedules_path(course_id: course.id, offerings: params[:offerings]), target: '_blank' %>
       <% if (current_user.can_process_course_catalog?) %>
         <%= link_to "(Edit)", edit_course_path(course), target: '_blank' %>
       <% end %>
