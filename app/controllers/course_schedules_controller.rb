@@ -7,7 +7,13 @@ class CourseSchedulesController < ApplicationController
   def index
     if params[:course_id].present?
       current_year = Time.now.year
-      @course_schedules = CourseSchedule.where("course_id = ? and year >= ?", params[:course_id], current_year).order(:start_date)
+      selected_offerings    = params[:offerings].map{|o| o.split(": ").second} if params[:offerings].present? # only interesed on the block not the year
+      selected_year         = params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
+      if selected_offerings.nil?
+        @course_schedules = CourseSchedule.where(course_id: params[:course_id])    
+      else
+        @course_schedules = CourseSchedule.where(course_id: params[:course_id], year: selected_year, block: selected_offerings).order(:start_date)
+      end
       @course_detail = Course.where(id: params[:course_id]).map(&:attributes)
     elsif session[:course_id].present?
       @course_schedules = temp_schedules = CourseSchedule.where("course_id = ? and start_date > ? and no_of_seats <> 0 and comment is not null", session[:course_id], DateTime.now - 2.month).order(:start_date)

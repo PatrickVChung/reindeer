@@ -13,7 +13,10 @@ class CoursesController < ApplicationController
       searchWord = params[:searchWord].strip.downcase
       @courses = Course.where("LOWER(course_number) like ? or LOWER(course_name) like ? or LOWER(course_purpose_statement) like ?", "%#{searchWord}%",
         "%#{searchWord}%", "%#{searchWord}%").order(:course_number)
-        
+      @courses = @courses
+        .joins(:course_schedules)
+        .where.not(course_schedules: { no_of_seats: [0, nil] })
+
     else
 
       selected_categories   = params[:categories] || []
@@ -23,13 +26,31 @@ class CoursesController < ApplicationController
       selected_competencies = params[:competencies] || []
       selected_offerings    = params[:offerings] || []
       selected_offerings    = params[:offerings].map{|o| o.split(": ").second} if params[:offerings].present? # only interesed on the block not the year
-      selected_years        =  params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
+      selected_years        = params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
 
-      @courses = Course.all.order(:category, :department)
+      @courses = Course.all.order(:course_number)
       @courses = @courses.where(category: selected_categories) if params[:categories].present?
       @courses = @courses.where(department: selected_departments) if params[:departments].present?
       @courses = @courses.where(duration: selected_durations) if params[:durations].present?
-      @courses = @courses.joins(:course_schedules).where(course_schedules: {year: selected_years, block: selected_offerings}).distinct if params[:offerings].present?
+
+      if params[:offerings].present?
+        @courses = @courses
+          .joins(:course_schedules)
+          .where(course_schedules: { year: selected_years, block: selected_offerings })
+          .where.not(course_schedules: { no_of_seats: [0, nil], comment: [nil] })
+      end
+
+        # if params[:offerings].present?
+        #   @courses = @courses
+        #     .joins(:course_schedules)
+        #     .where(course_schedules: { year: selected_years, block: selected_offerings })
+        #     .where(
+        #       "course_schedules.no_of_seats IS NOT NULL AND course_schedules.no_of_seats != 0
+        #        OR course_schedules.comment IS NOT NULL"
+        #     )
+        # end
+
+
 
       if selected_course_info.include? "Lottery"
         @courses = @courses.where(available_through_the_lottery: true)

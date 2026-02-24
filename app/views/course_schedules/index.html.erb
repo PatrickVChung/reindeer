@@ -46,9 +46,19 @@
               <% if (course_schedule.no_of_seats != 0 && !course_schedule.no_of_seats.nil?) %>
                 <td style="text-align: center;"><%= course_schedule.year %></td>
                 <td style="text-align: center;"><%= course_schedule.block %></td>
-                <td style="text-align: center;"><%= course_schedule.start_date %></td>
-                <td style="text-align: center;"><%= course_schedule.end_date %></td>
-                <td style="text-align: center;"><%= course_schedule.no_of_seats %> / <%= course_schedule.comment%></td>
+                <td style="text-align: center;"><%= localize course_schedule.start_date %></td>
+                <td style="text-align: center;"><%= localize course_schedule.end_date %></td>
+                <% if !course_schedule.comment.nil? and course_schedule.comment.strip != "" %>
+                  <td style="text-align: center;"><%= course_schedule.no_of_seats %> / <%= course_schedule.comment%></td>
+                 <% else %>
+                  <td style="text-align: center;"><%= course_schedule.no_of_seats %></td>
+                <% end %>
+              <% elsif (!course_schedule.comment.nil? && (course_schedule.no_of_seats == 0 || course_schedule.no_of_seats.nil?)) %>
+                    <td style="text-align: center;"><%= course_schedule.year %></td>
+                    <td style="text-align: center;"><%= course_schedule.block %></td>
+                    <td style="text-align: center;"><%= localize course_schedule.start_date %></td>
+                    <td style="text-align: center;"><%= localize course_schedule.end_date %></td>
+                    <td style="text-align: center;"><%= course_schedule.comment%></td>
               <% end %>
             </tr>
           <% end %>
