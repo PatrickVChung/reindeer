@@ -10,8 +10,18 @@
 #   end
 # end
 json.array! @events do |event|
-  json.extract! event, :id, :title, :description
-  json.start event.start_date
-  json.end event.end_date
+  json.id event.id
+
+  # Logic to add name to title if user exists
+  display_title = event.title
+  if event.user_id.present?
+    user = User.find_by(id: event.user_id)
+    display_title += " - #{user.full_name}" if user
+  end
+
+  json.title display_title
+  json.description event.description
+  json.start event.start_date.iso8601
+  json.end event.end_date.iso8601
   json.url event_url(event, format: :html)
 end
