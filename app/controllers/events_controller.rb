@@ -22,19 +22,13 @@ class EventsController < ApplicationController
       @events = Event.where('start_date > ? and user_id is null', DateTime.now)  #.order(start_date: :desc)
     end
 
-
-    #   @events = Event.where('advisor_id=? and start_date > ?', advisor.id, DateTime.now).order(start_date: :desc) #.paginate(:page => params[:page], :per_page => 10)
-    # else
-    #   @events = Event.where('start_date > ?', DateTime.now).order(start_date: :desc) #.paginate(:page => params[:page], :per_page => 10)
-    # end
-
     @events.each do |event|
       if !event.user_id.nil?
         full_name = User.find(event.user_id).full_name  #hf_full_name (event.id)
         event.title = event.title + ' - ' + full_name
       end
-
     end
+
     respond_to do |format|
       format.json
       format.html

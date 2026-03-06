@@ -136,3 +136,5 @@ end
 
 gem "mini_racer"
 gem "whenever", require: false
+gem "pdf-reader"
+gem "jbuilder"

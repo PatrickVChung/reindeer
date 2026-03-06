@@ -272,9 +272,15 @@ $(document).ready ->
   $('#check_all').click ->
     $('input:checkbox').prop 'checked', @checked
     return
-
-  $('#calendar').fullCalendar events: '/events.json'
-  console.log ("Inside events.coffee!")
+    
+  console.log "Inside events.coffee!"
+  $('#calendar').fullCalendar
+    events: '/events.json'
+    # Optional: add height or header to see if it responds
+    header:
+      left: 'prev,next today'
+      center: 'title'
+      right: 'month,agendaWeek,agendaDay'
 
   $('[id^="start_date_start_date"]').change ->
     yyyy = $("#start_date_start_date_1i").val()
@@ -300,7 +306,7 @@ $(document).ready ->
 
   $('#pass_events_table').dataTable language: searchPlaceholder: 'FirstName or LastName'
   $('#send_invite_table').dataTable language: searchPlaceholder: 'FirstName or LastName'
-  $('#delete_events_table').dataTable language: searchPlaceholder: 'FirstName or LastName'  
+  $('#delete_events_table').dataTable language: searchPlaceholder: 'FirstName or LastName'
   $('.dataTables_length').addClass 'bs-select'
   #alert('searchValue: ' + $('#searchValue').val())
 
@@ -322,3 +328,13 @@ $(document).ready ->
         alert 'Request Reviews: ' + JSON.stringify(request)
         return
     return
+
+# $(document).on 'turbo:load', ->
+#   console.log "Inside events.coffee!"
+#   $('#calendar').fullCalendar
+#     events: '/events.json'
+#     # Optional: add height or header to see if it responds
+#     header:
+#       left: 'prev,next today'
+#       center: 'title'
+#       right: 'month,agendaWeek,agendaDay'
