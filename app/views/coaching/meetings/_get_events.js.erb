@@ -57,16 +57,20 @@ var calendlyApptSolotskaya = '<div id="calendlyAppts">' +
 
 var windowLocation = window.location.pathname.split('/');
 var slug = windowLocation.pop();
-var emailErika = 'If you don’t see any availability, please contact ' + '<a href="/coaching/students/' + slug + '/contact_form" target="_blank">Erika Chomina</a> ';
+
 
 var advisor_name = $('#coaching_meeting_advisor_id option:selected').text();
+let formattedName = 'Dr. ' + advisor_name.split(', ').reverse().join(' ');
+var advisor_id   = $('#coaching_meeting_advisor_id option:selected').val();
+var emailErika = 'If you don’t see any availability, please contact ' + '<a href="/coaching/students/' + slug + '/contact_form?advisor_id=' + advisor_id + '"' + 'target="_blank">' + ' ' + formattedName + '</a> ';
+
 var tr_length = $('#EventsTable tbody tr:visible').length;
 var selectedAdvisorType = $('#coaching_meeting_advisor_type option:selected').text();
 // removed the logic below for Pope Bailey
 //  && !advisor_name.includes("Bailey")
 console.log(" inside _get_events --> selectedAdvisorType: " + selectedAdvisorType);
 console.log(" inside _get_events --> advisor_name: " + advisor_name);
-
+console.log(" inside _get_events --> advisor_id: " + advisor_id);
 if (tr_length == 0 && selectedAdvisorType == "Academic" && advisor_name.includes("Travis")) {
   alert("Dr. Travis Philipp’s REDEI advising appointments can be found under Advisor Type: Academic/Student Affairs.");
 } else if (tr_length == 0 && !advisor_name.includes("Shafir") && !advisor_name.includes("Lauren") && !advisor_name.includes("Domingo") &&
@@ -109,8 +113,8 @@ function calendlyClick(e) {
 }).call(this);
 
 $(document).ajaxComplete(function(){
-  console.log("** Inside get_events: AjaxComplete is called!");
-  console.log("tr_length: " + tr_length);
+  // console.log("** Inside get_events: AjaxComplete is called!");
+  // console.log("tr_length: " + tr_length);
   var advisor_name = $('#coaching_meeting_advisor_id option:selected').text();
   if (advisor_name.includes("Bailey")) {
     // commented out  on 5/25/2025
