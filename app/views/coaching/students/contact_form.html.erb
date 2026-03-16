@@ -9,8 +9,13 @@
                   <div class="row mb-0">
                     <label for="toEmail" class="form-label col-sm-2">To </label>
                     <div class="col-sm-6">
-                      <% email = Advisor.find_by(id: params[:advisor_id]).email %>
-                      <%= text_field_tag "to", "#{email}", class: "form-control" %>
+                      <% if params[:advisor_id].present? %>
+                        <% email = Advisor.find_by(id: params[:advisor_id]).email %>
+                        <%= text_field_tag "to", "#{email}", class: "form-control" %>                        
+                      <% else %>
+                        <% email = session["advisor_email"] %>
+                        <%= text_field_tag "to", "#{email}", class: "form-control" %>
+                      <% end %>
                     </div>
                   </div>
                   <div class="row mb-0">

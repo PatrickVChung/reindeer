@@ -408,12 +408,15 @@ module EpaMastersHelper
     #for i in 1..13
     epa_codes.each do |epa_code|
       #epa_code = 'EPA' + i.to_s
-      epa_count = wbas.collect{|w| w.epa if w.epa == "#{epa_code}"}.compact.count
+      epa_count = wbas.select{|w| w.epa if w.epa == "#{epa_code}"}.compact.count
       tot_count += epa_count
       epa_hash[epa_code] = epa_count
     end
-    epa_hash["TotalCount"] = tot_count
+    epa_hash["TotalCount"] = wbas.count
     epa_hash["Total Attending"] = total_attending
+
+    # puts epa_hash.inspect
+    # puts "======================================================================="
     return epa_hash
   end
 

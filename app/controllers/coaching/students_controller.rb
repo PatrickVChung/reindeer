@@ -122,6 +122,7 @@ module Coaching
 
     def contact_form
       if params[:message].present?
+        session["advisor_email"] = params[:to]
         ActionMailer::Base.mail(from: params[:from], to: params[:to], subject: params[:subject], body: params[:message].html_safe, content_type: 'text/html').deliver
         flash[:send_alert] = "Your email was sent!"
       end
