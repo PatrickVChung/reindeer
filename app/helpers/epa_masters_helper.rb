@@ -396,23 +396,16 @@ module EpaMastersHelper
     return data
   end
 
-  def count_wbas(epa_codes, wbas, sid, full_name, matriculated_date, new_competency)
+  def count_wbas(epa_codes, wba_epa_hash, total_attending, sid, full_name, matriculated_date, new_competency)
     epa_hash = {}
-    tot_count = 0
-    total_attending = 0
     epa_hash["StudentId"] = sid
     epa_hash["Student Name"] = full_name
     epa_hash["Matriculated Date"] = matriculated_date
-    total_attending = wbas.select{|w| w.clinical_assessor if w.clinical_assessor.include? "Attending"}.compact.count
-
-    #for i in 1..13
+    #total_attending = wbas.select{|w| w.clinical_assessor if w.clinical_assessor.include? "Attending"}.compact.count
     epa_codes.each do |epa_code|
-      #epa_code = 'EPA' + i.to_s
-      epa_count = wbas.select{|w| w.epa if w.epa == "#{epa_code}"}.compact.count
-      tot_count += epa_count
-      epa_hash[epa_code] = epa_count
+      epa_hash[epa_code] = wba_epa_hash[epa_code]
     end
-    epa_hash["TotalCount"] = wbas.count
+    epa_hash["TotalCount"] = wba_epa_hash.values.sum #wbas.count
     epa_hash["Total Attending"] = total_attending
 
     # puts epa_hash.inspect
@@ -524,7 +517,7 @@ module EpaMastersHelper
     #permission_group_id = PermissionGroup.find_by("title like ?", "%#{cohort}%").id
 
     for i in 1..4 do  #Level
-      epas = Epa.joins("inner join users on users.id = epas.user_id" )
+      epas = Epa.joins("inner joinclinical_assessor users on users.id = epas.user_id" )
       .where("users.permission_group_id = ? and submit_date >= ? and submit_date <= ? and involvement = ?", permission_group_id, start_date, end_date, i)
       .group(:epa).count(:epa)
         #epas = Epa.where("user_id = ? and submit_date >= ? and submit_date <= ? and involvement =? ", student.id, start_date, end_date, i)
@@ -538,7 +531,7 @@ module EpaMastersHelper
     if cohort_counts[cohort].nil?
       cohort_counts[cohort] = PermissionGroup.find(permission_group_id).users.count
     end
-    level_epa_wbas_count_hash = average_on_wba(level_epa_wbas_count_hash, cohort_counts[cohort], permission_group_id, start_date, end_date)
+    level_epa_wbas_count_hash = averageclinical_assessor_on_wba(level_epa_wbas_count_hash, cohort_counts[cohort], permission_group_id, start_date, end_date)
 
     return level_epa_wbas_count_hash
   end
@@ -546,8 +539,9 @@ module EpaMastersHelper
   def process_wba(epa_codes, students, start_date, end_date)
     data = []
     students.each do |student|
-        wbas = Epa.where("user_id=? and submit_date >= ? and submit_date <= ?", student.id, start_date, end_date)  # Epa table contains WBAs data
-        student_epa = count_wbas(epa_codes, wbas, student.sid, student.full_name, student.matriculated_date, student.new_competency)
+        total_attending = Epa.where("user_id=? and submit_date >= ? and submit_date <= ? and clinical_assessor like ?", student.id, start_date, end_date, "%Attending%").count  # Epa table contains WBAs data
+        wba_epa_hash = Epa.where("user_id=? and submit_date >= ? and submit_date <= ?", student.id, start_date, end_date).group(:epa).count
+        student_epa = count_wbas(epa_codes, wba_epa_hash, total_attending, student.sid, student.full_name, student.matriculated_date, student.new_competency)
 
         # temp_hash = {}
         #
