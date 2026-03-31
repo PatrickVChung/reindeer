@@ -283,9 +283,7 @@ class EpaMastersController < ApplicationController
         @wba_epa_data = hf_process_cohort2(params[:permission_group_id], @start_date, @end_date, "WBA")
         @wba_epa_data = @wba_epa_data.sort_by{ |wba| wba["TotalCount"] }.reverse
 
-        temp_title = @cohort_title.split(" ").last.gsub(/[()]/, "")
-
-        create_file @wba_epa_data, "#{temp_title}_wba_epa_#{current_user.username}.txt"
+        create_file @wba_epa_data, "wba_epa.txt"
         respond_to do |format|
           format.html
         end

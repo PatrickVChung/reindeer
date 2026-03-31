@@ -7,18 +7,13 @@ class CoursesController < ApplicationController
 
 
   def index
-    # @courses = Course.where(category: params[:category]) if params[:category].present?
-    # @courses = Course.where("competencies @> ?", "{PCP3, MK3}") if params[:competencies].present?
+
     if params[:searchWord].present?
-      searchWord = params[:searchWord].strip.downcase
-      @courses = Course.where("LOWER(course_number) like ? or LOWER(course_name) like ? or LOWER(course_purpose_statement) like ?", "%#{searchWord}%",
-        "%#{searchWord}%", "%#{searchWord}%").order(:course_number)
-      @courses = @courses
-        .joins(:course_schedules)
-        .where.not(course_schedules: { no_of_seats: [0, nil] })
+      searchWord = params[:searchWord].strip
+      @courses = Course.search(searchWord).order(:course_number)  # the scope is in model
+      @courses = @courses.available_and_has_comment  # has 0 seat and comments exist, and the scope in model
 
     else
-
       selected_categories   = params[:categories] || []
       selected_departments  = params[:departments] || []
       selected_durations    = params[:durations] || []
@@ -39,18 +34,6 @@ class CoursesController < ApplicationController
           .where(course_schedules: { year: selected_years, block: selected_offerings })
           .where.not(course_schedules: { no_of_seats: [0, nil], comment: [nil] })
       end
-
-        # if params[:offerings].present?
-        #   @courses = @courses
-        #     .joins(:course_schedules)
-        #     .where(course_schedules: { year: selected_years, block: selected_offerings })
-        #     .where(
-        #       "course_schedules.no_of_seats IS NOT NULL AND course_schedules.no_of_seats != 0
-        #        OR course_schedules.comment IS NOT NULL"
-        #     )
-        # end
-
-
 
       if selected_course_info.include? "Lottery"
         @courses = @courses.where(available_through_the_lottery: true)

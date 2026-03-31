@@ -281,7 +281,7 @@ module DashboardHelper
     epa_wba_data.first.delete("Matriculated Date")
     epa_wba_data.first.delete("Total Attending")
     epa_wba_data = epa_wba_data.first
-    tot_count = epa_wba_data.values.sum
+    tot_count = epa_wba_data.compact.values.sum
     if tot_count == 0
       return nil
     end
