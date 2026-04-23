@@ -19,7 +19,7 @@
           <strong>Site(s):</strong>&ensp;<%= course_detail["site"] %><br>
           <strong>Type:</strong>&ensp;<%= course_detail["content_type"] %> <br>
           <strong>Credits:</strong>&ensp;<%= course_detail["credits"] %><br>
-          <strong>Available through the lottery: </strong>&ensp;<%= course_detail["available_through_the_lottery"] %>
+          <strong>Available through the lottery: </strong>&ensp;<%= course_detail["available_through_the_lottery"] ? "Yes" : "No"%>
         </div>
         <div class="col-md-6">
           <strong>Course Director (name / email):</strong>&ensp;<%= course_detail["course_director"] %> / <%= course_detail["course_director_email"] %><br>
@@ -31,39 +31,27 @@
     <div class="row">
       <div class="col-9">
         <h6 style="text-align: center;"><strong> Available Blocks: </strong></h6>
-        <table class="table-responsive nowrap table table-hover table-bordered table3-striped custom-grid-color">
-          <thead>
-            <tr>
-            <th style="text-align: center;">Year</th>
-            <th style="text-align: center; width: 15%;">Block</th>
-            <th style="text-align: center; width: 15%;">StartDate</th>
-            <th style="text-align: center; width: 15%;">EndDate</th>
-            <th style="text-align: center;">Capacity</th>
-            </tr>
-          </thead>
-          <% @course_schedules.each do |course_schedule| %>
-            <tr>
-              <% if (course_schedule.no_of_seats != 0 && !course_schedule.no_of_seats.nil?) %>
-                <td style="text-align: center;"><%= course_schedule.year %></td>
-                <td style="text-align: center;"><%= course_schedule.block %></td>
-                <td style="text-align: center;"><%= localize course_schedule.start_date %></td>
-                <td style="text-align: center;"><%= localize course_schedule.end_date %></td>
-                <% if !course_schedule.comment.nil? and course_schedule.comment.strip != "" %>
-                  <td style="text-align: center;"><%= course_schedule.no_of_seats %> / <%= course_schedule.comment%></td>
-                 <% else %>
-                  <td style="text-align: center;"><%= course_schedule.no_of_seats %></td>
-                <% end %>
-              <% elsif (!course_schedule.comment.nil? && (course_schedule.no_of_seats == 0 || course_schedule.no_of_seats.nil?)) %>
-                    <td style="text-align: center;"><%= course_schedule.year %></td>
-                    <td style="text-align: center;"><%= course_schedule.block %></td>
-                    <td style="text-align: center;"><%= localize course_schedule.start_date %></td>
-                    <td style="text-align: center;"><%= localize course_schedule.end_date %></td>
-                    <td style="text-align: center;"><%= course_schedule.comment%></td>
-              <% end %>
-            </tr>
-          <% end %>
 
-        </table>
+        <%= turbo_frame_tag "course_schedules" do %>
+          <table id="courseSchedules-table" class="table-responsive nowrap table table-hover table-bordered table3-striped custom-grid-color" >
+            <thead>
+              <tr>
+              <th style="text-align: center;">Year</th>
+              <th style="text-align: center; width: 15%;">Block</th>
+              <th style="text-align: center; width: 15%;">StartDate</th>
+              <th style="text-align: center; width: 15%;">EndDate</th>
+              <th style="text-align: center;">Capacity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render partial: "course_schedules_list", locals: {course_schedules: @course_schedules} %>
+            </tbody>
+          </table>
+        <% end %>
+        <%= link_to "Show full course availability",
+              course_schedules_path(course_id: params[:course_id]),
+              class: "btn btn-outline-secondary btn-sm"
+               %>
 
       </div>
       <div class="col-sm-2">
@@ -74,8 +62,14 @@
               <li><%= comp %></li>
             <% end %>
           </ul>
+          <hr>
+          <strong>Competency Note: </strong><%= course_detail["competency_note"] ? course_detail["competency_note"] : "N/A" %>
         </div>
       </div>
+
+      <p><strong>Entrollment instruction: </strong>"The elective is offered on a space-available basis, if you are interested in enrolling email the coordinator (listed above) for
+        availability.  Note that you may request to enroll in this elective once your cohort has completed their elective lottery, and results have been released.  Please refer
+        to your cohorts lottery timeline for additional information."</p>
       <hr style="height:4px; background-color:#B2DBED;">
       <h6 style="color: #0092ca;"><strong> <%= course_detail["category"] %> </strong></h6>
     </div>

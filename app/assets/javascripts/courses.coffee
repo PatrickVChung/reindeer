@@ -9,8 +9,10 @@ refreshAccordions = ->
 
     if $collapseEl.length > 0
       # Find checked boxes
-      hasChecked = $collapseEl.find('input[type="checkbox"]:checked').length > 0
-
+      # hasChecked = $collapseEl.find('input[type="checkbox"]:checked').length > 0
+      hasCheckboxChecked = $collapseEl.find('input[type="checkbox"]:checked').length > 0
+      hasRadioChecked    = $collapseEl.find('input[type="radio"][name="prerequisites"]:checked').length > 0
+      hasChecked         = hasCheckboxChecked or hasRadioChecked
       # Get Bootstrap instance
       instance = bootstrap.Collapse.getOrCreateInstance($collapseEl[0], { toggle: false })
 
@@ -36,10 +38,14 @@ $(document).on 'click', '.custom-clickable-row', (e) ->
   window.open(url, '_blank')
   return
 
+
 $(document).ready ->
+
+  console.log 'Accordion handler attached'
 
   $('#clearAllCheckboxesBtn').click ->
     $('input[type=\'checkbox\']').attr 'checked', false
+    $('input[type=\'radio\']').attr 'checked', false
     return
 
   $('#searchWord').on 'input', ->
@@ -52,25 +58,39 @@ $(document).ready ->
     $('#searchWord').val ''
     return
 
-  $('.accordion').on 'change', 'input[type="checkbox"]', ->
-    $checkbox = $(this)
-    $item = $checkbox.closest('.accordion-item')
+  $('.accordion').on 'change', 'input[type="checkbox"], input[type="radio"]', ->
+    $input = $(this)
+    $item = $input.closest('.accordion-item')
     $panel = $item.find('.accordion-collapse')
     $header = $item.find('.accordion-header')
-    hasChecked = $panel.find('input[type="checkbox"]:checked').length > 0
-    # Debug (optional)
-    console.log 'Changed in item:', $item.attr('id') or '(no id)', 'hasChecked:', hasChecked
+
+    hasCheckboxChecked = $panel.find('input[type="checkbox"]:checked').length > 0
+    hasRadioChecked    = $panel.find('input[type="radio"][name="prerequisites"]:checked').length > 0
+    hasChecked         = hasCheckboxChecked or hasRadioChecked
+
+    console.log("hasRadioChecked: " + hasRadioChecked)
+
+    console.log 'Changed in item:',
+      $item.attr('id') or '(no id)',
+      'checkbox:', hasCheckboxChecked,
+      'radio:', hasRadioChecked
+
     collapse = bootstrap.Collapse.getOrCreateInstance($panel[0])
+
     if hasChecked
       collapse.show()
       $header.addClass 'has-checked'
     else
       $header.removeClass 'has-checked'
-      # Optional: auto-close when no checks
-      # collapse.hide();
+      # Optional auto-close:
+      # collapse.hide()
     return
-  $('.accordion-collapse').on 'hide.bs.collapse', (e) ->
-    if $(this).find('input[type="checkbox"]:checked').length > 0
-      e.preventDefault()
-    return
-  return
+
+    $('.accordion-collapse').on 'hide.bs.collapse', (e) ->
+      hasCheckboxChecked = $(this).find('input[type="checkbox"]:checked').length > 0
+      hasRadioChecked    = $(this).find('input[type="radio"]:checked').length > 0
+
+      if hasCheckboxChecked or hasRadioChecked
+        e.preventDefault()
+
+      return

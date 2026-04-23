@@ -10,7 +10,7 @@ class CourseSchedulesController < ApplicationController
       selected_offerings    = params[:offerings].map{|o| o.split(": ").second} if params[:offerings].present? # only interesed on the block not the year
       selected_year         = params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
       if selected_offerings.nil?
-        @course_schedules = CourseSchedule.where(course_id: params[:course_id])    
+        @course_schedules = CourseSchedule.where(course_id: params[:course_id])
       else
         @course_schedules = CourseSchedule.where(course_id: params[:course_id], year: selected_year, block: selected_offerings).order(:start_date)
       end
@@ -25,6 +25,7 @@ class CourseSchedulesController < ApplicationController
     end
 
     respond_to do |format|
+      format.turbo_stream
       format.html
 
     end

@@ -20,6 +20,7 @@ class CoursesController < ApplicationController
       selected_course_info  = params[:course_info] || []
       selected_competencies = params[:competencies] || []
       selected_offerings    = params[:offerings] || []
+      selected_prerequisites= params[:prerequisites] || []
       selected_offerings    = params[:offerings].map{|o| o.split(": ").second} if params[:offerings].present? # only interesed on the block not the year
       selected_years        = params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
 
@@ -27,6 +28,7 @@ class CoursesController < ApplicationController
       @courses = @courses.where(category: selected_categories) if params[:categories].present?
       @courses = @courses.where(department: selected_departments) if params[:departments].present?
       @courses = @courses.where(duration: selected_durations) if params[:durations].present?
+      @courses = @courses.where(prerequisites: selected_prerequisites) if params[:prerequisites].present?
 
       if params[:offerings].present?
         @courses = @courses
@@ -137,7 +139,8 @@ class CoursesController < ApplicationController
       @offering_count = @offering_count.transform_keys {|year, term| "#{year}: #{term}"}
       @offerings ||= hf_seasonal_sort(@offering_count.keys)
 
-      @course_info_count ||= Course.group(:content_type).count.sort.to_h
+      @course_info_count ||= Course.where("content_type not like '%Core%' and content_type <> 'Assessment' and content_type <> 'Intersession'").group(:content_type).count.sort.to_h
+
       @course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity"] + @course_info_count.keys
       #@course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity", "Clinical", "Non-Clinical", "Special Elective", "Sub-I/Acting Intern"]
       lottery_data ||= Course.group(:available_through_the_lottery).count

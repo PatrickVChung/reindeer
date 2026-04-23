@@ -37,7 +37,8 @@ Rails.application.routes.draw do
     end
   end
   resources :badging_dates
-  resources :course_schedules
+  resources :course_schedules 
+
   resources :courses
   #get 'overall_progresses/index'
   resources :eg_members

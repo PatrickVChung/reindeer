@@ -1,11 +1,19 @@
 <div id="<%= dom_id course %>">
+  <div style="display:flex; align-items:center; gap:10px;">
+    <strong>Course number:</strong>
 
-    <strong>Course number: </strong>
-    <h5 style="display:inline;"><%= link_to "#{course.course_number}", course_schedules_path(course_id: course.id, offerings: params[:offerings]), target: '_blank' %>
-      <% if (current_user.can_process_course_catalog?) %>
-        <%= link_to "(Edit)", edit_course_path(course), target: '_blank' %>
-      <% end %>
-     </h5><br />
+    <h5 class="mb-0"><%= course.course_number %></h5>
+
+    <%= link_to "Click Here for Full Detail",
+          course_schedules_path(course_id: course.id, offerings: params[:offerings]),
+          class: "btn btn-outline-secondary btn-sm",
+          target: "_blank" %>
+
+    <% if current_user.can_process_course_catalog? %>
+      <%= link_to "(Edit)", edit_course_path(course), target: "_blank" %>
+    <% end %>
+  </div>
+
     <strong>Course name:</strong>
     <h5 style="display:inline;color:purple"><%= course.course_name %></h5><br>
 
@@ -16,7 +24,7 @@
     <%= course.department %><br />
 
     <strong>Course Purpose Statement:</strong>
-    <%= highlight(course.course_purpose_statement, params[:searchWord], highlighter: '<span class="text-danger">\1</span>') %>
+    <%= highlight(course.course_purpose_statement, params[:searchWord], highlighter: '<span class="text-danger">\1</span>') %><br>
 
     <strong>Prerequisites:</strong>
     <%= course.prerequisites ? "Yes" : "No" %><br />
@@ -26,16 +34,13 @@
     <%= course.continuity ? "Yes" : "No" %><br />
     <strong>Lottery:</strong>
     <%= course.available_through_the_lottery ? "Yes" : "No" %><br />
+    <div style="display:flex; align-items:center; gap:10px;">
+      <%= link_to "Click Here for Full Detail",
+            course_schedules_path(course_id: course.id, offerings: params[:offerings]),
+            class: "btn btn-secondary btn-sm",
+            target: "_blank" %>
 
-    <strong>Credits:</strong>
-    <%= course.credits %><br />
-    <strong>Duration:</strong>
-    <%= course.duration %><br />
-    <strong>Competency:</strong>
-    <%= course.competencies %><br />
-    <strong>Competency Note:</strong>
-    <%= course.competency_note %><br />
-
+    </div>
     <hr>
 
 </div>
