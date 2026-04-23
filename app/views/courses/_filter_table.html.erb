@@ -10,26 +10,45 @@
     <div class="accordion-body">
       <% selected_items = Array(selected_param) %>
       <table>
-        <% items.each do |item| %>
+        <% if title == "Course Prerequisite" %>
           <tr>
-            <td style="width: 300px;">
-              <div class="form-check">
-                <%= check_box_tag "#{field_name}[]",
-                                  item,
-                                  selected_items.include?(item),
-                                  id: "#{prefix}_#{item.parameterize}",
-                                  class: "form-check-input" %>
+            <td>
 
-                <%= label_tag "#{prefix}_#{item.parameterize}",
-                              item,
-                              class: "form-check-label" %>
+                <div class="form-check form-check-inline">
+                  <%= radio_button_tag :prerequisites, "true", params[:prerequisites] == "true", class: "form-check-input" %>
+                  <%= label_tag :prerequisites_yes, "Yes", class: "form-check-label" %>
+                </div>
+
+                <div class="form-check form-check-inline">
+                  <%= radio_button_tag :prerequisites, "false", params[:prerequisites] == "false", class: "form-check-input" %>
+                  <%= label_tag :prerequisites_no, "No", class: "form-check-label" %>
+                </div>
               </div>
-            </td>
-
-            <td class="text-center">
-              <%= count_hash[item.to_s] %>
+            
             </td>
           </tr>
+        <% else %>
+          <% items.each do |item| %>
+            <tr>
+              <td style="width: 300px;">
+                <div class="form-check">
+                  <%= check_box_tag "#{field_name}[]",
+                                    item,
+                                    selected_items.include?(item),
+                                    id: "#{prefix}_#{item.parameterize}",
+                                    class: "form-check-input" %>
+
+                  <%= label_tag "#{prefix}_#{item.parameterize}",
+                                item,
+                                class: "form-check-label" %>
+                </div>
+              </td>
+
+              <td class="text-center">
+                <%= count_hash[item.to_s] %>
+              </td>
+            </tr>
+          <% end %>
         <% end %>
       </table>
     </div>

@@ -46,6 +46,18 @@
                             prefix: "info"
                           } %>
 
+              <%= render partial: "filter_table",
+                         locals: {
+                           title: "Course Prerequisite",
+                           items: [['Yes', true], ['No', false]],
+                           selected_param: params[:prerequisites],
+                           field_name: "prerequisites",
+                           count_hash: {},
+                           prefix: "prereq"
+                         } %>
+
+
+
                 <%= render partial: "filter_table",
                            locals: {
                              title: "Duration",
@@ -58,7 +70,7 @@
 
                  <%= render partial: "filter_table",
                             locals: {
-                              title: "Offering",
+                              title: "Block Offered",
                               items: @offerings,
                               selected_param: params[:offerings],
                               field_name: "offerings",
