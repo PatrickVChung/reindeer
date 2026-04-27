@@ -66,6 +66,8 @@ class CoursesController < ApplicationController
   # GET /courses/1/edit
   def edit
      @course = Course.find(params[:id])
+     @course.course_schedules.build if @course.course_schedules.empty?
+
   end
 
   # POST /courses or /courses.json
@@ -102,6 +104,7 @@ class CoursesController < ApplicationController
 
   # DELETE /courses/1 or /courses/1.json
   def destroy
+    @course = Course.find(params[:id])
     @course.destroy!
 
     respond_to do |format|
@@ -122,7 +125,19 @@ class CoursesController < ApplicationController
         :continuity, :available_through_the_lottery, :department, :course_purpose_statement, :special_notes, :prerequisites,
         :required_prerequisites, :waive_prereq_requirements, :waive_notes, :duration, :site, :weekly_workload, :credits,
         :course_director, :course_director_email, :course_coordinator, :course_coordinator_email, :grading_method, :qualified_assessor, :qualified_assessor_email,
-        :competency_note, :competencies)
+        :competency_note, :competencies,
+        course_schedules_attributes: [
+              :id,
+              :course_id,
+              :year,
+              :block,
+              :start_date,
+              :end_date,
+              :no_of_seats,
+              :comment,
+              :_destroy
+            ]
+        )
 
     end
 

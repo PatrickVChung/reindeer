@@ -1,8 +1,10 @@
 // // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
-// import 'popper'
-// import 'boostrap'
-// import "@fortawesome/fontawesome-free"
+import 'popper'
+import 'boostrap'
+import "@fortawesome/fontawesome-free"
 import * as bootstrap from "bootstrap"
 $(document).on("turbolinks:load", function() {
   $('.searchable-select').select2();
 });
+import "@hotwired/turbo-rails"
+import "controllers"

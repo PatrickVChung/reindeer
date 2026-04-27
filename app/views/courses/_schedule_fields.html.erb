@@ -1,0 +1,80 @@
+<div data-controller="schedule">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+  <h5 class="mb-0">Course Schedules</h5>
+
+  <% #= button_to "Add New Schedule", new_course_schedule_path, method: :get, class: "btn btn-sm btn-primary" %>
+
+    <div data-schedule-target="list">
+      <%= f.fields_for :course_schedules do |sf| %>
+        <div class="card shadow-sm mb-2 schedule-item">
+          <div class="card-body">
+
+            <%= sf.hidden_field :id %>
+
+            <div class="row g-2 align-items-end">
+
+              <div class="col-md-2">
+                <%= sf.label :year, class: "form-label" %>
+                <%= sf.number_field :year, class: "form-control" %>
+              </div>
+
+              <div class="col-md-2">
+                <%= sf.label :block, class: "form-label" %>
+                <%= sf.text_field :block, class: "form-control" %>
+              </div>
+
+              <div class="col-md-2">
+                <%= sf.label :start_date, class: "form-label" %>
+                <%= sf.date_field :start_date, class: "form-control" %>
+              </div>
+
+              <div class="col-md-2">
+                <%= sf.label :end_date, class: "form-label" %>
+                <%= sf.date_field :end_date, class: "form-control" %>
+              </div>
+
+              <div class="col-md-2">
+                <%= sf.label :no_of_seats, class: "form-label" %>
+                <%= sf.number_field :no_of_seats, class: "form-control" %>
+              </div>
+
+              <div class="col-md-8">
+                <%= sf.label :comment, class: "form-label" %>
+                <%= sf.text_field :comment, class: "form-control" %>
+              </div>
+
+              <div class="col-md-1 text-end">
+                <div class="form-check form-switch mt-4">
+                  <%= sf.check_box :_destroy, class: "form-check-input" %>
+                  <%= sf.label :_destroy, "Remove", class: "form-check-label text-danger" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+
+  <!-- TEMPLATE -->
+  <template data-schedule-target="template">
+    <%= f.fields_for :course_schedules, CourseSchedule.new, child_index: "NEW_RECORD" do |sf| %>
+      <div class="card shadow-sm mb-2 schedule-item">
+        <div class="card-body"></div>
+
+          <div class="row g-2 align-items-end">
+            <div class="col-md-2"><%= sf.number_field :year, class: "form-control", placeholder: "Year" %></div>
+            <div class="col-md-2"><%= sf.text_field :block, class: "form-control", placeholder: "Block" %></div>
+            <div class="col-md-2"><%= sf.date_field :start_date, class: "form-control" %></div>
+            <div class="col-md-2"><%= sf.date_field :end_date, class: "form-control" %></div>
+            <div class="col-md-2"><%= sf.number_field :no_of_seats, class: "form-control", placeholder: "Seats" %></div>
+            <div class="col-md-3"><%= sf.text_field :comment, class: "form-control", placeholder: "Comment" %></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </template>
+
+</div>

@@ -29,20 +29,26 @@ module ApplicationHelper
   end
 
   # very useful methods, improves caching efficiency and allows division of controller specific CSS/JS
-  def controller_stylesheet_link_tag
-    stylesheet = "#{params[:controller]}.css" #e.g. home_controller =>assets/stylesheets/home.css
-    #if stylesheet asset exists include it
-    unless Rails.application.assets.find_asset(stylesheet).nil?
-      stylesheet_link_tag stylesheet
-    end
-  end
+  # def controller_stylesheet_link_tag
+  #   stylesheet = "#{params[:controller]}.css" #e.g. home_controller =>assets/stylesheets/home.css
+  #   #if stylesheet asset exists include it
+  #   unless Rails.appl  # def controller_stylesheet_link_tag
+  #   stylesheet = "#{params[:controller]}.css" #e.g. home_controller =>assets/stylesheets/home.css
+  #   #if stylesheet asset exists include it
+  #   unless Rails.application.assets.find_asset(stylesheet).nil?
+  #     stylesheet_link_tag stylesheet
+  #   end
+  # endication.assets.find_asset(stylesheet).nil?
+  #     stylesheet_link_tag stylesheet
+  #   end
+  # end
 
-  def controller_javascript_include_tag
-    javascript = "#{params[:controller]}.js" #e.g. home_controller =>assets/javascripts/home.js
-    unless Rails.application.assets.find_asset(javascript).nil?
-      javascript_include_tag javascript
-    end
-  end
+  # def controller_javascript_include_tag
+  #   javascript = "#{params[:controller]}.js" #e.g. home_controller =>assets/javascripts/home.js
+  #   unless Rails.application.assets.find_asset(javascript).nil?
+  #     javascript_include_tag javascript
+  #   end
+  # end
 
   ##
   # Full name of controller with dashes separating modules
@@ -55,20 +61,20 @@ module ApplicationHelper
   end
 
   # very useful methods, improves caching efficiency and allows division of controller specific CSS/JS
-  def custom_stylesheet_link_tag
-    stylesheet = "custom/style.css" #e.g. home_controller =>assets/stylesheets/home.css
-    #if stylesheet asset exists include it
-    unless Rails.application.assets.find_asset(stylesheet).nil?
-      stylesheet_link_tag stylesheet
-    end
-  end
-
-  def custom_javascript_include_tag
-    javascript = "custom/style.js" #e.g. home_controller =>assets/javascripts/home.js
-    unless Rails.application.assets.find_asset(javascript).nil?
-      javascript_include_tag javascript
-    end
-  end
+  # def custom_stylesheet_link_tag
+  #   stylesheet = "custom/style.css" #e.g. home_controller =>assets/stylesheets/home.css
+  #   #if stylesheet asset exists include it
+  #   unless Rails.application.assets.find_asset(stylesheet).nil?
+  #     stylesheet_link_tag stylesheet
+  #   end
+  # end
+  #
+  # def custom_javascript_include_tag
+  #   javascript = "custom/style.js" #e.g. home_controller =>assets/javascripts/home.js
+  #   unless Rails.application.assets.find_asset(javascript).nil?
+  #     javascript_include_tag javascript
+  #   end
+  # end
 
   def current_user_theme
     if current_user.nil?

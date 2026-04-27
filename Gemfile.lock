@@ -279,7 +279,6 @@ GEM
       sprockets (>= 2)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
-    libv8-node (24.12.0.1)
     libv8-node (24.12.0.1-x86_64-linux)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -351,7 +350,6 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
-    pg (1.6.3)
     pg (1.6.3-x86_64-linux)
     php-serialize (1.4.1)
     popper_js (2.11.8)
@@ -731,7 +729,6 @@ CHECKSUMS
   less (2.6.0) sha256=266038742de84e69fc62f78018ac8e776932054572bf4863477a209d27dc2e4e
   less-rails (4.0.0) sha256=567a3a8e4061510fcbb1097afd29e863231def23002d82722e6ba1357d776a55
   letter_opener (1.10.0) sha256=2ff33f2e3b5c3c26d1959be54b395c086ca6d44826e8bf41a14ff96fdf1bdbb2
-  libv8-node (24.12.0.1) sha256=d93d23b861bfe5de3ba829e34a142402fb83b4c3592dd58d9ac4e027588d739a
   libv8-node (24.12.0.1-x86_64-linux) sha256=e1236be4765edc109bd6ecef2989cf781bdcbac6f6e2cb3236ec9568540a9cfa
   listen (3.9.0) sha256=db9e4424e0e5834480385197c139cb6b0ae0ef28cc13310cfd1ca78377d59c67
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
@@ -765,7 +762,6 @@ CHECKSUMS
   paper_trail (17.0.0) sha256=1c2842061d3874ca7015908e821e2aa14f9b982af2acb2a7974713bf79021c85
   pdf-core (0.10.0) sha256=0a5d101e2063c01e3f941e1ee47cbb97f1adfc1395b58372f4f65f1300f3ce91
   pdf-reader (2.15.1) sha256=18c6a986a84a3117fa49f4279fc2de51f5d2399b71833df5d2bccd595c7068ce
-  pg (1.6.3) sha256=1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
   pg (1.6.3-x86_64-linux) sha256=5d9e188c8f7a0295d162b7b88a768d8452a899977d44f3274d1946d67920ae8d
   php-serialize (1.4.1) sha256=b6e6438a284e7eaaba29035afbb6b6c551bd40fef9645d77c391cf6264f3d71f
   popper_js (2.11.8) sha256=f4b0be717fc0d50bdb3dbbc55788525a9e0e8f640b76c9971fc34ee609eadbd2

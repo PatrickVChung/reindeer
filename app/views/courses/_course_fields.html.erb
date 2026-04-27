@@ -1,0 +1,144 @@
+<div class="card shadow-sm mx-auto" style="max-width: 1100px;">
+  <div class="card-header bg-info text-white">
+    <h5 class="mb-0"><%= @course_header %></h5>
+  </div>
+
+  <div class="card-body">
+
+    <!-- COURSE BASICS -->
+    <h6 class="text-muted mb-3">Course Information</h6>
+    <div class="row g-3">
+      <div class="col-md-4 form-floating">
+        <%= f.text_field :course_number, class: "form-control", placeholder: "Course Number", required: true %>
+        <%= f.label :course_number, "Course Number" %>
+      </div>
+
+      <div class="col-md-8 form-floating">
+        <%= f.text_field :course_name, class: "form-control", placeholder: "Course Name", required: true %>
+        <%= f.label :course_name %>
+      </div>
+
+      <div class="col-md-4 form-floating">
+        <%= f.text_field :content_type, class: "form-control", placeholder: "Content Type", required: true %>
+        <%= f.label :content_type %>
+      </div>
+
+      <div class="col-md-4 form-floating">
+        <%= f.text_field :medhub_course_id, class: "form-control", placeholder: "MedHub Course ID" %>
+        <%= f.label :medhub_course_id %>
+      </div>
+
+      <div class="col-md-4 form-floating">
+        <%= f.text_field :department, class: "form-control", placeholder: "Department" %>
+        <%= f.label :department %>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- FLAGS -->
+    <h6 class="text-muted mb-3">Attributes</h6>
+    <div class="row g-3">
+      <% [:rural, :continuity, :available_through_the_lottery].each do |field| %>
+        <div class="col-md-4 form-check form-switch">
+          <%= f.check_box field, class: "form-check-input" %>
+          <%= f.label field, class: "form-check-label" %>
+        </div>
+      <% end %>
+    </div>
+
+    <hr>
+
+    <!-- DESCRIPTION -->
+    <h6 class="text-muted mb-3">Descriptions</h6>
+    <div class="form-floating mb-3">
+      <%= f.text_area :course_purpose_statement, class: "form-control", style: "height:150px", placeholder: "" %>
+      <%= f.label :course_purpose_statement %>
+    </div>
+
+    <div class="form-floating mb-3">
+      <%= f.text_area :special_notes, class: "form-control", style: "height:120px", placeholder: "" %>
+      <%= f.label :special_notes %>
+    </div>
+
+    <hr>
+
+    <!-- PREREQUISITES -->
+    <h6 class="text-muted mb-3">Prerequisites</h6>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <%= f.label :required_prerequisites, class: "form-label" %>
+        <%= f.text_field :required_prerequisites, class: "form-control" %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.label :waive_notes, class: "form-label" %>
+        <%= f.text_field :waive_notes, class: "form-control" %>
+      </div>
+
+      <div class="col-md-6 form-check form-switch">
+        <%= f.check_box :waive_prereq_requirements, class: "form-check-input" %>
+        <%= f.label :waive_prereq_requirements, class: "form-check-label" %>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- LOGISTICS -->
+    <h6 class="text-muted mb-3">Logistics</h6>
+    <div class="row g-3">
+      <% [:grading_method, :duration, :site, :weekly_workload, :credits].each do |field| %>
+        <div class="col-md-4 form-floating">
+          <%= f.text_field field, class: "form-control", placeholder: field.to_s.humanize %>
+          <%= f.label field %>
+        </div>
+      <% end %>
+    </div>
+
+    <hr>
+
+    <!-- CONTACTS -->
+    <h6 class="text-muted mb-3">Course Contacts</h6>
+    <div class="row g-3">
+      <% [
+        [:course_director, :course_director_email],
+        [:course_coordinator, :course_coordinator_email],
+        [:qualified_assessor, :qualified_assessor_email]
+      ].each do |name, email| %>
+
+        <div class="col-md-6 form-floating">
+          <%= f.text_field name, class: "form-control", placeholder: name.to_s.humanize %>
+          <%= f.label name %>
+        </div>
+
+        <div class="col-md-6 form-floating">
+          <%= f.email_field email, class: "form-control", placeholder: email.to_s.humanize %>
+          <%= f.label email %>
+        </div>
+
+      <% end %>
+    </div>
+
+    <hr>
+
+    <!-- COMPETENCIES -->
+    <h6 class="text-muted mb-3">Competencies</h6>
+    <div class="d-flex flex-wrap gap-3">
+      <% hf_new_comp_codes.each do |code| %>
+        <% code = code.upcase %>
+        <div class="form-check">
+          <input class="form-check-input"
+                 type="checkbox"
+                 name="compChecked[]"
+                 id="check_<%= code %>"
+                 value="<%= code %>"
+                 <%= "checked" if @course.competencies.include?(code) %>>
+          <label class="form-check-label fw-semibold" for="check_<%= code %>">
+            <%= code %>
+          </label>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>
