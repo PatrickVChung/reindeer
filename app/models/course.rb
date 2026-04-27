@@ -1,6 +1,11 @@
 class Course < ApplicationRecord
   has_many :course_schedules, dependent: :destroy
 
+  accepts_nested_attributes_for :course_schedules,
+                                allow_destroy: true,
+                                reject_if: :all_blank
+
+
   # scope :with_categories, ->(cats[]) { where(category: cats[]) if cats[].present }
   # scope :with_departments, ->(depts) { where(department: depts) if depts.present}
   # scope :with_durations, ->(weeks) { where(duration: weeks) if weeks.present }

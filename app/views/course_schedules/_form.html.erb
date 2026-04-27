@@ -3,7 +3,7 @@
   <%= f.error_notification %>
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
   <div class="card mx-auto" style="width: 75%;">
-    <div class="card-header"><h5><%= @course_schedule_header %></h5></div>
+    <div class="card-header"><h5><%= @course_schedule_header %>: [ <%= params[:course_number] %> ] <%= params[:course_name] %></h5></div>
     <div class="card-body">
       <div class="form-inputs">
 

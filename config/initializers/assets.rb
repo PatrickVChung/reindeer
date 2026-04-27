@@ -1,13 +1,13 @@
 
 #Rails.application.config.assets.paths << Rails.root.join("node_modules")
-Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap/dist/js")
-Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap-icons/font")
-Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap/dist/js")
-#
-# Rails.application.config.assets.paths += [
-Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap/dist/js")
-Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap-icons/font")
-Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap/dist/js")
+# Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap/dist/js")
+# Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap-icons/font")
+# Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap/dist/js")
+# #
+# # Rails.application.config.assets.paths += [
+# Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap/dist/js")
+# Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap-icons/font")
+# Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap/dist/js")
 #   Rails.root.join('vendor', 'assets').to_s
 # ]
 #

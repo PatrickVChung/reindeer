@@ -138,3 +138,6 @@ gem "mini_racer"
 gem "whenever", require: false
 gem "pdf-reader"
 gem "jbuilder"
+
+#gem "stimulus-rails", "~> 1.3"
+#gem "turbo-rails"

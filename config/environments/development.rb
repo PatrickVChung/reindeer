@@ -36,7 +36,7 @@ Rails.application.configure do
   # number of complex assets.
   #config.assets.compress = true
   #config.assets.compile = true
-  #config.assets.digest = true
+  # config.assets.digest = true 
   config.assets.debug = true
   #config.assets.check_precompiled_asset = false
 
