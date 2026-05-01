@@ -19,11 +19,11 @@
                 <%= render partial: "filter_table",
                            locals: {
                              title: "Course Type",
-                             items: @categories,
-                             selected_param: params[:categories],
-                             field_name: "categories",
-                             count_hash: @category_count,
-                             prefix: "cat"
+                             items: @course_types,
+                             selected_param: params[:course_types],
+                             field_name: "course_types",
+                             count_hash: @course_type_count,
+                             prefix: "courseType"
                            } %>
 
                 <%= render partial: "filter_table",

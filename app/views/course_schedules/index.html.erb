@@ -67,9 +67,7 @@
         </div>
       </div>
 
-      <p><strong>Entrollment instruction: </strong>"The elective is offered on a space-available basis, if you are interested in enrolling email the coordinator (listed above) for
-        availability.  Note that you may request to enroll in this elective once your cohort has completed their elective lottery, and results have been released.  Please refer
-        to your cohorts lottery timeline for additional information."</p>
+      <p><strong>Entrollment instruction: </strong><%= course_detail["enrollment_instructions"] || "Please contact the course coordinator." %></p>
       <hr style="height:4px; background-color:#B2DBED;">
       <h6 style="color: #0092ca;"><strong> <%= course_detail["category"] %> </strong></h6>
     </div>

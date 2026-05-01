@@ -4,11 +4,6 @@
 
     <h5 class="mb-0"><%= course.course_number %></h5>
 
-    <%= link_to "Click Here for Full Detail",
-          course_schedules_path(course_id: course.id, offerings: params[:offerings]),
-          class: "btn btn-outline-secondary btn-sm",
-          target: "_blank" %>
-
     <% if current_user.can_process_course_catalog? %>
       [<%= link_to "Edit", edit_course_path(course), target: "_blank" %> /
       <%= button_to "Destroy this course", @course, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-sm btn-danger" %>]
@@ -42,11 +37,10 @@
     <strong>Lottery:</strong>
     <%= course.available_through_the_lottery ? "Yes" : "No" %><br />
     <div style="display:flex; align-items:center; gap:10px;">
-      <%= link_to "Click Here for Full Detail",
+      <%= link_to "Click Here for Full Course Detail",
             course_schedules_path(course_id: course.id, offerings: params[:offerings]),
-            class: "btn btn-secondary btn-sm",
+            class: "btn btn-outline-secondary btn-sm",
             target: "_blank" %>
-
     </div>
     <hr>
 

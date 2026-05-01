@@ -14,7 +14,7 @@ class CoursesController < ApplicationController
       @courses = @courses.available_and_has_comment  # has 0 seat and comments exist, and the scope in model
 
     else
-      selected_categories   = params[:categories] || []
+      selected_course_types  = params[:course_types] || []
       selected_departments  = params[:departments] || []
       selected_durations    = params[:durations] || []
       selected_course_info  = params[:course_info] || []
@@ -25,7 +25,7 @@ class CoursesController < ApplicationController
       selected_years        = params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
 
       @courses = Course.all.order(:course_number)
-      @courses = @courses.where(category: selected_categories) if params[:categories].present?
+      @courses = @courses.where(course_type: selected_course_types) if params[:course_types].present?
       @courses = @courses.where(department: selected_departments) if params[:departments].present?
       @courses = @courses.where(duration: selected_durations) if params[:durations].present?
       @courses = @courses.where(prerequisites: selected_prerequisites) if params[:prerequisites].present?
@@ -73,7 +73,7 @@ class CoursesController < ApplicationController
   # POST /courses or /courses.json
   def create
     @course = Course.new(course_params)
-
+category
     respond_to do |format|
       if @course.save
         format.html { redirect_to course_url(@course), notice: "Course was successfully created." }
@@ -143,8 +143,8 @@ class CoursesController < ApplicationController
 
     def set_resources
 
-      @category_count ||= Course.group(:category).count.sort.to_h
-      @categories = @category_count.keys
+      @course_type_count ||= Course.group(:course_type).count.sort.to_h
+      @course_types = @course_type_count.keys
       @department_count ||= Course.group(:department).count.sort.to_h
       @departments = @department_count.keys  #Course.all.pluck(:department).uniq.compact.sort
       @duration_count ||= Course.group(:duration).count.sort.to_h

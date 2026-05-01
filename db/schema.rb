@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_19_143947) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_30_150920) do
   create_schema "source"
   create_schema "target"
   create_schema "transform"
@@ -214,7 +214,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_143947) do
   end
 
   create_table "courses", force: :cascade do |t|
-    t.string "category"
+    t.string "course_type"
     t.string "course_number"
     t.string "course_name"
     t.string "content_type"
@@ -229,7 +229,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_143947) do
     t.string "required_prerequisites"
     t.boolean "waive_prereq_requirements"
     t.string "waive_notes"
-    t.string "grading_method"
+    t.string "grading_method", default: "Pass/No Pass"
     t.string "duration"
     t.string "site"
     t.integer "weekly_workload"
@@ -244,6 +244,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_143947) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "competency_note"
+    t.string "enrollment_instructions"
+    t.string "admin_notes"
+    t.index ["course_type", "course_number"], name: "index_courses_on_course_type_and_course_number"
   end
 
   create_table "cpxes", force: :cascade do |t|
