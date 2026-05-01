@@ -125,7 +125,7 @@ category
         :continuity, :available_through_the_lottery, :department, :course_purpose_statement, :special_notes, :prerequisites,
         :required_prerequisites, :waive_prereq_requirements, :waive_notes, :duration, :site, :weekly_workload, :credits,
         :course_director, :course_director_email, :course_coordinator, :course_coordinator_email, :grading_method, :qualified_assessor, :qualified_assessor_email,
-        :competency_note, :competencies,
+        :competency_note, :competencies, :enrollment_instructions, :admin_notes,
         course_schedules_attributes: [
               :id,
               :course_id,
