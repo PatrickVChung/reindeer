@@ -97,14 +97,25 @@
     </div>
     <div class="col-md-9">
       <div class="card">
-        <div class="card-header bg-danger text-white">
-          <%= "Found #{@courses.count.to_s} courses." %>
-        </div>
-        <div class="card-body">
-          <% if !@courses.nil? %>
-            <%= render @courses %>
+        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+          <span>
+            <%= "Found #{@courses.count} courses." %>
+          </span>
+
+          <%= link_to "/course_catalog/Clinical_Exp_Block_Calendar_AY2526_AY2728.pdf",
+                      target: "_blank",
+                      class: "btn btn-sm btn-info" do %>
+            <i class="bi bi-calendar3"></i> View Block Calendar (AY2526-AY2728)
           <% end %>
-        </div.
+        </div>
+
+        <div class="card-body">
+          <% if @courses.present? %>
+            <%= render @courses %>
+          <% else %>
+            <p class="text-muted">No courses found.</p>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
