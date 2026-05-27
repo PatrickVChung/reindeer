@@ -11,7 +11,7 @@ class CoursesController < ApplicationController
     if params[:searchWord].present?
       searchWord = params[:searchWord].strip
       @courses = Course.search(searchWord).order(:course_number)  # the scope is in model
-      @courses = @courses.available_and_has_comment  # has 0 seat and comments exist, and the scope in model
+      #@courses = @courses.available_and_has_comment  # has 0 seat and comments exist, and the scope in model
 
     else
       selected_course_types  = params[:course_types] || []

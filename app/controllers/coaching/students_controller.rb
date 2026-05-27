@@ -205,7 +205,7 @@ module Coaching
         elsif current_user.dean_or_higher?
           # exclude Med18, Med19 & Med20
           #@cohorts = Cohort.includes(:users).where("permission_group_id > ?", 6).includes(:owner).all
-          @permission_groups = PermissionGroup.where(" id >= ? and id <> ?", 19, 15).load_async
+          @permission_groups = PermissionGroup.where(" (id >= ? and id <> ?) or id = 7 ", 19, 15).load_async
            #@coaches = @cohorts.map(&:owner).uniq!
            #@students = @cohorts.map(&:users).flatten
            advisor = Advisor.find_by(email: current_user.email)
