@@ -5,7 +5,7 @@
 window.addEventListener 'load', ->
   flatpickr '#start_date',
      allowInput: true,
-     dateFormat: "Y-m-d",
+     dateFormat: "m-d-Y",
      plugins: [
        new confirmDatePlugin()
      ]
@@ -19,7 +19,7 @@ window.addEventListener 'load', ->
 $(document).ready ->
   flatpickr '#end_date',
      allowInput: true,
-     dateFormat: "Y-m-d",
+     dateFormat: "m-d-Y",
      plugins: [
        new confirmDatePlugin()
      ]

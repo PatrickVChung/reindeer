@@ -51,9 +51,6 @@ class CourseSchedulesController < ApplicationController
   # POST /course_schedules or /course_schedules.json
   def create
     @course_schedule = CourseSchedule.new(course_schedule_params)
-    @course_schedule.start_date = params[:start_date]
-    @course_schedule.end_date   = params[:end_date]
-
 
     respond_to do |format|
       if @course_schedule.save

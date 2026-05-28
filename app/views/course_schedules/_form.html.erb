@@ -28,23 +28,31 @@
           </div>
         </div>
 
+        <div class="row mb-3"> <%# Changed mb-0 to mb-3 for cleaner Bootstrap spacing %>
+          <label class="control-label col-md-2 right-label" for="course_schedule_start_date">
+            Start Date <i class="fa fa-calendar"></i>
+          </label>
+          <div class="col-sm-6">
+            <%= f.date_field :start_date,
+                             required: true,
+                             class: "form-control" %>
+          </div>
+        </div>
 
-        <div class="row mb-0">
-          <label class="control-label col-md-2 right-label">Start Date <i class="fa fa-calendar"></i> </label>
+        <div class="row mb-3">
+          <label class="control-label col-md-2 right-label" for="course_schedule_end_date">
+            End Date <i class="fa fa-calendar"></i>
+          </label>
           <div class="col-sm-6">
-            <%= f.text_field :start_date, required: true, class: "flatpickr flatpickr-input active form-control", required: true, id: "start_date", name: "start_date", placeholder: "Select end Date/Time.."%>
-        </div>
-        </div>
-        <div class="row mb-0">
-          <label class="control-label col-md-2 right-label">End Date <i class="fa fa-calendar"></i> </label>
-          <div class="col-sm-6">
-             <%= f.text_field :end_date, required: true, class: "flatpickr flatpickr-input active form-control", required: true, id: "end_date", name: "end_date", placeholder: "Select end Date/Time.."%>
+            <%= f.date_field :end_date,
+                             required: true,
+                             class: "form-control" %>
           </div>
         </div>
         <div class="row mb-0">
           <%= f.label "No of Seats", class: "col-sm-2 control-label right-label" %>
           <div class="col-sm-6">
-             <%= f.input_field :no_of_seats, required: true, class: "form-control" %>
+             <%= f.input_field :no_of_seats, class: "form-control" %>
           </div>
         </div>
         <div class="row mb-0">

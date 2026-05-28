@@ -57,13 +57,19 @@
       <div class="col-sm-2">
         <div class="grid-container">
           <strong>Competencies Assessed: </strong>
-          <ul>
-            <% course_detail["competencies"].sort.each do |comp| %>
-              <li><%= comp %></li>
+
+            <% if course_detail["competencies"].blank? %>
+              <div class="text-muted fst-italic py-1">
+                <i class="fa fa-info-circle me-1"></i> No competencies assigned to this course.
+              </div>
+            <% else %>
+              <ul class="mb-0">
+                <% course_detail["competencies"].sort.each do |comp| %>
+                  <li><%= comp %></li>
+                <% end %>
+              </ul>
             <% end %>
-          </ul>
-          <hr>
-          <strong>Competency Note: </strong><%= course_detail["competency_note"] ? course_detail["competency_note"] : "N/A" %>
+
         </div>
       </div>
 
