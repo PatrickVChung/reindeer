@@ -6,10 +6,22 @@
   </div>
 </div>
 
-<div class="card mx-auto" style="width: 75%;">
-  <div class="card-body">
-    <%= link_to "Edit this course schedule", edit_course_schedule_path(@course_schedule) %> |
-    <%= link_to "Back to course schedules", course_schedules_path(course_id: params[:course_id]) %>
-    <%= button_to "Destroy this course schedule", @course_schedule, method: :delete, class: "btn btn-primary"%>
+<div class="card mx-auto mt-3" style="width: 75%;">
+  <div class="card-body d-flex gap-2 justify-content-start align-items-center">
+
+    <%# 1. Edit Button (Styled as an outline button) %>
+    <%= link_to "Edit this course schedule", edit_course_schedule_path(@course_schedule), class: "btn btn-outline-secondary" %>
+
+    <%# 2. Replaced Delete with "New Course Schedule" %>
+    <%= link_to "New Course Schedule", new_course_schedule_path(course_id: params[:course_id] || @course_schedule.course_id), class: "btn btn-primary" %>
+
+    <%# 4. Kept your original back button just in case, styled cleanly %>
+    <%= link_to "Back to course schedules", course_schedules_path(course_id: @course_schedule.course_id), class: "btn btn-primary" %>
+
+    <%# 3. Added "Return to Course" (Assuming you pass a course_id or have an association) %>
+    <%= link_to "Return to Course", course_path(@course_schedule.course), class: "btn btn-secondary" %>
+
+
+
   </div>
 </div>

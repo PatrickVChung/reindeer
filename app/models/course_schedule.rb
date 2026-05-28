@@ -1,5 +1,5 @@
 class CourseSchedule < ApplicationRecord
-  validates :course_id, :year, :block, :start_date, :end_date, :no_of_seats, presence: true
+  validates :course_id, :year, :block, :start_date, :end_date, presence: true
   belongs_to :course, optional: false  # want the activerecord to enforce the association integrity
   # scope :available, -> { where("no_of_seats IS NOT NULL AND no_of_seats != 0")
 

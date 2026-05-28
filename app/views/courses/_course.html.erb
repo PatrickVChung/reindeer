@@ -10,7 +10,7 @@
       <%= link_to "New Schedule",
                   new_course_schedule_path(course_id: course.id, course_number: course.course_number, course_name: course.course_name),
                   method: :get,
-                  form: { target: '_blank' },
+                  target: '_blank',
                   class: 'btn btn-sm btn-info' %>
 
     <% end %>

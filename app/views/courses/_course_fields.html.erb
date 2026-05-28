@@ -123,7 +123,7 @@
         </div>
 
         <div class="col-md-6 form-floating">
-          <%= f.email_field email, class: "form-control", placeholder: email.to_s.humanize %>
+          <%= f.text_field email, class: "form-control", placeholder: email.to_s.humanize %>
           <%= f.label email %>
         </div>
 
@@ -133,23 +133,25 @@
     <hr>
 
     <!-- COMPETENCIES -->
-    <h6 class="text-muted mb-3">Competencies</h6>
-    <div class="d-flex flex-wrap gap-3">
-      <% hf_new_comp_codes.each do |code| %>
-        <% code = code.upcase %>
-        <div class="form-check">
-          <input class="form-check-input"
-                 type="checkbox"
-                 name="compChecked[]"
-                 id="check_<%= code %>"
-                 value="<%= code %>"
-                 <%= "checked" if @course.competencies.include?(code) %>>
-          <label class="form-check-label fw-semibold" for="check_<%= code %>">
-            <%= code %>
-          </label>
-        </div>
-      <% end %>
-    </div>
+    <% if hf_new_comp_codes.present? %>
+      <h6 class="text-muted mb-3">Competencies</h6>
+      <div class="d-flex flex-wrap gap-3 mb-4"> <%# Added mb-4 for clean form spacing %>
+        <% hf_new_comp_codes.each do |code| %>
+          <% code = code.upcase %>
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="compChecked[]"
+                   id="check_<%= code %>"
+                   value="<%= code %>"
+                   <%= "checked" if @course.competencies&.include?(code) %>> <%# Added safe navigation %>
+            <label class="form-check-label fw-semibold" for="check_<%= code %>">
+              <%= code %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
 
   </div>
 </div>
