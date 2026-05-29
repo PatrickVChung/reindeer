@@ -37,17 +37,39 @@ class CoursesController < ApplicationController
           .where.not(course_schedules: { no_of_seats: [0, nil], comment: [nil] })
       end
 
-      if selected_course_info.include? "Lottery"
-        @courses = @courses.where(available_through_the_lottery: true)
-      elsif selected_course_info.include? "Non-Lottery"
-        @courses = @courses.where(available_through_the_lottery: false)
-      elsif selected_course_info.include? "Rural"
-        @courses = @courses.where(rural: true)
-      elsif selected_course_info.include? "Continuity"
-        @courses = @courses.where(continuity: true)
-      else
-        @courses = @courses.where(content_type: selected_course_info) if params[:course_info].present?
+
+      # if selected_course_info.include? "Lottery"
+      #   @courses = @courses.where(available_through_the_lottery: true)
+      # elsif selected_course_info.include? "Non-Lottery"
+      #   @courses = @courses.where(available_through_the_lottery: false)
+      # elsif selected_course_info.include? "Rural"
+      #   @courses = @courses.where(rural: true)
+      # elsif selected_course_info.include? "Continuity"
+      #   @courses = @courses.where(continuity: true)
+      # else
+      #   @courses = @courses.where(content_type: selected_course_info) if params[:course_info].present?
+      # end
+
+      # 1. Initialize an array to hold all matching queries
+      queries = []
+
+      # 2. Collect conditions based on what is included
+      queries << Course.where(available_through_the_lottery: true)  if selected_course_info.include?("Lottery")
+      queries << Course.where(available_through_the_lottery: false) if selected_course_info.include?("Non-Lottery")
+      queries << Course.where(rural: true)                          if selected_course_info.include?("Rural")
+      queries << Course.where(continuity: true)                     if selected_course_info.include?("Continuity")
+
+      # 3. Handle the fallback else logic
+      if queries.empty? && params[:course_info].present?
+        queries << Course.where(content_type: selected_course_info)
       end
+
+      # 4. Reduce the array into a single .or query and merge it into @courses
+      if queries.any?
+        combined_query = queries.reduce(:or)
+        @courses = @courses.merge(combined_query)
+      end
+
       @courses = @courses.where("competencies && ARRAY[?]", selected_competencies) if params[:competencies].present?
     end
 
