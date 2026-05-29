@@ -17,6 +17,7 @@ class CoursesController < ApplicationController
       selected_course_types  = params[:course_types] || []
       selected_departments  = params[:departments] || []
       selected_durations    = params[:durations] || []
+      selected_content_types= params[:content_types] || []
       selected_course_info  = params[:course_info] || []
       selected_competencies = params[:competencies] || []
       selected_offerings    = params[:offerings] || []
@@ -27,6 +28,7 @@ class CoursesController < ApplicationController
       @courses = Course.all.order(:course_number)
       @courses = @courses.where(course_type: selected_course_types) if params[:course_types].present?
       @courses = @courses.where(department: selected_departments) if params[:departments].present?
+      @courses = @courses.where(content_type: selected_content_types) if params[:content_types].present?
       @courses = @courses.where(duration: selected_durations) if params[:durations].present?
       @courses = @courses.where(prerequisites: selected_prerequisites) if params[:prerequisites].present?
 
@@ -37,19 +39,6 @@ class CoursesController < ApplicationController
           .where.not(course_schedules: { no_of_seats: [0, nil], comment: [nil] })
       end
 
-
-      # if selected_course_info.include? "Lottery"
-      #   @courses = @courses.where(available_through_the_lottery: true)
-      # elsif selected_course_info.include? "Non-Lottery"
-      #   @courses = @courses.where(available_through_the_lottery: false)
-      # elsif selected_course_info.include? "Rural"
-      #   @courses = @courses.where(rural: true)
-      # elsif selected_course_info.include? "Continuity"
-      #   @courses = @courses.where(continuity: true)
-      # else
-      #   @courses = @courses.where(content_type: selected_course_info) if params[:course_info].present?
-      # end
-
       # 1. Initialize an array to hold all matching queries
       queries = []
 
@@ -58,11 +47,11 @@ class CoursesController < ApplicationController
       queries << Course.where(available_through_the_lottery: false) if selected_course_info.include?("Non-Lottery")
       queries << Course.where(rural: true)                          if selected_course_info.include?("Rural")
       queries << Course.where(continuity: true)                     if selected_course_info.include?("Continuity")
-
-      # 3. Handle the fallback else logic
-      if queries.empty? && params[:course_info].present?
-        queries << Course.where(content_type: selected_course_info)
-      end
+      #
+      #     # 3. Handle the fallback else logic
+      # if queries.empty? && params[:course_info].present?
+      #   queries << Course.where(content_type: selected_course_info)
+      # end
 
       # 4. Reduce the array into a single .or query and merge it into @courses
       if queries.any?
@@ -95,7 +84,6 @@ class CoursesController < ApplicationController
   # POST /courses or /courses.json
   def create
     @course = Course.new(course_params)
-category
     respond_to do |format|
       if @course.save
         format.html { redirect_to course_url(@course), notice: "Course was successfully created." }
@@ -176,13 +164,15 @@ category
       @offering_count = @offering_count.transform_keys {|year, term| "#{year}: #{term}"}
       @offerings ||= hf_seasonal_sort(@offering_count.keys)
 
-      @course_info_count ||= Course.where("content_type not like '%Core%' and content_type <> 'Assessment' and content_type <> 'Intersession'").group(:content_type).count.sort.to_h
+      @content_type_count ||= Course.where("content_type not like '%Core%' and content_type <> 'Assessment' and content_type <> 'Intersession'").group(:content_type).count.sort.to_h
+      @content_types = @content_type_count.keys
 
-      @course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity"] + @course_info_count.keys
+      @course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity"]
       #@course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity", "Clinical", "Non-Clinical", "Special Elective", "Sub-I/Acting Intern"]
       lottery_data ||= Course.group(:available_through_the_lottery).count
       rural_data ||= Course.group(:rural).count
       continuity_data = Course.group(:continuity).count
+      @course_info_count = {}
       @course_info_count["Lottery"] = lottery_data[true]
       @course_info_count["Non-Lottery"] = lottery_data[false]
       @course_info_count["Rural"] = rural_data[true]

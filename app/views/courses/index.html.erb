@@ -36,6 +36,17 @@
                              prefix: "dep"
                            } %>
 
+                 <%= render partial: "filter_table",
+                            locals: {
+                              title: "Content Type",
+                              items: @content_types,
+                              selected_param: params[:content_types],
+                              field_name: "content_types",
+                              count_hash: @content_type_count,
+                              prefix: "info"
+                            } %>
+
+
                <%= render partial: "filter_table",
                           locals: {
                             title: "Course Information",
