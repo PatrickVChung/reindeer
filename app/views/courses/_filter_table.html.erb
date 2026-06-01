@@ -23,6 +23,10 @@
                   <%= radio_button_tag :prerequisites, "false", params[:prerequisites] == "false", class: "form-check-input" %>
                   <%= label_tag :prerequisites_no, "No", class: "form-check-label" %>
                 </div>
+                <div class="form-check form-check-inline">
+                  <%= radio_button_tag :prerequisites, "both", params[:prerequisites] == "both", class: "form-check-input" %>
+                  <%= label_tag :prerequisites_both, "Both", class: "form-check-label" %>
+                </div>
               </div>
 
             </td>
