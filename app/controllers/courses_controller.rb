@@ -30,13 +30,17 @@ class CoursesController < ApplicationController
       @courses = @courses.where(department: selected_departments) if params[:departments].present?
       @courses = @courses.where(content_type: selected_content_types) if params[:content_types].present?
       @courses = @courses.where(duration: selected_durations) if params[:durations].present?
-      @courses = @courses.where(prerequisites: selected_prerequisites) if params[:prerequisites].present?
+      if params[:prerequisites].present? && params[:prerequisites] == 'both'
+        @courses = @courses.where(prerequisites: [true, false])
+      else
+        @courses = @courses.where(prerequisites: selected_prerequisites) if params[:prerequisites].present?
+      end
 
       if params[:offerings].present?
         @courses = @courses
           .joins(:course_schedules)
           .where(course_schedules: { year: selected_years, block: selected_offerings })
-          .where.not(course_schedules: { no_of_seats: [0, nil], comment: [nil] })
+          .where.not(course_schedules: { no_of_seats: [0, nil], comment: [nil] }).distinct
       end
 
       # 1. Initialize an array to hold all matching queries
