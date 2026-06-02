@@ -6,7 +6,7 @@
 
     <% if current_user.can_process_course_catalog? %>
       [<%= link_to "Edit", edit_course_path(course), target: "_blank" %> /
-      <%= button_to "Destroy this course", @course, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-sm btn-danger" %>]
+      <%= button_to "Destroy this course", course, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-sm btn-danger" %>]
       <%= link_to "New Schedule",
                   new_course_schedule_path(course_id: course.id, course_number: course.course_number, course_name: course.course_name),
                   method: :get,

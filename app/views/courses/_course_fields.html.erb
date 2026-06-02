@@ -77,6 +77,14 @@
     <!-- PREREQUISITES -->
     <h6 class="text-muted mb-3">Prerequisites</h6>
     <div class="row g-3">
+      <%# --- Added Prerequisite Yes/No Field --- %>
+        <div class="col-md-6">
+          <%= f.label :prerequisites, "Prerequisite?", class: "form-label" %>
+          <%= f.select :prerequisites,
+                       [['Yes', true], ['No', false]],
+                       { prompt: 'Select an option' },
+                       { class: "form-select" } %>
+        </div>
       <div class="col-md-6">
         <%= f.label :required_prerequisites, class: "form-label" %>
         <%= f.text_field :required_prerequisites, class: "form-control" %>
