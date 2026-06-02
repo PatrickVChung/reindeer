@@ -1,4 +1,5 @@
 class Course < ApplicationRecord
+  validates :course_number, :course_name, :course_type, :content_type, :department, presence: true
   has_many :course_schedules, dependent: :destroy
 
   accepts_nested_attributes_for :course_schedules,

@@ -22,8 +22,25 @@
           <strong>Available through the lottery: </strong>&ensp;<%= course_detail["available_through_the_lottery"] ? "Yes" : "No"%>
         </div>
         <div class="col-md-6">
-          <strong>Course Director (name / email):</strong>&ensp;<%= course_detail["course_director"] %> / <%= course_detail["course_director_email"] %><br>
-          <strong>Course Coordinator (name / email):</strong>&ensp;<%= course_detail["course_coordinator"] %> / <%= course_detail["course_coordinator_email"] %> <br>
+          <strong>Course Director (name / email):</strong>&ensp;
+          <%= course_detail["course_director"] %>
+          <% if course_detail["course_director_email"].present? %>
+            <% course_name = course_detail["course_number"].to_s + " " + course_detail["course_name"] %>
+            <% director_email = course_detail["course_director_email"] %>
+            /  <%= link_to director_email, contact_form_courses_path(to_email: director_email,
+                subject: course_name), target: '_blank' %>
+          <% end %>
+          <br>
+
+          <strong>Course Coordinator (name / email):</strong>&ensp;
+          <%= course_detail["course_coordinator"] %>
+          <% if course_detail["course_coordinator_email"].present? %>
+            <% course_name = course_detail["course_number"].to_s + " " + course_detail["course_name"] %>  
+            <% coordinator_email = course_detail["course_coordinator_email"] %>
+            / <%= link_to coordinator_email, contact_form_courses_path(to_email: coordinator_email,
+                subject: course_name), target: '_blank' %>
+          <% end %>
+          <br>
         </div>
       </div>
       <hr style="height:3px; background-color:#3e4a61;">

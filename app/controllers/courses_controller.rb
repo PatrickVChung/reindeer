@@ -127,6 +127,13 @@ class CoursesController < ApplicationController
     end
   end
 
+  def contact_form
+    if params[:message].present?
+      ActionMailer::Base.mail(from: params[:from], to: params[:to], subject: params[:subject], body: params[:message].html_safe, content_type: 'text/html').deliver_later
+      flash[:send_alert] = "Your email was sent!"
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
@@ -135,7 +142,7 @@ class CoursesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def course_params
-      params.require(:course).permit(:course_number, :course_name, :content_type, :medhub_course_id, :rural,
+      params.require(:course).permit(:course_number, :course_name, :course_type, :content_type, :medhub_course_id, :rural,
         :continuity, :available_through_the_lottery, :department, :course_purpose_statement, :special_notes, :prerequisites,
         :required_prerequisites, :waive_prereq_requirements, :waive_notes, :duration, :site, :weekly_workload, :credits,
         :course_director, :course_director_email, :course_coordinator, :course_coordinator_email, :grading_method, :qualified_assessor, :qualified_assessor_email,
