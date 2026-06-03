@@ -4,10 +4,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ########################################
 # Core
 ########################################
-gem "rails", "~> 7.1"
+gem "rails", ">= 7.2.3.1"
 gem "bundler"
 gem "pg"
-gem "bcrypt"
+gem "bcrypt", ">= 3.1.22"
 gem "rdoc"
 gem "psych", "< 4"
 
@@ -25,7 +25,7 @@ gem "rails_admin", "~> 3.3"
 gem "rails_admin_import", "~> 3.0"
 gem "settingslogic"
 gem "cancancan"
-gem "devise", "~> 4.7"
+gem "devise", ">= 5.0.4"
 gem "devise_ldap_authenticatable"
 gem "lograge"
 
@@ -43,7 +43,7 @@ gem "highcharts-rails"
 gem "lazy_high_charts"
 gem "jquery-datatables"
 gem "datejs-rails", "~> 2.0.1"
-gem "twitter-bootstrap-rails"   # Bootstrap 3/4 via Sprockets
+gem "twitter-bootstrap-rails", ">= 5.3.0"   # Bootstrap 3/4 via Sprockets
 gem "bootstrap", "~> 5.3.2"     # If you want Bootstrap 5 via CSS bundling or CDN
 gem "flatpickr"
 gem "popper_js", ">= 2.11.8", "< 3"
@@ -89,7 +89,7 @@ gem "timeout"
 gem "nokogiri"
 gem "net-imap", ">= 0.4.20"
 gem "rails-html-sanitizer", ">= 1.6.1"
-gem "icalendar"
+gem "icalendar", ">= 2.12.2"
 gem "rufus-scheduler"
 gem "statistics2"
 gem "descriptive-statistics"
