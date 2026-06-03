@@ -10,28 +10,6 @@
     <div class="accordion-body">
       <% selected_items = Array(selected_param) %>
       <table>
-        <% if title == "Course Prerequisite" %>
-          <tr>
-            <td>
-
-                <div class="form-check form-check-inline">
-                  <%= radio_button_tag :prerequisites, "true", params[:prerequisites] == "true", class: "form-check-input" %>
-                  <%= label_tag :prerequisites_yes, "Yes", class: "form-check-label" %>
-                </div>
-
-                <div class="form-check form-check-inline">
-                  <%= radio_button_tag :prerequisites, "false", params[:prerequisites] == "false", class: "form-check-input" %>
-                  <%= label_tag :prerequisites_no, "No", class: "form-check-label" %>
-                </div>
-                <div class="form-check form-check-inline">
-                  <%= radio_button_tag :prerequisites, "both", params[:prerequisites] == "both", class: "form-check-input" %>
-                  <%= label_tag :prerequisites_both, "Both", class: "form-check-label" %>
-                </div>
-              </div>
-
-            </td>
-          </tr>
-        <% else %>
           <% items.each do |item| %>
             <tr>
               <td style="width: 300px;">
@@ -53,7 +31,6 @@
               </td>
             </tr>
           <% end %>
-        <% end %>
       </table>
     </div>
   </div>

@@ -60,10 +60,10 @@
               <%= render partial: "filter_table",
                          locals: {
                            title: "Course Prerequisite",
-                           items: [['Yes', true], ['No', false]],
+                           items: @prerequisites,
                            selected_param: params[:prerequisites],
                            field_name: "prerequisites",
-                           count_hash: {},
+                           count_hash: @prerequisites_count,
                            prefix: "prereq"
                          } %>
 

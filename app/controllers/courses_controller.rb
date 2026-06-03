@@ -30,11 +30,9 @@ class CoursesController < ApplicationController
       @courses = @courses.where(department: selected_departments) if params[:departments].present?
       @courses = @courses.where(content_type: selected_content_types) if params[:content_types].present?
       @courses = @courses.where(duration: selected_durations) if params[:durations].present?
-      if params[:prerequisites].present? && params[:prerequisites] == 'both'
-        @courses = @courses.where(prerequisites: [true, false])
-      else
-        @courses = @courses.where(prerequisites: selected_prerequisites) if params[:prerequisites].present?
-      end
+      selected_prerequisites = params[:prerequisites].map{|s| s == "Yes"} if params[:prerequisites].present?
+
+      @courses = @courses.where(prerequisites: selected_prerequisites) if params[:prerequisites].present?
 
       if params[:offerings].present?
         @courses = @courses
@@ -175,8 +173,12 @@ class CoursesController < ApplicationController
       @offering_count = @offering_count.transform_keys {|year, term| "#{year}: #{term}"}
       @offerings ||= hf_seasonal_sort(@offering_count.keys)
 
+      @prerequisites_count = Course.group(:prerequisites).count
+      @prerequisites_count = @prerequisites_count.transform_keys { |k| k ? "Yes" : "No" }
+      @prerequisites = @prerequisites_count.keys
+
       @content_type_count ||= Course.where("content_type not like '%Core%' and content_type <> 'Assessment' and content_type <> 'Intersession'").group(:content_type).count.sort.to_h
-      @content_types = @content_type_count.keys
+      @content_types =  @content_type_count.keys
 
       @course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity"]
       #@course_info = ["Lottery", "Non-Lottery", "Rural", "Continuity", "Clinical", "Non-Clinical", "Special Elective", "Sub-I/Acting Intern"]
