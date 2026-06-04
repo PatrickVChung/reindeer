@@ -266,7 +266,7 @@ class User < ActiveRecord::Base
       field :sid
       field :coaching_type, :enum do
           enum do
-            [['student'],['dean']]
+            [['student'],['coordinator'],['dean']]
           end
       end
       field :subscribed
