@@ -54,10 +54,7 @@
               <% end %>
             </li>
             <li class="nav-item">
-              <% if ['admin', 'dean', 'coordinator'].include? current_user.coaching_type %>
                 <%= link_to '<i style="color:#31a34f;" class="fa fa-book"></i> Course Catalog'.html_safe, courses_path(), target: '_blank', class: "nav-link" %>
-              <% end %>
-
             </li>
             <li class="nav-item dropdown">
               <% if current_user.can_process_fom? and current_user.coaching_type != 'student'%>
