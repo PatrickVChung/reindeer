@@ -48,15 +48,15 @@ $(document).ready ->
     $('input[type=\'radio\']').attr 'checked', false
     return
 
-  $('#searchWord').on 'input', ->
-    hasText = $(this).val().length > 0
-    $('input[type="checkbox"]').prop 'disabled', hasText
-    $('input[type="checkbox"]').prop('checked', false);
-    return
-
-  $('input[type="checkbox"]').on 'click', ->
-    $('#searchWord').val ''
-    return
+  # $('#searchWord').on 'input', ->
+  #   hasText = $(this).val().length > 0
+  #   $('input[type="checkbox"]').prop 'disabled', hasText
+  #   $('input[type="checkbox"]').prop('checked', false);
+  #   return
+  #
+  # $('input[type="checkbox"]').on 'click', ->
+  #   $('#searchWord').val ''
+  #   return
 
   $('.accordion').on 'change', 'input[type="checkbox"], input[type="radio"]', ->
     $input = $(this)

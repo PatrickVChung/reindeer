@@ -7,13 +7,6 @@ class CoursesController < ApplicationController
 
 
   def index
-
-    if params[:searchWord].present?
-      searchWord = params[:searchWord].strip
-      @courses = Course.search(searchWord).order(:course_number)  # the scope is in model
-      #@courses = @courses.available_and_has_comment  # has 0 seat and comments exist, and the scope in model
-
-    else
       selected_course_types  = params[:course_types] || []
       selected_departments  = params[:departments] || []
       selected_durations    = params[:durations] || []
@@ -26,6 +19,12 @@ class CoursesController < ApplicationController
       selected_years        = params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
 
       @courses = Course.all.order(:course_number)
+      
+      if params[:searchWord].present?
+        searchWord = params[:searchWord].strip
+        @courses = Course.search(searchWord).order(:course_number)  # the scope is in model
+      end
+
       @courses = @courses.where(course_type: selected_course_types) if params[:course_types].present?
       @courses = @courses.where(department: selected_departments) if params[:departments].present?
       @courses = @courses.where(content_type: selected_content_types) if params[:content_types].present?
@@ -62,7 +61,7 @@ class CoursesController < ApplicationController
       end
 
       @courses = @courses.where("competencies && ARRAY[?]", selected_competencies) if params[:competencies].present?
-    end
+
 
   end
 
