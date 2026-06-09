@@ -19,7 +19,7 @@ class CoursesController < ApplicationController
       selected_years        = params[:offerings].map{|o| o.split(": ").first} if params[:offerings].present?
 
       @courses = Course.all.order(:course_number)
-      
+
       if params[:searchWord].present?
         searchWord = params[:searchWord].strip
         @courses = Course.search(searchWord).order(:course_number)  # the scope is in model
@@ -126,8 +126,21 @@ class CoursesController < ApplicationController
 
   def contact_form
     if params[:message].present?
-      ActionMailer::Base.mail(from: params[:from], to: params[:to], subject: params[:subject], body: params[:message].html_safe, content_type: 'text/html').deliver_later
-      flash[:send_alert] = "Your email was sent!"
+      ContactMailer.contact_form(
+        params[:from],
+        params[:to],
+        params[:subject],
+        params[:message].html_safe
+      ).deliver_later
+
+      flash[:notice] = "Your email was sent!"
+      respond_to do |format|
+        format.html { redirect_to courses_path, notice: "Email sent!" }
+        format.js
+      end
+    else
+      flash.now[:alert] = "Message cannot be blank"
+      render :contact_form
     end
   end
 
