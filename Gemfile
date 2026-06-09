@@ -22,7 +22,7 @@ gem "coffee-rails"        # Works only with Sprockets
 # Admin / Auth / Config
 ########################################
 gem "rails_admin", "~> 3.3"
-gem "rails_admin_import" 
+gem "rails_admin_import", "~> 3.0"
 gem "settingslogic"
 gem "cancancan"
 gem "devise", ">= 5.0.4"
