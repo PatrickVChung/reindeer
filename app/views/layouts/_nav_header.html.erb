@@ -19,7 +19,7 @@
 
         <div id="SearchPlaceHolder">
           <div id="SearchInputForm">
-            <% if !current_user.nil? && current_user.coaching_type != 'student' && current_user.spec_program !='Wellness' %>
+            <% if current_user.present? && current_user.coaching_type.in?(['dean', 'admin']) && current_user.spec_program != 'Wellness' %>
               <%= form_with url: searches_path, method: :get, local: true do |form| %>
                 <span>
                   <div class="input-group">
@@ -73,7 +73,7 @@
 
             <li class="nav-item dropdown">
               <% if (['admin', 'dean'].include? current_user.coaching_type and current_user.spec_program !='Wellness') or
-                  (['itot', 'schneibe', 'fruhwirt', 'dunnbri', 'gustafsb', 'moberly', 'budd'].include? current_user.username) %>
+                  (['itot', 'schneibe', 'fruhwirt', 'dunnbri', 'budd'].include? current_user.username) %>
                   <a class="nav-link dropdown-toggle" role="button"  href="#reportMenu" data-bs-toggle="dropdown" aria-expanded="false">
                   Report
                   </a>
