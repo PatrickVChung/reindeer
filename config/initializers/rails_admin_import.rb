@@ -1,3 +1,4 @@
+require 'rails_admin_import'
 RailsAdmin.config do |config|
   # REQUIRED:
   # Include the import action
