@@ -1,72 +1,112 @@
 
-      <div class="card">
-        <div class="card-body">
-          <form>
-            <label for="Cohort">Cohort:</label>
-            <input type="text" id="uniq_cohort" name="cohort" class="form-control" style="max-width:250px; background-color: #D8A7B1" value= <%= params[:uniq_cohort] %> disabled>
-            <label for="from">From:</label>
-            <input type="text" id="from" name="from" style='max-width:250px;background-color: #D8A7B1' value="fruhwirt@ohsu.edu" class="form-control">
-            <label for="subject">Subject:</label>
-            <input type="text" id="subject" name="subject" value="REDEI Grades" class="form-control" style='max-width:250px;background-color: #D8A7B1'>
-            <label for="body_message">Body Message:</label>
-            <textarea id="body_message" name="body_message" rows="15" cols="150" class="form-control"><br>
-
-              Your Fundamentals (FUND) week 4 scores are viewable on REDEI.  <br /><br />
-
-              The Teaching Services Office (TSO) will release the exam in <b>Examsoft</b> for your reference later today. Please wait <b>at least an hour</b> after receiving this notice to contact me or TSO about the exam release. Thank you for your patience.
-              To access ExamSoft go to https://ei.examsoft.com/GKWeb/login/ohsumed and log in. <br /><br />
-
-              Visit SimCapture at https://ohsu-portland.simcapture.com/ to view your CSA/OSCE recording and to see how the Standardized Patient graded the encounter using the patient checklist (select recorded encounter – click “evaluations / checkmark icon” – select “Med CSA – SP Checklist”. <br />
-              You may need dual authentication to access the website. If you need assistance viewing a recording, please contact Corey MacMillan (macmillc@ohsu.edu). <br /><br />
-              If you have any questions, please contact me. <br /><br />
-
-              Thank you,<br /><br />
-              Will Fruhwirth, Program Manager, UME Assessments (fruhwirt@ohsu.edu)<br /><br />
-
-              **If you would like to <b>unsubscribe</b> from this email alert, please email Patrick Chung directly. Thank you.** <br /> <br />
-
-            </textarea><br />
-            <%= check_box_tag "checkAll", "checkAll", false %> <b>Check All</b><br/>
-            <%= button_tag "Send Alerts", id: "SendAlerts", class: "btn btn-primary" %>
-          </form>
-
-          <% if !user_ids.nil? %>
-                  <table class="table table-hover table-striped table-info" >
-                    <% user_ids.each do |user_id| %>
-                      <tr>
-                        <% user = User.where(id: user_id).select(:id, :full_name, :email).first %>
-                        <% id = user.id %>
-                        <td><%= user.full_name %> </td>
-                        <td><%= user.email %> </td>
-                        <td><%= label_tag do %>
-                            <%= check_box_tag "checkbox", "#{user.id}", false, id: "checkbox#{user.id}" %>
-                            Send Alert
-                          <% end %>
-                        </td>
-                      </tr>
-                    <% end %>
-
-                    <tr>
-                      <td><b><%= @tso_emails.first["TSO1"]["name"] %></b></td>
-                      <td><%= @tso_emails.first["TSO1"]["email"] %> </td>
-                      <td></td>
-                    </tr>
-
-                    <tr><i>
-                      <td><b><%= @tso_emails.second["TSO2"]["name"] %></b></td>
-                      <td><%= @tso_emails.second["TSO2"]["email"] %> </td>
-                      <td></td>
-                    </tr>
-
-                    <% cohort_ids.each do |id| %>
-                      <tr>
-                        <% user = User.where(id: id).select(:id, :full_name, :email).first %>
-                        <td><%= user.full_name %> </td>
-                        <td><%= user.email %> </td>
-                        <td></td>
-                      </tr>
-                    <% end %>
-                  </table>
-          <% end %>
-        </div>
+    <div class="card shadow-sm w-100" style="max-width: 1200px;">
+      <div class="card-header bg-secondary text-white">
+        <h5 class="card-title mb-0">Alert Details</h5>
       </div>
+      <div class="card-body">
+        <%= form_with url: send_alerts_fom_exams_path, method: :post, local: true, class: "needs-validation" do |f| %>
+
+          <div class="row g-3">
+            <%# Cohort - Read Only %>
+            <div class="col-md-4">
+              <%= label_tag :selected_cohort, "Cohort", class: "form-label fw-bold" %>
+              <%= text_field_tag :selected_cohort, params[:uniq_cohort],
+                  class: "form-control bg-light" %>
+            </div>
+
+            <%# From %>
+            <div class="col-md-4">
+              <%= label_tag :from, "From", class: "form-label fw-bold" %>
+              <%= email_field_tag :from, "fruhwirt@ohsu.edu", class: "form-control" %>
+            </div>
+
+            <%# Subject %>
+            <div class="col-md-4">
+              <%= label_tag :subject, "Subject", class: "form-label fw-bold" %>
+              <%= text_field_tag :subject, "REDEI Grades", class: "form-control" %>
+            </div>
+
+            <%# Body Message %>
+            <div class="col-12">
+              <%= label_tag :body_message, "Body Message", class: "form-control-label fw-bold" %>
+
+              <%# Define your default text as a string variable %>
+              <% default_text = "Your Fundamentals (FUND) week 4 scores are viewable on REDEI.</br></br>
+
+                The Teaching Services Office (TSO) will release the exam in Examsoft for your reference later today. Please wait at least an hour after receiving this notice to contact me or TSO about the exam release. Thank you for your patience.</br></br>
+
+                To access ExamSoft go to https://ei.examsoft.com/GKWeb/login/ohsumed and log in.</br></br>
+
+                Visit SimCapture at https://ohsu-portland.simcapture.com/ to view your CSA/OSCE recording.</br></br>
+
+                Thank you,<br>
+                Will Fruhwirth" %>
+
+              <%= text_area_tag :body_message, default_text, rows: 10, class: "form-control shadow-sm", placeholder: "Enter email body..." %>
+            </div>
+
+
+            <%# Controls %>
+            <div class="col-12 d-flex align-items-center gap-3">
+              <div class="form-check form-switch">
+                <%= check_box_tag "checkAll", "checkAll", false, class: "form-check-input", id: "checkAll" %>
+                <%= label_tag :checkAll, "Select All Students", class: "form-check-label fw-bold" %>
+              </div>
+              <%= button_tag type: "submit", id: "SendAlerts", class: "btn btn-primary px-4" do %>
+                <i class="bi bi-send me-2"></i> Send Alerts
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if user_ids.present? %>
+          <div class="table-responsive mt-4">
+            <table class="table table-hover align-middle border">
+              <thead class="table-light">
+                <tr>
+                  <th>Full Name</th>
+                  <th>Email Address</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%# Students with Checkboxes %>
+                <% user_ids.each do |user_id| %>
+                  <% user = User.find(user_id) %>
+                  <tr>
+                    <td><%= user.full_name %></td>
+                    <td><%= user.email %></td>
+                    <td class="text-center text-muted small">Automatic</td>
+                  </tr>
+                <% end %>
+
+                <%# TSO Staff (Visual separation) %>
+                <tr class="table-secondary small">
+                  <td colspan="3 text-uppercase fw-bold"><b>TSO Recipients (CC)</b></td>
+                </tr>
+                <% @tso_emails.each do |tso| %>
+                  <% data = tso.values.first %>
+                  <tr>
+                    <td class="fw-bold"><%= data["name"] %></td>
+                    <td><%= data["email"] %></td>
+                    <td class="text-center text-muted small">Automatic</td>
+                  </tr>
+                <% end %>
+                <tr class="table-secondary small">
+                  <td colspan="3 text-uppercase fw-bold"><b>Cohort Emails (CC)</b></td>
+                </tr>
+                <% cohort_ids.each do |user_id| %>
+                  <% user = User.find(user_id) %>
+                  <tr>
+                    <td><%= user.full_name %></td>
+                    <td><%= user.email %></td>
+                    <td class="text-center text-muted small">Automatic</td>
+                  </tr>
+                <% end %>
+
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+      </div>
+    </div>

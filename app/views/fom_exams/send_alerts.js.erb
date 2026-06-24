@@ -1,4 +1,4 @@
-$('#send-alerts-list').html("<%= j render partial: 'fom_exams/send_alerts_list', locals: { user_ids: @user_ids, cohort_ids: @cohort_ids} %>");
+$('#send-alerts-list').html("<%= j render partial: 'fom_exams/send_alerts_list', locals: { user_ids: @cohort_emails, cohort_ids: @cohort_ids} %>");
 
 $("#checkAll").change(function () {
     $("input:checkbox").prop('checked', $(this).prop("checked"));

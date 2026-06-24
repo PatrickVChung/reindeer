@@ -1,21 +1,38 @@
-<div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-body">
-          <h5>FoM - Send Alerts</h5><hr>
-          <%= form_for(send_alerts_fom_exams_path, remote: true) do %>
-              <div style: "display: inline-block">
-                <%= label_tag :Cohort, "Cohort", class: "control-label"  %>
-                <%= select_tag :uniq_cohort, options_for_select(@permission_groups.map{|group| [group.title, group.id]}, selected: params[:uniq_cohort]), class: "form-select",
-                    style: "max-width:250px; display: inline-block", prompt: "Please Select a Cohort" %> &nbsp;
-              <%= submit_tag 'Submit', class: "btn btn-primary", :name => 'commit'%>
-              </div>
 
-          <% end %>
-        </div>
+  <div class="d-flex justify-content-center w-100">
+    <div class="card shadow-sm w-100" style="max-width: 1200px;">
+      <div class="card-header bg-primary text-white">
+        <h5 class="card-title mb-0">FoM - Send Alerts</h5>
       </div>
-      <div id="send-alerts-list"></div>
+      <div class="card-body">
+        <%= form_with url: send_alerts_fom_exams_path, method: :get, data: { turbo_frame: "alerts_results" } do |f| %>
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+
+            <%# Label - mb-0 removes the bottom margin %>
+            <%= label_tag :uniq_cohort, "Cohort", class: "form-label fw-bold mb-0" %>
+
+            <%# Dropdown %>
+            <div style="max-width: 250px; flex-grow: 1;">
+              <%= select_tag :uniq_cohort,
+                  options_for_select(@permission_groups.map{|g| [g.title, g.id]}, params[:uniq_cohort]),
+                  class: "form-select",
+                  prompt: "Please Select a Cohort" %>
+            </div>
+
+            <%# Submit Button %>
+            <%= f.submit 'Submit', class: "btn btn-sm btn-primary" %>
+          </div>
+        <% end %>
+
     </div>
+  </div>
 </div>
 
-<%= flash[:send_alert] %>
+<br />
+
+<%# CHANGED turbo-frame to a normal div container %>
+<div id="alerts_results" class="w-100">
+  <div class="d-flex justify-content-center w-100">
+    <%= render "fom_exams/send_alerts_list", user_ids: @user_ids, cohort_ids: @cohort_ids %>
+  </div>
+</div>
