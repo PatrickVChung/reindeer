@@ -57,51 +57,69 @@ class FomExamsController < ApplicationController
   end
 
   def send_alerts
+
     if params[:uniq_cohort].present?
-      @tso_ids = User.where(subscribed: true, coaching_type: ['dean', 'admin']).order(:id).pluck(:id)
-      course_code = FomExam.where(permission_group_id: params[:uniq_cohort]).select(:course_code).order(:course_code).distinct.pluck(:course_code).last
-      @cohort_ids = FomExam.where(permission_group_id: params[:uniq_cohort], course_code: course_code).select(:id, :user_id).pluck(:user_id)
-      #@cohort_ids = User.where(permission_group_id: params[:uniq_cohort], subscribed: true).order(:full_name).pluck(:id)
+      @tso_ids = User.where(subscribed: true, coaching_type: 'dean').order(:id).pluck(:id)
+      # course_code = FomExam.where(permission_group_id: params[:uniq_cohort]).select(:course_code).order(:course_code).distinct.pluck(:course_code).last
+      # @cohort_ids = FomExam.where(permission_group_id: params[:uniq_cohort], course_code: course_code).select(:id, :user_id).pluck(:user_id)
+      @cohort_ids = User.where(permission_group_id: params[:uniq_cohort], subscribed: true).order(:full_name).pluck(:id)
       @user_ids = @tso_ids
-
-    elsif params[:email_message].present? # from ajax  call here
-        email_message = JSON.parse(params[:email_message])
-        uniq_cohort = email_message.select{|e| e if e["uniq_cohort"]}.first["uniq_cohort"]
-        @tso_ids = User.where(subscribed: true, coaching_type: ['admin','dean']).order(:id).pluck(:id)
-        @cohort_ids = User.where(permission_group_id: uniq_cohort, subscribed: true).order(:full_name).pluck(:id)
-
-        @email_ids = email_message.select{|e| e if e["valid_emails"]}.first["valid_emails"]
-        @from = email_message.select{|e| e if e["from"]}.first["from"]
-        @subject = email_message.select{|e| e if e["subject"]}.first["subject"]
-        body_message = email_message.select{|e| e if e["body_message"]}.first["body_message"]
-
-        user_ids = @email_ids.map{|x| x["user_id"]}
-        user_ids = user_ids + @cohort_ids
-
-        user_ids.each do |id|
-          if id != 'checkAll'
-            user = User.find(id.to_i)
+    elsif params[:body_message].present? # from ajax  call here\
+        uniq_cohort = params[:selected_cohort]
+        @dean_users = User.where(subscribed: true, coaching_type: 'dean').order(:id)
+        @from = params[:from]
+        @subject = params[:subject]
+        body_message = params[:body_message]
+        total_count = 0
+        total_count += @dean_users.count
+        @dean_users.each do |user|
             hello = "Hello " + user.full_name.split(", ").last + ",<br /><br />"
             @body_message = hello + body_message
-            FomExamMailer.alert_student(@from, user.email, @from,  @subject, @body_message.html_safe).deliver_later
+            FomExamMailer.alert_student(@from, user.email, @subject, body: @body_message.html_safe).deliver_later
+        end
+        if (params[:checkAll].present? and params[:checkAll] == "checkAll")
+          @users = User.where(permission_group_id: uniq_cohort, subscribed: true).order(:full_name)
+          @users.each do |user|
+              hello = "Hello " + user.full_name.split(", ").last + ",<br /><br />"
+              @body_message = hello + body_message
+              FomExamMailer.alert_student(@from, user.email, @subject, @body_message.html_safe).deliver_later
+
           end
+          total_count += @users.count
         end
 
         hello = "Hello " + @tso_emails.first["TSO1"]["name"].split(", ").last + ",<br /><br />"
         @body_message = hello + body_message
-        FomExamMailer.alert_student(@from, @tso_emails.first["TSO1"]["email"], @subject, @body_message.html_safe).deliver_later
+        FomExamMailer.alert_student(@from, @tso_emails.first["TSO1"]["email"], @subject, body: @body_message.html_safe).deliver_later
 
         hello = "Hello " + @tso_emails.second["TSO2"]["name"].split(", ").last + ",<br /><br />"
         @body_message = hello + body_message
         FomExamMailer.alert_student(@from, @tso_emails.second["TSO2"]["email"], @subject, @body_message.html_safe).deliver_later
 
-        flash[:send_alert] = "You have sent out #{user_ids.count} emails!"
+        total_count += 2
+
+        flash.now[:notice] = "You have sent out #{total_count.to_s} emails!"
+
     end
 
     respond_to do |format|
-      format.js {render action: 'send_alerts', status: 200}
-      format.html
+      format.html # Normal page fallback
+      format.turbo_stream do
+        render turbo_stream: [
+          # 1. Dynamically replace the flash message area at the top of the page
+          turbo_stream.update("flash-container", partial: "layouts/flashes"),
+
+          # 2. Dynamically replace the lower results area with the updated list
+          turbo_stream.update("alerts_results", inline: <<~ERB
+            <div class="d-flex justify-content-center w-100">
+              <%= render "fom_exams/send_alerts_list", user_ids: @user_ids, cohort_ids: @cohort_ids %>
+            </div>
+          ERB
+          )
+        ]
+      end
     end
+
   end
 
   def unsubscribe
