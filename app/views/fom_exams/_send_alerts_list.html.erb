@@ -31,20 +31,10 @@
               <%= label_tag :body_message, "Body Message", class: "form-control-label fw-bold" %>
 
               <%# Define your default text as a string variable %>
-              <% default_text = "Your Fundamentals (FUND) week 4 scores are viewable on REDEI.</br></br>
+              <% default_text = "Your Fundamentals (FUND) week 4 scores are viewable on REDEI.</br></br>" %>
 
-                The Teaching Services Office (TSO) will release the exam in Examsoft for your reference later today. Please wait at least an hour after receiving this notice to contact me or TSO about the exam release. Thank you for your patience.</br></br>
-
-                To access ExamSoft go to https://ei.examsoft.com/GKWeb/login/ohsumed and log in.</br></br>
-
-                Visit SimCapture at https://ohsu-portland.simcapture.com/ to view your CSA/OSCE recording.</br></br>
-
-                Thank you,<br>
-                Will Fruhwirth" %>
-
-              <%= text_area_tag :body_message, default_text, rows: 10, class: "form-control shadow-sm", placeholder: "Enter email body..." %>
+              <%= text_area_tag :body_message, default_text, rows: 5, class: "form-control shadow-sm", placeholder: "Enter email body..." %>
             </div>
-
 
             <%# Controls %>
             <div class="col-12 d-flex align-items-center gap-3">

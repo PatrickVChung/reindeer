@@ -59,14 +59,15 @@ class FomExamsController < ApplicationController
   def send_alerts
 
     if params[:uniq_cohort].present?
-      @tso_ids = User.where(subscribed: true, coaching_type: 'dean').order(:id).pluck(:id)
+      @tso_ids = User.where(subscribed: true, coaching_type: ['dean', 'admin']).order(:id).pluck(:id)
       # course_code = FomExam.where(permission_group_id: params[:uniq_cohort]).select(:course_code).order(:course_code).distinct.pluck(:course_code).last
       # @cohort_ids = FomExam.where(permission_group_id: params[:uniq_cohort], course_code: course_code).select(:id, :user_id).pluck(:user_id)
       @cohort_ids = User.where(permission_group_id: params[:uniq_cohort], subscribed: true).order(:full_name).pluck(:id)
       @user_ids = @tso_ids
+
     elsif params[:body_message].present? # from ajax  call here\
         uniq_cohort = params[:selected_cohort]
-        @dean_users = User.where(subscribed: true, coaching_type: 'dean').order(:id)
+        @dean_users = User.where(subscribed: true, coaching_type: ['dean', 'admin']).order(:id)
         @from = params[:from]
         @subject = params[:subject]
         body_message = params[:body_message]
@@ -75,7 +76,7 @@ class FomExamsController < ApplicationController
         @dean_users.each do |user|
             hello = "Hello " + user.full_name.split(", ").last + ",<br /><br />"
             @body_message = hello + body_message
-            FomExamMailer.alert_student(@from, user.email, @subject, body: @body_message.html_safe).deliver_later
+            FomExamMailer.alert_student(@from, user.email, @subject, @body_message.html_safe).deliver_later
         end
         if (params[:checkAll].present? and params[:checkAll] == "checkAll")
           @users = User.where(permission_group_id: uniq_cohort, subscribed: true).order(:full_name)
@@ -90,7 +91,7 @@ class FomExamsController < ApplicationController
 
         hello = "Hello " + @tso_emails.first["TSO1"]["name"].split(", ").last + ",<br /><br />"
         @body_message = hello + body_message
-        FomExamMailer.alert_student(@from, @tso_emails.first["TSO1"]["email"], @subject, body: @body_message.html_safe).deliver_later
+        FomExamMailer.alert_student(@from, @tso_emails.first["TSO1"]["email"], @subject, @body_message.html_safe).deliver_later
 
         hello = "Hello " + @tso_emails.second["TSO2"]["name"].split(", ").last + ",<br /><br />"
         @body_message = hello + body_message
