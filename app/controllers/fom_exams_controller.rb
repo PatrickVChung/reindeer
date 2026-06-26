@@ -66,7 +66,7 @@ class FomExamsController < ApplicationController
       @user_ids = @tso_ids
     elsif params[:body_message].present? # from ajax  call here\
         uniq_cohort = params[:selected_cohort]
-        @dean_users = User.where(subscribed: true, coaching_type: 'dean').order(:id)
+        @dean_users = User.where(subscribed: true, coaching_type: ['dean', 'admin']).order(:id)
         @from = params[:from]
         @subject = params[:subject]
         body_message = params[:body_message]
@@ -75,14 +75,14 @@ class FomExamsController < ApplicationController
         @dean_users.each do |user|
             hello = "Hello " + user.full_name.split(", ").last + ",<br /><br />"
             @body_message = hello + body_message
-            FomExamMailer.alert_student(@from, user.email, @subject, @body_message.html_safe).deliver_later
+            FomExamMailer.send_alert(@from, user.email, @subject, @body_message.html_safe).deliver_later
         end
         if (params[:checkAll].present? and params[:checkAll] == "checkAll")
           @users = User.where(permission_group_id: uniq_cohort, subscribed: true).order(:full_name)
           @users.each do |user|
               hello = "Hello " + user.full_name.split(", ").last + ",<br /><br />"
               @body_message = hello + body_message
-              FomExamMailer.alert_student(@from, user.email, @subject, @body_message.html_safe).deliver_later
+              FomExamMailer.send_alert(@from, user.email, @subject, @body_message.html_safe).deliver_later
 
           end
           total_count += @users.count
@@ -90,11 +90,11 @@ class FomExamsController < ApplicationController
 
         hello = "Hello " + @tso_emails.first["TSO1"]["name"].split(", ").last + ",<br /><br />"
         @body_message = hello + body_message
-        FomExamMailer.alert_student(@from, @tso_emails.first["TSO1"]["email"], @subject, @body_message.html_safe).deliver_later
+        FomExamMailer.send_alert(@from, @tso_emails.first["TSO1"]["email"], @subject, @body_message.html_safe).deliver_later
 
         hello = "Hello " + @tso_emails.second["TSO2"]["name"].split(", ").last + ",<br /><br />"
         @body_message = hello + body_message
-        FomExamMailer.alert_student(@from, @tso_emails.second["TSO2"]["email"], @subject, @body_message.html_safe).deliver_later
+        FomExamMailer.send_alert(@from, @tso_emails.second["TSO2"]["email"], @subject, @body_message.html_safe).deliver_later
 
         total_count += 2
 

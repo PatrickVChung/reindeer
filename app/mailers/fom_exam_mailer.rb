@@ -1,17 +1,11 @@
 class FomExamMailer < ApplicationMailer
-  def alert_student (from_user, to_user, subject, body)
-<<<<<<< HEAD
-=======
+  def send_alert (from_user, to_user, subject, body)
       @body_msg = body
->>>>>>> redei-portal_v6
+
       mail(
         to: to_user,
         from: from_user,
         subject: subject,
-<<<<<<< HEAD
-        body: body,
-=======
->>>>>>> redei-portal_v6
         content_type: 'text/html'
       )
 
