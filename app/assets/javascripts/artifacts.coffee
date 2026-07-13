@@ -66,10 +66,18 @@ epa_codes = (category_code) ->
           cat_array = []
           cat_array.push {id: "Formative Feedback Text File", value: "Formative Feedback Text File"}
           cat_array.push {id: "Informatics Feedback Text File", value: "Informatics Feedback Text File"}
-          cat_array.push {id: "Q-Informatics Feedback Text File", value: "Q-Informatics Feedback Text File"}          
+          cat_array.push {id: "Q-Informatics Feedback Text File", value: "Q-Informatics Feedback Text File"}
   else if category_code == "FoM Grades"
           cat_array = []
-          cat_array.push {id: "FoM Tab Delimited File", value: "FoM Tab Delimited File"}
+          cat_array.push {id: "FoM (Tab Delimited File)", value: "FoM (Tab Delimited File)"}
+          cat_array.push {id: "1-FUND Mid-Block Exam (Tab Delimited File)", value: "1-FUND Mid-Block Exam (Tab Delimited File)"}
+          cat_array.push {id: "2-BLHD Mid-Block Exam (Tab Delimited File)", value: "2-BLHD Mid-Block Exam (Tab Delimited File)"}
+          cat_array.push {id: "3-SBM Mid-Block Exam (Tab Delimited File)", value: "3-SBM Mid-Block Exam (Tab Delimited File)"}
+          cat_array.push {id: "4-CPR Mid-Block Exam (Tab Delimited File)", value: "4-CPR Mid-Block Exam (Tab Delimited File)"}
+          cat_array.push {id: "5-HODI Mid-Block Exam (Tab Delimited File)", value: "5-HODI Mid-Block Exam (Tab Delimited File)"}
+          cat_array.push {id: "6-NSF Mid-Block Exam (Tab Delimited File)", value: "6-NSF Mid-Block Exam (Tab Delimited File)"}
+          cat_array.push {id: "7-DEVH Mid-Block Exam (Tab Delimited File)", value: "7-DEVH Mid-Block Exam (Tab Delimited File)"}
+
   else if category_code == "Competency"
           cat_array = []
           cat_array.push {id: "Competency-Excel", value: "Excel-xlsx"}

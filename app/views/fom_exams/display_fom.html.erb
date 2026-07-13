@@ -75,13 +75,15 @@
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_<%= comp %>" aria-expanded="false" aria-controls="collapse_<%= comp %>">
                 <h5>
                   <% if ![13,6,5,3].include? @student_perm_group %>
-                  <% if @student_perm_group >= 20 and (comp == 'comp1_wk' or comp == 'comp2a_hss')%>
-                    <%= hf_component_desc(comp) %> - <span style="color:red">FORMATIVE FEEDBACK &nbsp;</span><%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>
-                  <% else %>
-                  <%= hf_component_desc(comp) %>&nbsp;<%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>
-                  <% end %>
-                <% else %>
+                    <% if (@student_perm_group >= 20 && @student_perm_group < 24)  && (comp == 'comp1_wk' || comp == 'comp2a_hss') %>
+                      <%= hf_component_desc(comp) %> - <span style="color:red">FORMATIVE FEEDBACK &nbsp;</span><%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>
+                    <% elsif @student_perm_group >= 24 && comp == 'comp2a_hss' %>
+                      <%= hf_component_desc2(comp) %> - <span style="color:red">FORMATIVE FEEDBACK &nbsp;</span><%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>
+                    <% else %>
                     <%= hf_component_desc2(comp) %>&nbsp;<%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>
+                    <% end %>
+                <% else %>
+                    <%= hf_component_desc3(comp) %>&nbsp;<%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>
                 <% end %>
               </h5>
 
@@ -93,7 +95,7 @@
                   <% comp_graph ||= hf_create_graph(comp, @comp_exams, @comp_avg_exams, @exam_headers, @student_perm_group)%>
                   <%= high_chart("#{comp}_graph", comp_graph) %>
 
-                  <% if (@student_perm_group < 20 and comp == 'comp1_wk') %>
+                  <% if (@student_perm_group < 20 or @student_perm_group >= 24) and (comp == 'comp1_wk') %>
                     <br />
                     Dropped Weekly Quiz: <b><%= @comp_exams.first["comp1_dropped_quiz"] %></b> <br />
                     Dropped Score: <b><%= @comp_exams.first["comp1_dropped_score"] %></b>

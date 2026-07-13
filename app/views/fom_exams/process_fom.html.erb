@@ -28,11 +28,15 @@
                         <%= link_to 'View', url_for(document), target: :_blank %>
                         /
                         <%= link_to 'Download', rails_blob_path(document, disposition: 'attachment') %>
-                        /
-                        <% if artifact.content.to_s.include? "Excel" and (current_user.coaching_type == 'admin') %>
-                          <%= link_to 'Process Competency', process_comp_excel_artifact_path(artifact), target: :_blank  %>
-                        <% else %>
-                          <%= link_to 'Process', process_csv_fom_exams_path(attach_id: artifact.documents.first) %>
+                        <% if current_user.can_process_fom? and current_user.coaching_type != 'student'%>
+                          <% if artifact.content.to_s.include? "Excel"  %>
+                            <%= link_to 'Process Competency', process_comp_excel_artifact_path(artifact), target: :_blank  %>
+                          <% elsif artifact.content == "FoM (Tab Delimited File)"  %>
+                            / <%= link_to 'Process FoM File', process_csv_fom_exams_path(attach_id: artifact.documents.first), class: 'text-danger' %>
+                          <% elsif artifact.content.include?("Mid-Block")  %>
+                            / <%= link_to 'Process Mid-Block File', process_mid_block_fom_exams_path(attach_id: artifact.documents.first, artifact_content: artifact.content),
+                             class: 'text-danger' %>
+                          <% end %>
                         <% end %>
 
 

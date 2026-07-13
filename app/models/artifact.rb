@@ -110,9 +110,9 @@ class Artifact < ApplicationRecord
           elsif code == 'FormativeFeedback'
             row_to_hash.store(row["q1"], " --> NOT Updated")
           elsif code == "InformaticsFeedback"
-            row_to_hash.store(full_name, email + " --> NOT Updated")
+            row_to_hash.store(full_name +  " --> NOT Updated")
           elsif code == "UsmleExam"
-              row_to_hash.store(full_name, row["sid"] + " --> NOT Updated")
+              row_to_hash.store(full_name + " " + row["sid"] + " --> NOT Updated")
           end
           no_not_updated += 1
           log_results.push row_to_hash

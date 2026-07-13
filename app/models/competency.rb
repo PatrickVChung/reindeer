@@ -73,6 +73,13 @@ class Competency < ApplicationRecord
   end
 
   def self.all_blocks_mean(selected_user)
+
+    if selected_user.permission_group_id == 7 #phd students
+      new_permission_group = selected_user.prev_permission_group_id
+    else
+      new_permission_group = selected_user.permission_group_id
+    end
+
     all_blocks_class_mean_sql = 'select fom_exams.course_code,
             trunc(avg(summary_comp1),2) as "ave_summ_comp1",
             trunc(avg(summary_comp2a),2) as "ave_summ_comp2a",
@@ -81,7 +88,7 @@ class Competency < ApplicationRecord
             trunc(avg(summary_comp4),2) as "ave_summ_comp4",
             trunc(avg(summary_comp5a),2) as "ave_summ_comp5a",
             trunc(avg(summary_comp5b),2) as "ave_summ_comp5b"
-          FROM fom_exams, fom_labels  where fom_exams.permission_group_id=' + "#{selected_user.permission_group_id} and " +
+          FROM fom_exams, fom_labels  where fom_exams.permission_group_id=' + "#{new_permission_group} and " +
           ' fom_labels.course_code = fom_exams.course_code and fom_labels.permission_group_id = fom_exams.permission_group_id and fom_labels.block_enabled=true ' +
           'group by fom_exams.course_code
           order by fom_exams.course_code'
@@ -100,7 +107,7 @@ class Competency < ApplicationRecord
               trunc(summary_comp5b,2) as "summ_comp5b"
             FROM fom_exams, fom_labels where ' +
             ' fom_exams.user_id=' + "#{selected_user.id} and" +
-            ' fom_labels.course_code = fom_exams.course_code and fom_labels.permission_group_id = fom_exams.permission_group_id and fom_labels.block_enabled=true ' +
+            ' fom_labels.course_code = fom_exams.course_code and fom_labels.permission_group_id =' + "#{new_permission_group} and " + ' fom_labels.block_enabled=true ' +
             'order by fom_exams.course_code'
 
       all_blocks_class_mean_results = Competency.execute_sql(all_blocks_class_mean_sql)

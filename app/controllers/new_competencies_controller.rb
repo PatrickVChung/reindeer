@@ -76,11 +76,12 @@ class NewCompetenciesController < ApplicationController
 
      @csl_feedbacks = CslFeedback.where(user_id: @selected_user.id).order(:submit_date).load_async
 
-     if @selected_user.permission_group_id >= 16 or @selected_user.permission_group_id == 7 or @selected_user.permission_group_id = 11
+     if @selected_user.permission_group_id == 7 || @selected_user.permission_group_id >= 16
        @all_blocks, @all_blocks_class_mean, @category_labels = Competency.all_blocks_mean(@selected_user)
        # if @all_blocks.first.second.empty?  # to check component 1 is empty
        #    @all_blocks, @all_blocks_class_mean, @category_labels =  hf_get_clinical_dataset(@selected_user, 'All Blocks')
        # end
+
 
      else
        @all_blocks, @all_blocks_class_mean, @category_labels =  hf_get_clinical_dataset(@selected_user, 'All Blocks')

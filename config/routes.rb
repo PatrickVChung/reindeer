@@ -166,6 +166,7 @@ Rails.application.routes.draw do
       get 'send_alerts', controller: 'fom_exams', action: :send_alerts, to: 'fom_exams#send_alerts'
       get 'display_fom', controller: 'fom_exams', action: :display_fom, to: 'fom_exams#display_fom'
       get 'unsubscribe'
+      get 'process_mid_block'
 
     end
   end
