@@ -1,8 +1,6 @@
 class EgCohort < ApplicationRecord
   belongs_to :user
 
-
-
   rails_admin do
 
     list do

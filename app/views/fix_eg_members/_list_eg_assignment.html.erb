@@ -3,11 +3,15 @@
     <h5>EG Assignment -Click here to Download
     <%= link_to ('<i class="fa fa-download"></i>').html_safe, download_file_fix_eg_members_path(file_name: @eg_assignment_filename) %></h5>
     <table class="responsive nowrap table table-hover">
+      <th>Action</th>
       <% @eg_cohorts.first.keys.each do |header| %>
         <th><%= header %></th>
       <% end %>
+
       <% @eg_cohorts.each do |data| %>
         <tr>
+          <%= link_to '-Delete', epa_review_path(id: review.id), method: :delete, data: { confirm: 'Are you sure?' },
+          remote: true, class: 'delete_review fa fa-trash' %>
           <% data.each do |key, val| %>
             <td> <%= val %> </td>
           <% end %>

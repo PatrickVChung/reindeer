@@ -444,7 +444,7 @@ class Artifact < ApplicationRecord
         if artifact.documents.attached?
           artifact.documents.each do |document|
             temp_hash={}
-            test_str = file_type + "_" + cohort
+            test_str = cohort + "_" + block_code + "_" + file_type
             if document.filename.to_s.include? test_str
               temp_hash["user_id"] = user.id.to_s
               temp_hash["artifact_id"] = artifact.id.to_s

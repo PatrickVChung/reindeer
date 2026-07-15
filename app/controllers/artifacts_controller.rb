@@ -243,7 +243,7 @@ class ArtifactsController < ApplicationController
   def bulk_remove
     @bulk_remove_files = []
     if params[:Cohort].present? and params[:BlockCode].present? and params[:FileType].present?
-      permission_group = PermissionGroup.where('title like ?', '%Med28%').first
+      permission_group = PermissionGroup.where('title like ?', "%#{params[:Cohort]}%").first
       #users = ["1983", "2043", "1941", "1977"]
       @bulk_remove_files = Artifact.gather_files_to_delete(params[:Cohort], permission_group, params[:BlockCode], params[:FileType])
     end
@@ -251,6 +251,7 @@ class ArtifactsController < ApplicationController
   end
 
   def purge_all_documents
+
     if params[:content].present?
       file_path = Rails.root.join('public', "FoM_#{params[:content]}_#{params[:file_type]}.txt")
       CSV.foreach(file_path, col_sep: "\t", headers: true) do |row|
@@ -259,14 +260,18 @@ class ArtifactsController < ApplicationController
         title = row["title"]
         content = row["content"]
         file_type = row["file_type"]
-        test_str = content + "_" + file_type
+        blob_id = row["blob_id"]
+        ActiveStorage::Blob.find_by(id: blob_id)&.purge
         artifact = Artifact.find_by(title: title, content: content, id: artifact_id, user_id: user_id)
-        artifact.documents.each do |document|
-          if document.filename.to_s.include? test_str
-            document.purge
-            artifact.destroy
-          end
-        end
+        artifact.destroy
+        # test_str = content + "_" + file_type
+        # artifact = Artifact.find_by(title: title, content: content, id: artifact_id, user_id: user_id)
+        # artifact.documents.each do |document|
+        #   if document.filename.to_s.include? test_str
+        #     document.purge
+        #     artifact.destroy
+        #   end
+        #end
       end
     end
   end

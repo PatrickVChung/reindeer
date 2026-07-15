@@ -77,7 +77,7 @@
                   <% if ![13,6,5,3].include? @student_perm_group %>
                     <% if (@student_perm_group >= 20 && @student_perm_group < 24)  && (comp == 'comp1_wk' || comp == 'comp2a_hss') %>
                       <%= hf_component_desc(comp) %> - <span style="color:red">FORMATIVE FEEDBACK &nbsp;</span><%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>
-                    <% elsif @student_perm_group >= 24 && comp == 'comp2a_hss' %>
+                    <% elsif @student_perm_group >= 24 && (comp == 'comp2a_hss' || comp == 'comp4_nbme') %>
                       <%= hf_component_desc2(comp) %> - <span style="color:red">FORMATIVE FEEDBACK &nbsp;</span><%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>
                     <% else %>
                     <%= hf_component_desc2(comp) %>&nbsp;<%= hf_check_failed_comp(comp, @failed_comps, current_user.coaching_type).html_safe %>

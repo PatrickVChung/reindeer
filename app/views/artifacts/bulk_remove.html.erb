@@ -17,8 +17,8 @@
 <hr>
 <% if !@bulk_remove_files.empty? %>
   <%= form_with(url: purge_all_documents_artifacts_path, method: :get) do |form| %>
-    <%= form.hidden_field :title, value: params[:title] %>
-    <%= form.hidden_field :content, value: params[:content]%>
+    <%= form.hidden_field :title, value: "FoM"%>
+    <%= form.hidden_field :content, value: params[:BlockCode]%>
     <%= form.hidden_field :file_type, value: params[:FileType] %>
     <div class='card'>
       <div class="card-body">

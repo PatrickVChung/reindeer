@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_163420) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_14_170605) do
   create_schema "source"
   create_schema "target"
   create_schema "transform"
@@ -1067,6 +1067,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_163420) do
     t.unique_constraint ["email"], name: "med26_mspe_email_key"
   end
 
+  create_table "public.med27_mspes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "full_name"
+    t.integer "permission_group_id"
+    t.string "sid"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_med27_mspes_on_user_id"
+  end
+
   create_table "public.medhub_courses", force: :cascade do |t|
     t.string "course_code"
     t.integer "course_id"
@@ -1511,6 +1522,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_163420) do
   add_foreign_key "public.med24_mspes", "public.users"
   add_foreign_key "public.med25_mspes", "public.users"
   add_foreign_key "public.med26_mspes", "public.users"
+  add_foreign_key "public.med27_mspes", "public.users"
   add_foreign_key "public.precep_meetings", "public.users"
   add_foreign_key "public.preceptor_assesses", "public.users"
   add_foreign_key "public.preceptor_evals", "public.users"
