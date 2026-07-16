@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       get  :reviewer_update
       get  :eg_assignment
       get  :download_file
+      delete  :delete_cohort
     end
   end
 

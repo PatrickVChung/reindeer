@@ -73,6 +73,20 @@ class FixEgMembersController < ApplicationController
       end
   end
 
+  def delete_cohort
+    cohort = EgCohort.find_by(email: params[:eg_cohort_email])
+    @permission_group_id = cohort&.permission_group_id
+
+    if cohort&.destroy
+      # Just redirect directly. No respond_to block needed!
+      redirect_to eg_assignment_fix_eg_members_path(uniq_cohort: @permission_group_id),
+                  status: :see_other,
+                  notice: "Cohort Member deleted!"
+    else
+      redirect_to eg_assignment_fix_eg_members_path(), alert: "Cohort Member not found."
+    end
+  end
+
   private
 
   def set_resources

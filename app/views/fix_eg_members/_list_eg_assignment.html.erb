@@ -10,8 +10,14 @@
 
       <% @eg_cohorts.each do |data| %>
         <tr>
-          <%= link_to '-Delete', epa_review_path(id: review.id), method: :delete, data: { confirm: 'Are you sure?' },
-          remote: true, class: 'delete_review fa fa-trash' %>
+          <td>
+            <%= button_to delete_cohort_fix_eg_members_path(eg_cohort_email: data["email"]),
+                          method: :delete,
+                          form: { data: { turbo_confirm: 'Are you sure?' } },
+                          class: 'delete_review fa fa-trash' do %>
+              -Delete
+            <% end %>
+          </td>
           <% data.each do |key, val| %>
             <td> <%= val %> </td>
           <% end %>

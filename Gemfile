@@ -120,7 +120,7 @@ group :development do
   gem "rack-mini-profiler", require: false
   gem "rack", ">= 2.2.12"
   gem "webrick", ">= 1.8.2"
-  gem "puma", "~> 6.4.2"
+  gem "puma", '~> 7.2.1'
   gem "rails_layout"
   gem "awesome_print"
   gem "binding_of_caller"
