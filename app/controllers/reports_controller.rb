@@ -79,9 +79,10 @@ class ReportsController < ApplicationController
       if params[:cohort].present? and  params[:email].present? and params[:email] != 'All'
         #@mspe_data = hf_get_mspe_data(params[:cohort])
         @student_email = params[:email]
-        @mspe_data, @mspe_filename = hf_get_mspe_data_by_email(params[:email], params[:cohort])
+        @mspe_data, @mspe_filename = hf_get_mspe_data_by_email(params[:email], params[:cohort], @allowed_models)
+
       elsif params[:cohort].present? and  params[:email].present? and params[:email] == 'All'
-        @mspe_data, @mspe_filename = hf_get_mspe_data(params[:cohort])
+        @mspe_data, @mspe_filename = hf_get_mspe_data(params[:cohort], @allowed_models)
       end
       respond_to do |format|
         format.html
@@ -112,7 +113,14 @@ class ReportsController < ApplicationController
     # group 7 is phd/mph/mcr students
     # group 11 is dismissed or discharged students
     @permission_groups ||= PermissionGroup.where("id >= 16 and id not in (7,11) and title like ?", "%Student%").order(:id) # get last 3 rows
-    @permission_groups_mspe ||= PermissionGroup.where("id >= ? and title like ?", 20, "%Student%").order(:id) # get last 3 rows
+    @permission_groups_mspe ||= PermissionGroup.where("id >= ? and title like ?", 21, "%Student%").order(:id) # get last 3 rows
+    @allowed_models = {}
+    for i in 23..30
+      mspe_model = "Med#{i}Mspe"
+      if model_exists? (mspe_model)
+        @allowed_models["Med#{i}"] = mspe_model.classify.safe_constantize
+     end
+    end
   end
 
   def private_download in_file

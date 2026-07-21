@@ -106,7 +106,7 @@ module ReportsHelper
   end
 
   def model_exists? (model_name)
-    files = Dir[Rails.root + 'app/models/*.rb']
+    files = Dir[Rails.root + 'app/models/med*_mspe.rb']
     models = files.map{ |m| File.basename(m, '.rb').camelize }
     if models.include? model_name
       return true
@@ -126,12 +126,15 @@ module ReportsHelper
     end
   end
 
-  def hf_get_mspe_data_by_email(email, permission_group_id)
+  def hf_get_mspe_data_by_email(email, permission_group_id, allowed_models)
     permission_group_title = PermissionGroup.find(permission_group_id.to_i).title.split(' ').last.gsub(/[()]/, '')
-    mspeTable = "#{permission_group_title}Mspe"
     mspe_data = []
-    if model_exists? (mspeTable)
-      mspe = mspeTable.constantize.find_by(email: email).competencies.where(WHERE_QUERY, '%FoM%', '%JCON%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%FAMP 705SD%', '%GMED 705AB%',
+    unless permission_group_title
+      return mspe_data.push("Permission Group not found!")
+    end
+    mspe_model = allowed_models[permission_group_title]
+    if mspe_model
+      mspe = mspe_model.find_by(email: email).new_competencies.where(WHERE_QUERY, '%FoM%', '%JCON%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%FAMP 705SD%', '%GMED 705AB%',
       '%IMEDMINF 705B%', '%MULT 705A%', '%MULT 705C%', '%MULT 705D%', '%MULT 705TI%', '%709Z%').select(:id, :student_uid, :user_id, :email,
         :course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, :prof_concerns, :mspe,
       ).order(:user_id, :start_date)
@@ -139,8 +142,9 @@ module ReportsHelper
       file_name = create_tab_delimited_file(permission_group_title, email, mspe_data)
       return mspe_data, file_name
     else
-      return mspe_data.push "Table #{mspeTable} is Not Created/Loaded Yet!"
+      return mspe_data.push "Table #{mspe_model} is Not Created/Loaded Yet!"
     end
+
   end
 
   def create_tab_delimited_file(permission_group_title, email, mspe_data)
@@ -169,40 +173,59 @@ module ReportsHelper
 
   end
 
-  def hf_get_mspe_data (permission_group_id)
+  def hf_get_mspe_data (permission_group_id, allowed_models)
     permission_group_title = PermissionGroup.find(permission_group_id.to_i).title.split(' ').last.gsub(/[()]/, '')
-      # query_select = ':student_uid, :user_id, :users.permission_group_id, :competencies.email, ' +
-      #   ':course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, ' +
-      #   ':prof_concerns, :comm_prof_concerns, :overall_summ_comm_perf, :add_comm_on_perform, :mspe, :clinic_exp_comment '
-
-      # query_params = "'%FoM%', '%JCON%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%FAMP 705SD%', '%GMED 705AB%', " +
-      #                "'%IMEDMINF 705B%', '%MULT 705A%', '%MULT 705C%', '%MULT 705D%', '%MULT 705TI%', '%709Z%'"
-
     mspe_data = []
-    if permission_group_title == "Med23"
-      Med23Mspe.all.each do |mspe|
+    unless permission_group_title
+      return mspe_data.push("Permission Group not found!")
+    end
+    mspe_model = allowed_models[permission_group_title]
+    if mspe_model && permission_group_title >= 'Med26Mspe'
+        mspe_model.all.each do |mspe|
+           mspe = mspe.user.new_competencies.where(WHERE_QUERY, '%FoM%', '%JCON%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%FAMP 705SD%', '%GMED 705AB%',
+           '%IMEDMINF 705B%', '%MULT 705A%', '%MULT 705C%', '%MULT 705D%', '%MULT 705TI%', '%709Z%').select(:id, :student_uid, :user_id, :email,
+             :course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, :prof_concerns, :mspe,
+           ).order(:user_id, :start_date)
+           mspe_data.push mspe
+        end
+    elsif mspe_model && permission_group_title < 'Med26Mspe'
+      mspe_model.all.each do |mspe|
          mspe = mspe.user.competencies.where(WHERE_QUERY, '%FoM%', '%JCON%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%FAMP 705SD%', '%GMED 705AB%',
          '%IMEDMINF 705B%', '%MULT 705A%', '%MULT 705C%', '%MULT 705D%', '%MULT 705TI%', '%709Z%').select(:id, :student_uid, :user_id, :email,
            :course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, :prof_concerns, :mspe,
          ).order(:user_id, :start_date)
          mspe_data.push mspe
       end
-    elsif permission_group_title == "Med24"
-      Med24Mspe.all.each do |mspe|
-         mspe = mspe.user.competencies.where(WHERE_QUERY2, '%FoM%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%709Z%').select(:id, :student_uid, :user_id, :email,
-           :course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, :prof_concerns, :mspe,
-         ).order(:user_id, :start_date)
-         mspe_data.push mspe
-      end
-    elsif permission_group_title >= "Med26"
-      mspe_yr = permission_group_title.from(3)
-      Med26Mspe.all.each do |mspe|
-         mspe = mspe.user.new_competencies.where(WHERE_QUERY2, '%FoM%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%709Z%').select(:id, :student_uid, :user_id, :email,
-           :course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, :prof_concerns, :mspe,
-         ).order(:user_id, :start_date)
-         mspe_data.push mspe
-      end
+    else
+      return mspe_data.push "Table #{mspe_model} is Not Created/Loaded Yet!"
     end
+    #
+    # mspe_data = []
+    # if permission_group_title == "Med23"
+    #   Med23Mspe.all.each do |mspe|
+    #      mspe = mspe.user.competencies.where(WHERE_QUERY, '%FoM%', '%JCON%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%FAMP 705SD%', '%GMED 705AB%',
+    #      '%IMEDMINF 705B%', '%MULT 705A%', '%MULT 705C%', '%MULT 705D%', '%MULT 705TI%', '%709Z%').select(:id, :student_uid, :user_id, :email,
+    #        :course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, :prof_concerns, :mspe,
+    #      ).order(:user_id, :start_date)
+    #      mspe_data.push mspe
+    #   end
+    # elsif permission_group_title == "Med24"
+    #   Med24Mspe.all.each do |mspe|
+    #      mspe = mspe.user.competencies.where(WHERE_QUERY2, '%FoM%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%709Z%').select(:id, :student_uid, :user_id, :email,
+    #        :course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, :prof_concerns, :mspe,
+    #      ).order(:user_id, :start_date)
+    #      mspe_data.push mspe
+    #   end
+    # elsif permission_group_title >= "Med26"
+    #   mspe_yr = permission_group_title.from(3)
+    #   Med26Mspe.all.each do |mspe|
+    #      mspe = mspe.user.new_competencies.where(WHERE_QUERY2, '%FoM%', '%TRAN%', '%PREC 724%', '%SCHI%', '%CPX 702%', '%709Z%').select(:id, :student_uid, :user_id, :email,
+    #        :course_id, :course_name, :final_grade, :start_date, :end_date, :submit_date, :evaluator, :prof_concerns, :mspe,
+    #      ).order(:user_id, :start_date)
+    #      mspe_data.push mspe
+    #   end
+    # elsif permission_group_title >= "Med27"
+    # end
     file_name = create_tab_delimited_file(permission_group_title, 'All', mspe_data)
     total_count = mspe_data.count
     mspe_data = []
