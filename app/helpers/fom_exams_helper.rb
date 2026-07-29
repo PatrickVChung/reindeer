@@ -495,11 +495,11 @@ end
 
     height = 400
 
-    if component == 'comp1_wk' && (permission_group >= 20 && permission_group < 24)
+    if component == 'comp1_wk' && (permission_group >= 16 && permission_group < 24)
       title =  hf_component_desc(component) + '<br ><span style="color:red">Formative Feedback</span>' + '<br ><b>' + student_name + '</b>'
     elsif permission_group >= 24
       title =  hf_component_desc2(component) + '<br ><b>' + student_name + '</b>'
-    elsif permission_group < 20
+    elsif permission_group < 16
       title =  hf_component_desc3(component) + '<br ><b>' + student_name + '</b>'
     else
       title =  hf_component_desc(component) + '<br ><b>' + student_name + '</b>'
