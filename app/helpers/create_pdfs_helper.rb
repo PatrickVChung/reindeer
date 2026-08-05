@@ -44,8 +44,13 @@ formative feedback to facilitate positive change during this Foundations of Medi
    file_name = "#{tmp_path}/#{full_name}_#{part_file}.pdf"
 
    Prawn::Document.generate("#{file_name}") do |pdf|
+     pdf.font_families.update("Carlito" => {
+        normal: "/usr/share/fonts/truetype/crosextra/Carlito-Regular.ttf",
+        bold:   "/usr/share/fonts/truetype/crosextra/Carlito-Bold.ttf"
+     })
 
-      pdf.font "Times-Roman", :size => 12
+      pdf.font "Carlito", :size => 12
+
       pdf.text "#{header1}", :style => :bold
       pdf.font_size 10
       pdf.text "#{header2}"
@@ -68,11 +73,11 @@ formative feedback to facilitate positive change during this Foundations of Medi
       pdf.stroke_horizontal_rule
       pdf.text " "
 
-      pdf.font "Times-Roman" #, :size => 12"
+      pdf.font "Carlito" #, :size => 12"
       row.drop(4).each do |key, val|
         pdf.text "Question: " + (key || "").encode("Windows-1252", invalid: :replace, undef: :replace, replace: '')
           # if val is nil, be sure to set it "" and then encode to window-1252
-          pdf.text "Ans/Comment: " + (val || "").encode("Windows-1252", invalid: :replace, undef: :replace, replace: ''), :color => "0000ff"
+          pdf.text "Ans/Comment: " + (val.to_s || "").encode("Windows-1252", invalid: :replace, undef: :replace, replace: ''), :color => "0000ff"
         pdf.text " "
       end
     end
@@ -124,7 +129,11 @@ formative feedback to facilitate positive change during this Foundations of Medi
     end
     pdf_log = []
     artifact = Artifact.find(artifact_id)
-    CSV.parse(ActiveStorage::Attachment.find(artifact.documents.first.id).download, headers: true, col_sep: "\t") do |row|
+    #CSV.parse(ActiveStorage::Attachment.find(artifact.documents.first.id).download, headers: true, col_sep: "\t") do |row|
+    file_content = artifact.documents.first.download
+                       .gsub("\r\n", "\n")
+    CSV.parse(file_content, headers: true, liberal_parsing: true, col_sep: "\t" ) do |row|
+
       email = row["Student Name"].split(" - ").last
       user = User.find_by(email: email)
       if !user.nil?
