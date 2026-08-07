@@ -70,7 +70,7 @@ module Coaching
             if send_email_flag["OASIS"]["send_email"] ==  true
               event = Event.where("id = ? and start_date >= ?", @meeting.event_id, Date.today)
 
-              if (!event.empty? and @meeting.advisor_notes.blank?) or !params[:email_notification].nil? or @meeting.advisor_type == 'Assist Dean'  # send email to student & advisor if advisor_notes is nil otherwise, it is a retro-appointment
+              if (!event.empty? and @meeting.advisor_notes.blank?) or !params[:email_notification].nil? #or @meeting.advisor_type == 'Assist Dean'  # send email to student & advisor if advisor_notes is nil otherwise, it is a retro-appointment
                 EventMailer.notify_student(@meeting, "Create").deliver_later
               end
             end

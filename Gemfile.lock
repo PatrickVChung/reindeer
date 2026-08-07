@@ -156,6 +156,7 @@ GEM
       devise (>= 3.4.1)
       net-ldap (>= 0.16.0)
     diff-lcs (1.6.2)
+    distribution (0.8.0)
     drb (2.2.3)
     erb (6.0.4)
     erubi (1.13.1)
@@ -188,6 +189,7 @@ GEM
       railties (>= 3.2, < 9.0)
     formatador (1.2.3)
       reline
+    forwardable (1.4.0)
     fugit (1.12.2)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
@@ -411,6 +413,9 @@ GEM
       pdf-core (~> 0.10.0)
       ttfunk (~> 1.8)
     prettyprint (0.2.0)
+    prime (0.1.4)
+      forwardable
+      singleton
     prism (1.9.0)
     pry (0.16.0)
       coderay (~> 1.1)
@@ -563,6 +568,7 @@ GEM
     simple_xlsx_reader (1.0.5)
       nokogiri
       rubyzip
+    singleton (0.3.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -571,7 +577,6 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    statistics2 (0.54)
     strscan (3.1.8)
     thor (1.5.0)
     tilt (2.7.0)
@@ -645,6 +650,7 @@ DEPENDENCIES
   descriptive-statistics
   devise (>= 5.0.4)
   devise_ldap_authenticatable
+  distribution
   exception_notification
   factory_bot_rails
   faker
@@ -680,6 +686,7 @@ DEPENDENCIES
   php-serialize
   popper_js (>= 2.11.8, < 3)
   prawn
+  prime
   psych (< 4)
   puma (~> 7.2.1)
   rack (>= 2.2.12)
@@ -700,7 +707,6 @@ DEPENDENCIES
   settingslogic
   simple_form
   sprockets-rails
-  statistics2
   timeout
   twitter-bootstrap-rails (>= 5.3.0)
   webrick (>= 1.8.2)
@@ -763,6 +769,7 @@ CHECKSUMS
   devise (5.0.4) sha256=d605f2b85854e74e56ee789e2d398702bc2d06e6bcd894717a670a3199c74cc1
   devise_ldap_authenticatable (0.8.7) sha256=8af6f839661e24ca9afc5a1508a7ec7e1327e93af4516f2baabacdf511ee5a2e
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
+  distribution (0.8.0) sha256=90673c806a1dcb180e88229f8aea70101c3a217a34f2e2c38a9836a5f31109fd
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   erb (6.0.4) sha256=38e3803694be357fe2bfe312487c74beaf9fb4e5beb3e22498952fe1645b95d9
   erubi (1.13.1) sha256=a082103b0885dbc5ecf1172fede897f9ebdb745a4b97a5e8dc63953db1ee4ad9
@@ -784,6 +791,7 @@ CHECKSUMS
   flatpickr (4.6.13.1) sha256=4604f9f18daf4c24c3d54d6dfdfcf8645e7a0d5e0f30280f9060d67392f3ccd4
   font-awesome-rails (4.7.0.9) sha256=b45044908fbf3178b8d84fbae415dae4b9bf847612bcb1170d88ed13842c8732
   formatador (1.2.3) sha256=19fa898133c2c26cdbb5d09f6998c1e137ad9427a046663e55adfe18b950d894
+  forwardable (1.4.0) sha256=f1cd40cc9812937980e1c76f1aa053660990a7c9b6a98fc37d945468afcce838
   fugit (1.12.2) sha256=643f2bf28db263bd400cbf8e0dd8b76b2c9b94bdb130e12d2394de04d9c20e5e
   fullcalendar-rails (3.9.0.0) sha256=821dc5cf4f23fb925f65fa055c419fb339ae17743a18155818216feae2945975
   globalid (1.4.0) sha256=037f12fbf1d9d7a014d501c2d5c77356fd4ddd96d7a7991d6700bba96706f427
@@ -881,6 +889,7 @@ CHECKSUMS
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570
   prawn (2.5.0) sha256=f4e20e3b4f30bf5b9ae37dad15eb421831594553aa930b2391b0fa0a99c43cb6
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
+  prime (0.1.4) sha256=4d755ebf7c2994a6f3a3fee0d072063be3fff2d4042ebff6cd5eebd4747a225e
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   pry (0.16.0) sha256=d76c69065698ed1f85e717bd33d7942c38a50868f6b0673c636192b3d1b6054e
   psych (3.3.4) sha256=f0aae8574d0c86b711472e6a57cc036655e2549f02390ca7266f3b6d1814d1a0
@@ -938,9 +947,9 @@ CHECKSUMS
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   simple_form (5.4.1) sha256=58c3d229034c7e5545035c3271b6f030ef730c340b9d7d8eb730e0a385b20808
   simple_xlsx_reader (1.0.5) sha256=a6e220dbb313603c40f4704f63c43674c0a46647b3e29da869decf62ec60ca6d
+  singleton (0.3.0) sha256=83ea1bca5f4aa34d00305ab842a7862ea5a8a11c73d362cb52379d94e9615778
   sprockets (4.2.2) sha256=761e5a49f1c288704763f73139763564c845a8f856d52fba013458f8af1b59b1
   sprockets-rails (3.5.2) sha256=a9e88e6ce9f8c912d349aa5401509165ec42326baf9e942a85de4b76dbc4119e
-  statistics2 (0.54) sha256=5dadaf709dc5bf2d355abfe20ce7d4e46d3b0db30b3ec0d4f26528b21509d5c7
   strscan (3.1.8) sha256=aae2db611a225559f21ffbb71765c9a4e60fd262534a9ea84f4f11c7f32f679e
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   tilt (2.7.0) sha256=0d5b9ba69f6a36490c64b0eee9f6e9aad517e20dcc848800a06eb116f08c6ab3

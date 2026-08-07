@@ -55,6 +55,9 @@ var calendlyApptSolotskaya = '<div id="calendlyAppts">' +
                         'onclick="calendlyClick(event)" target="_blank">Outlook Appointments</a> </div>';
 
 
+var popUpMessage = '<div id="calendlyAppts">' +
+                        '<b>Out on leave 8/7-9/21, to schedule a sooner appointment, please schedule with one of the other available DEIB advisors. </b> </div>';
+
 var windowLocation = window.location.pathname.split('/');
 var slug = windowLocation.pop();
 
@@ -160,7 +163,8 @@ $(document).ajaxComplete(function(){
             else {
               if (advisor_name.includes("Solotskaya")) {
                     $('#calendly-events').empty();
-                    $('#calendly-events').append(calendlyApptSolotskaya);
+                    // replaced it with popup - out on leave on 8/7/2026
+                    $('#calendly-events').append(popUpMessage);
                     return
               }
               else {
