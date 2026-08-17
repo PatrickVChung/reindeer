@@ -18,7 +18,7 @@ $ ->
       permissioGroupID = $('#coaching_meeting_permission_group_id').val()
       # Commented out on 10/14/2025
       if (permissioGroupID > 22 )  ## Med27 -> 21, Med28 -> 22
-        alert("Career Advisors are prioritizing MS4 ERAS and MS3 lottery needs at this time. If you are not a M26 or M27 student, please hold on scheduling appointments until October.")
+        alert("Career Advisors are prioritizing MS4 ERAS and MS3 lottery needs at this time. If you are not a M27 or M28 student, please hold on scheduling appointments until October.")
         return
 
     $('div[data-advisors]' ).each ->

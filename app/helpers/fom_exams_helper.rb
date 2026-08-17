@@ -495,14 +495,14 @@ end
 
     height = 400
 
-    if component == 'comp1_wk' && (permission_group >= 16 && permission_group < 24)
-      title =  hf_component_desc(component) + '<br ><span style="color:red">Formative Feedback</span>' + '<br ><b>' + student_name + '</b>'
+    if component == 'comp1_wk' and permission_group >= 20
+      title =  COMPONENT_DESC[component] + '<br ><span style="color:red">Formative Feedback</span>' + '<br ><b>' + student_name + '</b>'
     elsif permission_group >= 24
-      title =  hf_component_desc2(component) + '<br ><b>' + student_name + '</b>'
-    elsif permission_group < 16
-      title =  hf_component_desc3(component) + '<br ><b>' + student_name + '</b>'
+      title =  COMPONENT_DESC2[component] + '<br ><b>' + student_name + '</b>'
+    elsif permission_group <= 15
+      title =  COMPONENT_DESC_MED21[component] + '<br ><b>' + student_name + '</b>'
     else
-      title =  hf_component_desc(component) + '<br ><b>' + student_name + '</b>'
+      title =  COMPONENT_DESC[component] + '<br ><b>' + student_name + '</b>'
     end
 
     chart = LazyHighCharts::HighChart.new('graph') do |f|
