@@ -11,12 +11,9 @@ class EpasController < ApplicationController
         @epa_headers = @epas.first.keys
       end
     end
-
-
     respond_to do |format|
       format.html
     end
-
   end
 
   # GET /epas/1
@@ -35,7 +32,6 @@ class EpasController < ApplicationController
   # POST /epas
   def create
     @epa = Epa.new(epa_params)
-
     if @epa.save
       edirect_to @epa, notice: 'Epa was successfully created.'
     else

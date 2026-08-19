@@ -447,10 +447,7 @@ module NewCompetenciesHelper
       end
       epa_hash = temp_epa_hash.merge(epa_hash)
     end
-
-
     return epa_hash
-
   end
 
   def hf_clinical_assessors_graph(wba, user, total_wba_count)
@@ -458,7 +455,6 @@ module NewCompetenciesHelper
     if wba.empty?
       return nil
     end
-
     student_name = user.full_name  # processing student Alver
     #wba_series = wba.values # removed the first 2 items in array
     selected_categories = wba.keys

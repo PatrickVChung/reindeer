@@ -39,27 +39,20 @@ module EpasHelper
           end
       end
     end
-
    return epa_hash
-
   end
 
   def reformatted_data3(results)  #data for column, inverted & polar graphs
-
     epa_hash3 = {}
     for i in 1..13 do
         count = 0
         count = results.select{|r| r if r.epa == "EPA#{i}"}.count
         if count != 0
-
           epa_hash3.store("EPA#{i}", count)
-
         end
     end
-
     return epa_hash3
   end
-
 
   def epas_by_evaluators (results)
     epa_evaluators = {}
@@ -85,7 +78,6 @@ module EpasHelper
       end
       i = i + 1
     end # end of while
-
     return epa_evaluators, unique_evaluators, selected_dates
   end
 
