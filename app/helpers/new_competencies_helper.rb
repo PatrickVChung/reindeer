@@ -416,7 +416,7 @@ module NewCompetenciesHelper
     #epas = Epa.where(user_id: selected_user.id).order(:epa, :submit_date)
     #epas = User.select(:id, :full_name).where(email: email).first.epas.where("epa <> ? and epa <> ?", "EPA12", "EPA13").order(:epa, :submit_date)
 
-    if !epas.empty?
+    if !epas.empty? 
       total_wba_count = epas.count
       selected_student = epas.first.student_assessed.split("-").first
       #commented it out at the controller

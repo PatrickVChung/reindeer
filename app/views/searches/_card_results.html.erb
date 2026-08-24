@@ -104,7 +104,7 @@
                       <% end %>
                     <% end %>
 
-                    <% if ['chungp','fruhwirt','meltond', 'nmai' ].include? current_user.username %>
+                    <% if ['chungp','fruhwirt','meltond', 'nmai', 'banu' ].include? current_user.username %>
                       <%= link_to '<i class="fa fa-cog" style="color:#23A9BD"></i> Add USMLE/Step Exams'.html_safe, usmle_exams_path(user_id: result.id, full_name: result.full_name),
                       target: '_blank', class: "nav-link blue-text" %>
                     <% end %>

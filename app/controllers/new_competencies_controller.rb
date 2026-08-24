@@ -31,7 +31,7 @@ class NewCompetenciesController < ApplicationController
       preceptor_assesses = PreceptorAssess.where(user_id: params[:user_id]).load_async.map(&:attributes)
       @preceptor_assesses = hf_collect_values(preceptor_assesses)
 
-      if ["20", "21", "22"].include? @user.permission_group_id.to_s   # only Med26, Med27, Med28
+      if @user.permission_group_id.to_s >= "20"  # Med26 or higher
       # commented out (8/18/2026) the logic to exclude EPA 12 & 13
       #   @wbas = Epa.where(user_id: params[:user_id])
       # else

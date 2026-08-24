@@ -54,6 +54,12 @@ var calendlyApptSolotskaya = '<div id="calendlyAppts">' +
                         '<a href="https://outlook.office.com/bookwithme/user/648b0a37b17c4623992d7fd96b3beace%40ohsu.edu?anonymous&ismsaljsauthenabled"' +
                         'onclick="calendlyClick(event)" target="_blank">Outlook Appointments</a> </div>';
 
+var outlookApptRaven = '<div id="outlookAppt">' +
+                          '<i><b>This Faculty Advisor uses Outlook for booking appointments. ' +
+                          'Click below to schedule your advising appointment through Outlook, which will redirect you outside the REDEI system. </b></i><br/>' +
+                          '<a href="https://bookings.cloud.microsoft/bookwithme/user/829646401a9b4c9d820697d635fe9c5e%40ohsu.edu?anonymous&ismsaljsauthenabled"' +
+                          'onclick="calendlyClick(event)" target="_blank">Outlook Appointments</a> </div>';
+
 
 var popUpMessage = '<div id="calendlyAppts">' +
                         '<b>Out on leave 8/7-9/21, to schedule a sooner appointment, please schedule with one of the other available DEIB advisors. </b> </div>';
@@ -77,7 +83,8 @@ console.log(" inside _get_events --> advisor_id: " + advisor_id);
 if (tr_length == 0 && selectedAdvisorType == "Academic" && advisor_name.includes("Travis")) {
   alert("Dr. Travis Philipp’s REDEI advising appointments can be found under Advisor Type: Academic/Student Affairs.");
 } else if (tr_length == 0 && !advisor_name.includes("Shafir") && !advisor_name.includes("Lauren") && !advisor_name.includes("Domingo") &&
-    !advisor_name.includes("Gause") &&  !advisor_name.includes("Shafir") && !advisor_name.includes("Moberly") && !advisor_name.includes("Solotskaya") ){
+    !advisor_name.includes("Gause") &&  !advisor_name.includes("Shafir") && !advisor_name.includes("Moberly") && !advisor_name.includes("Solotskaya") &&
+    !advisor_name.includes("Raven")){
     $("#meeting-submit").prop("disabled", true);
     alert('Please select another advisor that has appointments!!');
 
@@ -161,17 +168,25 @@ $(document).ajaxComplete(function(){
                   return
             }
             else {
-              if (advisor_name.includes("Solotskaya")) {
+              if (advisor_name.includes("Raven")) {
                     $('#calendly-events').empty();
                     // replaced it with popup - out on leave on 8/7/2026
-                    $('#calendly-events').append(popUpMessage);
+                    $('#calendly-events').append(outlookApptRaven);
                     return
               }
               else {
-                if (tr_length == 0) {
-                  $('#calendly-events').empty();
-                  $('#calendly-events').append(emailErika);
-                  return
+                if (advisor_name.includes("Solotskaya")) {
+                      $('#calendly-events').empty();
+                      // replaced it with popup - out on leave on 8/7/2026
+                      $('#calendly-events').append(popUpMessage);
+                      return
+                }
+                else {
+                  if (tr_length == 0) {
+                    $('#calendly-events').empty();
+                    $('#calendly-events').append(emailErika);
+                    return
+                  }
                 }
               }
             }
