@@ -20,7 +20,6 @@
             <th style="text-align:center">Matriculated Date</th>
             <th style="text-align:center">NewComp</th>
             <th style="text-align:center">Former Name</th>
-            <th style="text-align:center">BLS Exp Date</th>
             <th style="text-align:center"># of WBAs<br />(All Levels)</th>
             <th style="text-align:center"># of Badges<br />Awarded</th>
             <th>DataSets</th>
@@ -51,16 +50,6 @@
             <% end %>
             <td style="text-align:center"><%= result.new_competency? ? 'Yes' : 'No' %> </td>
             <td style="text-align:center"><%= result.former_name %> </td>
-            <% bls_record = result.ume_bls %>
-            <% if !bls_record.nil? %>
-               <% if bls_record.expiration_date.after? (Date.today) %>
-                   <td style="text-align:center; color:green"> <b><%= bls_record.expiration_date.strftime("%F") %></b></td>
-               <% else %>
-                   <td style="text-align:center; color:red"> <b><%= bls_record.expiration_date.strftime("%F") %></b></td>
-               <% end %>
-            <% else %>
-              <td></td>
-            <% end %>
 
             <td style="text-align:center;color:purple"><b><%= result.epas.where.not(involvement: 0).count.to_s %></b></td>
             <td style="text-align:center;color:purple"><b><%= result.epa_masters.where('status = ? and status_date < ?','Badge', hf_releaseDate(result)).count.to_s %></b></td>

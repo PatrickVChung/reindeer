@@ -281,13 +281,13 @@ module MedhubApisHelper
   def update_or_insert_new_competencies(row_hash, full_name)
 
       #NewCompetency.where(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create.update(row_hash)
-      if NewCompetency.exists?(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"])
-        NewCompetency.where(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create.update(row_hash)
+      if NewCompetency.exists?(user_id: row_hash["user_id"], medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"])
+        NewCompetency.where(user_id: row_hash["user_id"], medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create.update(row_hash)
         MedhubLog.info "======================================================================"
         MedhubLog.info "#### Updated:  #{full_name} ###########"
         MedhubLog.info "----------------------------------------------------------------------"
       else
-        NewCompetency.where(medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create(row_hash)
+        NewCompetency.where(user_id: row_hash["user_id"], medhub_id: row_hash["medhub_id"], course_id: row_hash["course_id"]).first_or_create(row_hash)
         MedhubLog.info "======================================================================"
         MedhubLog.info "#### Inserted:  #{full_name} ###########"
         MedhubLog.info "----------------------------------------------------------------------"
