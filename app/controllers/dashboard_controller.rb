@@ -31,17 +31,17 @@ class DashboardController < ApplicationController
       @selection_student = student.first
       @user = student.first
 
-      if ["20", "21", "22"].include? @user.permission_group_id.to_s   # only Med26, Med27, Med28
-        @wbas = Epa.where(user_id: current_user.id)
-      else
+      if @user.permission_group_id.to_s >= "20"   # only Med26, Med27, Med28
         @wbas = Epa.where("epa <> ? and epa <> ? and user_id = ?", "EPA12", "EPA13", params[:user_id])
+      else
+        @wbas = Epa.where(user_id: current_user.id)
       end
       @epas, @epa_hash, @clinical_assessors, @clinical_hash_by_involve, @selected_student, @total_wba_count = hf_get_wbas_new(@wbas)
 
       if ["20", "21", "22"].include? @user.permission_group_id.to_s  # only Med26, Med27, Med28
         @epa_hash = Epa.where(user_id: current_user.id).group(:epa).order(:epa).count
         #re-arranging the EPAs on the graph by using Slice.
-        @epa_hash = @epa_hash.slice("EPA1A&1B", "EPA1A", "EPA1B", "EPA2", "EPA3", "EPA4", "EPA5", "EPA6", "EPA7", "EPA8", "EPA9", "EPA10", "EPA11", "EPA12", "EPA13")
+        @epa_hash = @epa_hash.slice("EPA1A&1B", "EPA1A", "EPA1B", "EPA2", "EPA3", "EPA4", "EPA5", "EPA6", "EPA7", "EPA8", "EPA9", "EPA10", "EPA11")
         # merge with a epa hash with zero count so that we can show it on graph.
         @epa_hash = epa_hash_merge(@epa_hash, @user.permission_group_id)
       else

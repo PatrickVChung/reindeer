@@ -11,7 +11,11 @@
   <table class="table table-hover" >
     <tr>
       <td align ="right">Required Total # of WBAs (all levels) : </td>
-      <td><b><%= current_user.epas.where.not(involvement: 0).count.to_s %> </b>out of <b><%= wba_req.to_s %></b></td>
+      <% if current_user.permission_group_id.to_i >= 20 && current_user.new_competency? %>
+        <td><b><%= current_user.epas.where("involvement <> 0 and epa not in ('EPA12', 'EPA13')").count.to_s %> </b>out of <b><%= wba_req.to_s %></b></td>
+      <% else %>
+          <td><b><%= current_user.epas.where("involvement <> 0").count.to_s %> </b>out of <b><%= wba_req.to_s %></b></td>    
+      <% end %>
     </tr>
     <tr>
       <td align ="right">Total # of Badges Awarded : </td>
