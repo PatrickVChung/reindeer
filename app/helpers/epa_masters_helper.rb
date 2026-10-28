@@ -544,7 +544,7 @@ module EpaMastersHelper
           total_attending = Epa.where("user_id=? and clinical_assessor like ? and epa not in ('EPA12', 'EPA13')", student.id, "%Attending%").count  # Epa table contains WBAs data
           wba_epa_hash = Epa.where("user_id=? and epa not in ('EPA12', 'EPA13')", student.id).group(:epa).count
         else
-          total_attending = Epa.where("user_id=? and clinical_assessor like ?", student.id, start_date, end_date, "%Attending%").count  # Epa table contains WBAs data
+          total_attending = Epa.where("user_id=? and clinical_assessor like ?", student.id, "%Attending%").count  # Epa table contains WBAs data
           wba_epa_hash = Epa.where(user_id: student.id).group(:epa).count
         end
         student_epa = count_wbas(epa_codes, wba_epa_hash, total_attending, student.sid, student.full_name, student.matriculated_date, student.new_competency)
@@ -595,7 +595,7 @@ module EpaMastersHelper
             wbas = User.find_by(id: student.id, new_competency: true).epas.where("epa not in ('EPA12', 'EPA13')")   #Epa.where(user_id: student.id)
           else
             wbas = User.find_by(id: student.id, new_competency: false).epas
-          end 
+          end
           if !student.sid.nil?
             wbas = count_wba_clinical(wbas, student.sid, student.full_name, student.matriculated_date, uniq_assessors)
             data.push wbas
@@ -608,12 +608,14 @@ module EpaMastersHelper
   def hf_process_cohort2 (permission_group_id, start_date, end_date, code)
 
     if permission_group_id.to_s >= "20" #&& permission_group_id.to_s <= "22" #Med26
-      students = User.where(permission_group_id: permission_group_id, new_competency: true).select(:id, :sid, :email, :full_name, :matriculated_date, :new_competency).order(:full_name)
+      students = User.where(permission_group_id: permission_group_id, new_competency: true).select(:id, :sid, :email, :full_name,
+        :matriculated_date, :new_competency, :permission_group_id).order(:full_name)
       epa_codes = getEpaCodes(permission_group_id, new_competency = true)
       # epa_codes.push "EPA12"
       # epa_codes.push "EPA13"
     else
-      students = User.where(permission_group_id: permission_group_id, new_competency: false).select(:id, :sid, :email, :full_name, :matriculated_date, :new_competency).order(:full_name)
+      students = User.where(permission_group_id: permission_group_id, new_competency: false).select(:id, :sid, :email,
+        :full_name, :matriculated_date, :new_competency, :permission_group_id).order(:full_name)
       epa_codes = getEpaCodes(permission_group_id, new_competency = false)
 
     end
